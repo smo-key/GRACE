@@ -1,4 +1,4 @@
 GRACE
 =====
 
-GRACE Satellite Data Msnipulation
+GRACE Satellite Data Manipulation Libraries
