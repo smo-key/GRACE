@@ -1,0 +1,3 @@
+@echo Initializing environment...
+git submodule init
+git submodule update

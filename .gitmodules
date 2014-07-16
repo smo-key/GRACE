@@ -1,0 +1,3 @@
+[submodule "d3dlib"]
+	path = d3dlib
+	url = https://github.com/smo-key/d3dlib.git
