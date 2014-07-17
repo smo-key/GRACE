@@ -18,6 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\graceio.h" />
+    <ClInclude Include="src\gracemath.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
