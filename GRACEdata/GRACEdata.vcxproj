@@ -22,6 +22,9 @@
     <ClInclude Include="src\graceio.h" />
     <ClInclude Include="src\gracemath.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gracemath.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

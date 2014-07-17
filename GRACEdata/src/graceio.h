@@ -6,7 +6,7 @@
 
 namespace GRACEdata
 {
-	static class io
+	class io
 	{
 	public:
 

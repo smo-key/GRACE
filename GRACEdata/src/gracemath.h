@@ -3,10 +3,11 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <math.h>
 
 namespace GRACEdata 
 {
-	static class math
+	class math
 	{
 	public:
 		static float velocity(float deltadistance, float deltatime);
