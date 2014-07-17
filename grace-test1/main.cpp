@@ -11,6 +11,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance
 	Shutdown();
 }
 
+void Init()
+{
+	///*** SET GLOBAL VARIABLES ***///
+	_verbosity = ErrorLevel::Warning; //minimum level of message shown
+
+	///*** INITIALIZE WINDOW ***///
+	win = Window();
+	win.Initialize(L"GRACE", true, false, false, 800, 600, 1000.0f, 0.1f, false);
+	win.GetWindowSize(win_width, win_height, win_full);
+
+	///*** INITIALIZE TEXTURES ***///
+	DrawStartupText(L"Initializing textures...");
+	graceundersidetex.Initialize(GETDEVICE, L"assets/images/underside_foil_grace.dds");
+	gracetex.Initialize(GETDEVICE, L"assets/images/GRACE_texture.dds");
+	earthtex.Initialize(GETDEVICE, L"../d3dlib/assets/image/Earth_CloudyDiffuse.dds");
+
+	///***INITIALIZE SHADERS***///
+	DrawStartupText(L"Completing initialization...");
+	shade_tex.Initialize(GETDEVICE, win.GetHWND());
+
+	///*** INITIALIZE MODELS ***///
+	DrawStartupText(L"Initializing models...");
+	sphere.Initialize(GETDEVICE, "../d3dlib/assets/model/sphere.fbx", true);
+	grace.Initialize(GETDEVICE, "assets/models/GRACE.fbx", false);
+
+	///*** SET DIRECT3D SETTINGS ***///
+	win.d3d->TurnZBufferOn();
+	win.d3d->SetRasterizer(D3DDesc::Rasterizer(true, D3D11_CULL_NONE, D3D11_FILL_SOLID));
+}
+
 void Run()
 {
 	///*** DEFINE VARIABLES ***///
@@ -65,12 +95,12 @@ void Run()
 		win.painter->ClearList(); //removes all items from queue
 
 		//Earth
-		shade_tex.SetParameters(earthtex.GetTexture());
+		/*shade_tex.SetParameters(earthtex.GetTexture());
 		win.painter->AddToFront(ModelType(&sphere, &shade_tex,
 			new Transform(D3DXVECTOR3(-deg, 0, 0), D3DXVECTOR3(3, 3, 3), D3DXVECTOR3(0, 0, 0),
-			RotMode::Deg), new CullAuto(), PAINT));
+			RotMode::Deg), new CullAuto(), PAINT));*/
 		//GRACE Sattelite
-		shade_tex.SetParameters(earthtex.GetTexture());
+		shade_tex.SetParameters(gracetex.GetTexture());
 		win.painter->AddToFront(ModelType(&grace, &shade_tex,
 			new Transform(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0.1f, 0.1f, 0.1f), D3DXVECTOR3(0, 0, 0),
 			RotMode::Deg), new CullAuto(), PAINT));
@@ -82,32 +112,6 @@ void Run()
 	}
 }
 
-void Init()
-{
-	///*** INITIALIZE WINDOW ***///
-	win = Window();
-	win.Initialize(L"GRACE", true, false, false, 800, 600, true);
-	win.GetWindowSize(win_width, win_height, win_full);
-	
-	///*** INITIALIZE MODELS ***///
-	DrawStartupText(L"Initializing models...");
-	sphere.Initialize(win.d3d->GetDevice(), "../d3dlib/assets/model/sphere.fbx", true);
-	grace.Initialize(GETDEVICE, "assets/models/GRACE_v011.fbx", true);
-	
-	///*** INITIALIZE TEXTURES ***///
-	DrawStartupText(L"Initializing textures...");
-	gracetex.Initialize(GETDEVICE, L"assets/images/GRACE_Texture.tga");
-	earthtex.Initialize(GETDEVICE, L"../d3dlib/assets/image/Earth_CloudyDiffuse.dds");
-
-	///***INITIALIZE SHADERS***///
-	DrawStartupText(L"Completing initialization...");
-	shade_tex.Initialize(GETDEVICE, win.GetHWND());
-
-	///*** SET DIRECT3D SETTINGS ***///
-	win.d3d->TurnZBufferOn();
-	win.d3d->SetRasterizer(D3DDesc::Rasterizer(true, D3D11_CULL_NONE, D3D11_FILL_SOLID));
-}
-
 void Shutdown()
 {
 	///*** MODELS ***///
@@ -117,6 +121,7 @@ void Shutdown()
 	///*** TEXTURES ***///
 	gracetex.Shutdown();
 	earthtex.Shutdown();
+	graceundersidetex.Shutdown();
 
 	///*** OTHERS ***///
 	win.Shutdown();

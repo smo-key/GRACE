@@ -78,6 +78,8 @@
     <IncludePath>$(SolutionDir)d3dlib\D3DLib\src;$(SolutionDir)d3dlib\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)d3dlib\lib\$(PlatformTarget)\$(Configuration)\;$(SolutionDir)d3dlib\D3DLib\bin\$(Configuration)\$(PlatformTarget)\;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>bin\$(Configuration)\$(PlatformTarget)\</OutDir>
+    <IntDir>obj\$(Configuration)\$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -90,6 +92,8 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)d3dlib\D3DLib\src;$(SolutionDir)d3dlib\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)d3dlib\lib\$(PlatformTarget)\$(Configuration)\;$(SolutionDir)d3dlib\D3DLib\bin\$(Configuration)\$(PlatformTarget)\;$(LibraryPath)</LibraryPath>
+    <OutDir>bin\$(Configuration)\$(PlatformTarget)\</OutDir>
+    <IntDir>obj\$(Configuration)\$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -158,9 +162,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\d3dlib\D3DLib\D3DLib.vcxproj">
-      <Project>{bed31694-ff93-4b32-a54d-527043077b74}</Project>
-    </ProjectReference>
+    <Image Include="assets\images\GRACE_Texture.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,6 +7,7 @@
 #include "models/model_FBX.h"
 #include "models/model_OBJ.h"
 #pragma comment (lib, "D3DLib.lib")
+
 using namespace D3DLIB;
 
 /*** METHODS ***/
@@ -31,6 +32,7 @@ Shader_TEXTURE shade_tex =
 
 Texture earthtex;
 Texture gracetex;
+Texture graceundersidetex;
 
 int win_width, win_height;
 bool win_full;
