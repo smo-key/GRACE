@@ -95,15 +95,15 @@ void Run()
 		win.painter->ClearList(); //removes all items from queue
 
 		//Earth
-		/*shade_tex.SetParameters(earthtex.GetTexture());
+		shade_tex.SetParameters(earthtex.GetTexture());
 		win.painter->AddToFront(ModelType(&sphere, &shade_tex,
 			new Transform(D3DXVECTOR3(-deg, 0, 0), D3DXVECTOR3(3, 3, 3), D3DXVECTOR3(0, 0, 0),
-			RotMode::Deg), new CullAuto(), PAINT));*/
+			RotMode::Deg), new CullAuto(), PAINT));
 		//GRACE Sattelite
-		shade_tex.SetParameters(gracetex.GetTexture());
+		/*shade_tex.SetParameters(gracetex.GetTexture());
 		win.painter->AddToFront(ModelType(&grace, &shade_tex,
 			new Transform(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0.1f, 0.1f, 0.1f), D3DXVECTOR3(0, 0, 0),
-			RotMode::Deg), new CullAuto(), PAINT));
+			RotMode::Deg), new CullAuto(), PAINT));*/
 
 		win.painter->Render(win.d3d, win.frustum, win.viewport, world, view, projection, ortho);
 
