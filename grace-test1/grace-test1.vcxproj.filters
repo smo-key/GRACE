@@ -6,14 +6,4 @@
   <ItemGroup>
     <ClInclude Include="main.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{3d867b01-06ae-46ad-9d19-b9e20dada265}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="assets\images\GRACE_Texture.tga">
-      <Filter>Assets</Filter>
-    </Image>
-  </ItemGroup>
 </Project>

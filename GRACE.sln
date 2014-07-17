@@ -12,8 +12,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3DLibTest (from D3DLIB)", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GRACE Test 1", "grace-test1\grace-test1.vcxproj", "{1378A974-4014-4DAB-BD9D-C94304DCD83D}"
 	ProjectSection(ProjectDependencies) = postProject
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4} = {F87A3E04-8BB3-44D8-ADFD-E48311017FE4}
 		{BED31694-FF93-4B32-A54D-527043077B74} = {BED31694-FF93-4B32-A54D-527043077B74}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GRACE CMD Tester", "grace-cmd\grace-cmd.vcxproj", "{B7A31A81-552D-4752-B441-BEAF26B0FBFB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4} = {F87A3E04-8BB3-44D8-ADFD-E48311017FE4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GRACEdata", "GRACEdata\GRACEdata.vcxproj", "{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +55,21 @@ Global
 		{1378A974-4014-4DAB-BD9D-C94304DCD83D}.Release|Win32.Build.0 = Release|Win32
 		{1378A974-4014-4DAB-BD9D-C94304DCD83D}.Release|x64.ActiveCfg = Release|x64
 		{1378A974-4014-4DAB-BD9D-C94304DCD83D}.Release|x64.Build.0 = Release|x64
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Debug|Win32.Build.0 = Debug|Win32
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Debug|x64.ActiveCfg = Debug|x64
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Debug|x64.Build.0 = Debug|x64
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Release|Win32.ActiveCfg = Release|Win32
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Release|Win32.Build.0 = Release|Win32
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Release|x64.ActiveCfg = Release|x64
+		{B7A31A81-552D-4752-B441-BEAF26B0FBFB}.Release|x64.Build.0 = Release|x64
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}.Debug|Win32.Build.0 = Debug|Win32
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}.Debug|x64.ActiveCfg = Debug|x64
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}.Debug|x64.Build.0 = Debug|x64
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}.Release|Win32.ActiveCfg = Release|Win32
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}.Release|Win32.Build.0 = Release|Win32
+		{F87A3E04-8BB3-44D8-ADFD-E48311017FE4}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
