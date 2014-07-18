@@ -29,8 +29,9 @@ namespace GRACE_CMD
                 }
                 this.boxcenter = GetCoord(lonbox, latbox);
                 this.boxsize = GetSize(lonbox, latbox);
-                this.area = new AreaBox(Utils.coerce(boxcenter.x - (boxsize.x / 2), 0, 360), Utils.coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
-                        Utils.coerce(boxcenter.y + (boxsize.y / 2), -90, 90), Utils.coerce(boxcenter.x + (boxsize.y / 2), -90, 90));
+                AreaBox box = new AreaBox(Utils.coerce(boxcenter.x - (boxsize.x / 2), 0, 360), Utils.coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
+                        Utils.coerce(boxcenter.y - (boxsize.y / 2), -90, 90), Utils.coerce(boxcenter.y + (boxsize.y / 2), -90, 90));
+                this.area = box;
             }
 
             static int GetGridLoc(double n)

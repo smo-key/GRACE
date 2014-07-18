@@ -13,9 +13,25 @@ namespace GRACE_CMD
         static void Main(string[] args)
         {
             //*** READ TEXT FILES and find the bin of each point ***//
-            Dictionary<Structs.PointTime, List<Structs.GPSBoxed>> boxlist =
+
+            /* 
+             * gpslist = GPS data by time entered bin (in order)
+             * bins = grid of bins and how often found
+             */
+
+            Dictionary<Structs.PointTime, List<Structs.GPSBoxed>> gpslist =
                 new Dictionary<Structs.PointTime, List<Structs.GPSBoxed>>();
             Structs.PointTime lasttime = new Structs.PointTime();
+
+            //Initialize grid of bins
+            List<Structs.AreaBox>[,] bins = new List<Structs.AreaBox>[Structs.GPSBoxed.BinsLon, Structs.GPSBoxed.BinsLat];
+            for (int i = 0; i < Structs.GPSBoxed.BinsLon; i++)
+            {
+                for (int j = 0; j < Structs.GPSBoxed.BinsLat; j++)
+                {
+                    bins[i, j] = new List<Structs.AreaBox>();
+                }
+            }
 
             StreamReader reader = new StreamReader("../../../../gracedata/2002-04-05.1579023002.latlon");
             while (!reader.EndOfStream)
@@ -39,7 +55,7 @@ namespace GRACE_CMD
                 if (lasttime.point == current.point)
                 {
                     //if already inside the area
-                    boxlist.First((e) =>
+                    gpslist.First((e) =>
                     {
                         if (e.Key == lasttime)
                         {
@@ -53,7 +69,8 @@ namespace GRACE_CMD
                     //if not yet inside area
                     List<Structs.GPSBoxed> lbox = new List<Structs.GPSBoxed>();
                     lbox.Add(box);
-                    boxlist.Add(current, lbox);
+                    gpslist.Add(current, lbox); //add to boxlist
+                    bins[box.lonbox, Structs.GPSBoxed.BinLatCenter + box.latbox].Add(box.area); //add to bin
                     lasttime = current;
                 }
                 
