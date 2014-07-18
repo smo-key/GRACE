@@ -8,17 +8,21 @@ using System.Drawing;
 
 namespace GRACE_CMD
 {
+    /// <summary>
+    /// Main program
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
-            //*** READ TEXT FILES and find the bin of each point ***//
-
             /* 
              * gpslist = GPS data by time entered bin (in order)
-             * bins = grid of bins and how often found
+             * bins = grid of bins and how often entered
              */
 
+            Console.WriteLine("Initializing...");
+
+            //initialize ordered GPS data
             Dictionary<Structs.PointTime, List<Structs.GPSBoxed>> gpslist =
                 new Dictionary<Structs.PointTime, List<Structs.GPSBoxed>>();
             Structs.PointTime lasttime = new Structs.PointTime();
@@ -33,48 +37,58 @@ namespace GRACE_CMD
                 }
             }
 
-            StreamReader reader = new StreamReader("../../../../gracedata/2002-04-05.1579023002.latlon");
-            while (!reader.EndOfStream)
-            {
-                string s = reader.ReadLine();
-                string[] parameters = s.Split(' ');
-                int count = parameters.Length;
-                
-                DateTime time = Utils.GetTime(Convert.ToDouble(parameters[0]));
-                double latA = Convert.ToDouble(parameters[1]);
-                double lonA = Convert.ToDouble(parameters[2]);
-                double altA = Convert.ToDouble(parameters[3]);
-                double latB = Convert.ToDouble(parameters[7]);
-                double lonB = Convert.ToDouble(parameters[8]);
-                double altB = Convert.ToDouble(parameters[9]);
-                Structs.GPSData data = new Structs.GPSData(time, latA, lonA, altA, latB, lonB, altB);
-                Structs.GPSBoxed box = new Structs.GPSBoxed(data, Structs.Satellite.GraceA);
+            //Read all files
+            string[] files = System.IO.Directory.GetFiles("../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
 
-                Structs.PointTime current = new Structs.PointTime(box.boxcenter, data.time);
-                
-                if (lasttime.point == current.point)
+            foreach (string file in files)
+            {
+                //*** READ TEXT FILE and find the bin of each point ***//
+                Console.WriteLine("Reading {0}", Path.GetFileName(file));
+                StreamReader reader = new StreamReader(file);
+                while (!reader.EndOfStream)
                 {
-                    //if already inside the area
-                    gpslist.First((e) =>
+                    string s = reader.ReadLine();
+                    string[] parameters = s.Split(' ');
+                    int count = parameters.Length;
+
+                    DateTime time = Utils.GetTime(Convert.ToDouble(parameters[0]));
+                    double latA = Convert.ToDouble(parameters[1]);
+                    double lonA = Convert.ToDouble(parameters[2]);
+                    double altA = Convert.ToDouble(parameters[3]);
+                    double latB = Convert.ToDouble(parameters[7]);
+                    double lonB = Convert.ToDouble(parameters[8]);
+                    double altB = Convert.ToDouble(parameters[9]);
+                    Structs.GPSData data = new Structs.GPSData(time, latA, lonA, altA, latB, lonB, altB);
+                    Structs.GPSBoxed box = new Structs.GPSBoxed(data, Structs.Satellite.GraceA);
+
+                    Structs.PointTime current = new Structs.PointTime(box.boxcenter, data.time);
+
+                    if (lasttime.point == current.point)
                     {
-                        if (e.Key == lasttime)
+                        //if already inside the area
+                        gpslist.First((e) =>
                         {
-                            return true;
-                        }
-                        return false;
-                    }).Value.Add(box);
+                            if (e.Key == lasttime)
+                            {
+                                return true;
+                            }
+                            return false;
+                        }).Value.Add(box);
+                    }
+                    else
+                    {
+                        //if not yet inside area
+                        List<Structs.GPSBoxed> lbox = new List<Structs.GPSBoxed>();
+                        lbox.Add(box);
+                        gpslist.Add(current, lbox); //add to boxlist
+                        bins[box.lonbox, Structs.GPSBoxed.BinLatCenter + box.latbox].Add(box.area); //add to bin
+                        lasttime = current;
+                    }
+
                 }
-                else
-                {
-                    //if not yet inside area
-                    List<Structs.GPSBoxed> lbox = new List<Structs.GPSBoxed>();
-                    lbox.Add(box);
-                    gpslist.Add(current, lbox); //add to boxlist
-                    bins[box.lonbox, Structs.GPSBoxed.BinLatCenter + box.latbox].Add(box.area); //add to bin
-                    lasttime = current;
-                }
-                
             }
+
+            Console.WriteLine("Reading complete!");
 
             return;
         }

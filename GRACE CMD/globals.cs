@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace GRACE_CMD
 {
+    /// <summary>
+    /// Globals
+    /// </summary>
     public static class Globals
     {
         /// <summary>
         /// Gridsize in degrees
         /// </summary>
-        public static double gridsize = 10; //degrees
+        public static double gridsize = 10;
     }
 }
