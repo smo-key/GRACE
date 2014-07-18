@@ -1,7 +1,8 @@
-﻿//#define SEARCHPOWER_0 //low memory & low latency
+﻿#define SEARCHPOWER_0 //low memory & low latency
 //#define SEARCHPOWER_1 //low latency
-#define SEARCHPOWER_2 //WARNING!  Slow and mem-draining!
+//#define SEARCHPOWER_2 //WARNING!  Slow and mem-draining!
 
+//#define WRITE_LOG //write to log file (less memory usage) instead of variables
 
 using System;
 using System.Collections.Generic;
@@ -61,7 +62,7 @@ namespace GRACE_CMD
             #endif
 
             //Read all files
-            string[] files = System.IO.Directory.GetFiles("../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
+            string[] files = System.IO.Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
             int filen = 1; //current file number
 
             foreach (string file in files)
