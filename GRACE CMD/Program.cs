@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Drawing;
+using System.Collections.Concurrent;
 
 namespace GRACE_CMD
 {
@@ -30,8 +31,9 @@ namespace GRACE_CMD
 
             #if SEARCHPOWER_2
             //initialize ordered GPS data
-            Dictionary<Structs.PointTime, List<Structs.GPSBoxed>> gpslist =
-                new Dictionary<Structs.PointTime, List<Structs.GPSBoxed>>();
+            List<Structs.GPSBoxed> lastlist = new List<Structs.GPSBoxed>();
+            ConcurrentDictionary<Structs.PointTime, List<Structs.GPSBoxed>> gpslist =
+                new ConcurrentDictionary<Structs.PointTime, List<Structs.GPSBoxed>>();
             #endif
             Structs.PointTime lasttime = new Structs.PointTime();
 
@@ -91,25 +93,17 @@ namespace GRACE_CMD
                     {
                         //if already inside the area
                         #if SEARCHPOWER_2
-                        //gpslist.ElementAt(gpslist.Count - 1).Value.Add(box);
-                        //gpslist.Last().Value.Add(box);
-                        gpslist.First((e) =>
-                        {
-                            if (e.Key == lasttime)
-                            {
-                                return true;
-                            }
-                            return false;
-                        }).Value.Add(box);
+                        gpslist[lasttime].Add(box);
                         #endif
                     }
                     else
                     {
                         //if not yet inside area
+                        lasttime = current;
                         #if SEARCHPOWER_2
                         List<Structs.GPSBoxed> lbox = new List<Structs.GPSBoxed>();
                         lbox.Add(box);
-                        gpslist.Add(current, lbox); //add to boxlist
+                        if (!gpslist.TryAdd(lasttime, lbox)) { throw new Exception(); } //add to boxlist
                         #endif
                         #if SEARCHPOWER_1
                         bins[box.lonbox, Structs.GPSBoxed.BinLatCenter + box.latbox].Add(box.area); //add to bin
@@ -117,7 +111,6 @@ namespace GRACE_CMD
                         #if SEARCHPOWER_0
                         bins[box.lonbox, Structs.GPSBoxed.BinLatCenter + box.latbox]++; //add 1 to bin count
                         #endif
-                        lasttime = current;
                     }
 
                 }
