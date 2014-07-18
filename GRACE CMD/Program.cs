@@ -36,6 +36,27 @@ namespace GRACE_CMD
             this.y = y;
         }
         public double x, y;
+        public override bool Equals(object obj)
+        {
+            return ((Point)obj == this);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public static bool operator !=(Point a, Point b)
+        {
+            if ((a.x == b.x) && (a.y == b.y))
+            { return false; }
+            return true;
+        }
+
+        public static bool operator ==(Point a, Point b)
+        {
+            if ((a.x == b.x) && (a.y == b.y))
+            { return true; }
+            return false;
+        }
     }
 
     enum Anchor { TopLeft, Center }
@@ -108,25 +129,9 @@ namespace GRACE_CMD
     {
         static readonly double gridsize = 10; //degrees
 
-        static int GetGridLoc(double n)
-        {
-            return (int)Math.Floor((n / gridsize) - 0.5d) + 1;
-        }
-
-        static Point GetCoord(double boxlon, double boxlat, int boxlatcenter)
-        {
-            double lon = gridsize * boxlon;
-            double lat = gridsize * (boxlat);
-            return new Point(lon, lat);
-        }
-        static Point GetSize(double boxlon, double boxlat)
-        {
-            //gridsize - extra space that was cut
-            double w = gridsize - (boxlon - coerce(boxlon, 0, 360));
-            double h = gridsize - (boxlat - coerce(boxlat, -90, 90));
-            return new Point(w, h);
-        }
-
+        /// <summary>
+        /// GPS Data including time, in a specific boxed area
+        /// </summary>
         struct GPSBoxed
         {
             public GPSBoxed(GPSData data, Satellite sat)
@@ -143,34 +148,99 @@ namespace GRACE_CMD
                     this.lonbox = GetGridLoc(data.lonB);
                     this.latbox = GetGridLoc(data.latB);
                 }
+                this.boxcenter = GetCoord(lonbox, latbox);
+                this.boxsize = GetSize(lonbox, latbox);
+                this.area = new AreaBox(coerce(boxcenter.x - (boxsize.x / 2), 0, 360), coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
+                        coerce(boxcenter.y + (boxsize.y / 2), -90, 90), coerce(boxcenter.x + (boxsize.y / 2), -90, 90));
             }
+
+            static int GetGridLoc(double n)
+            {
+                return Math.Sign(n) * ((int)Math.Floor((Math.Abs(n) / gridsize) - 0.5d) + 1);
+            }
+            static Point GetCoord(double boxlon, double boxlat)
+            {
+                double lon = gridsize * boxlon;
+                double lat = gridsize * boxlat;
+                return new Point(lon, lat);
+            }
+            static Point GetSize(double boxlon, double boxlat)
+            {
+                //gridsize - extra space that was cut
+                double w = gridsize - (boxlon - coerce(boxlon, 0, 360));
+                double h = gridsize - (boxlat - coerce(boxlat, -90, 90));
+                return new Point(w, h);
+            }
+            public static int BinsLon { get { return (int)Math.Ceiling(360 / gridsize) + 1; } }
+            public static int BinsLat { get { return (int)Math.Ceiling(180 / gridsize) + 1; } }
+            public static int BinLatCenter { get { return (BinsLat - 1) / 2; } }
+            
             public GPSData data;
+            public AreaBox area;
             public int lonbox;
             public int latbox;
+            public Point boxcenter;
+            public Point boxsize;
             public Satellite sat;
+        }
+
+        struct PointTime
+        {
+            public PointTime(Point point, DateTime time)
+            {
+                this.point = point;
+                this.time = time;
+            }
+            public Point point;
+            public DateTime time;
+
+            public override bool Equals(object obj)
+            {
+                return ((PointTime)obj == this);
+            }
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+            public static bool operator !=(PointTime a, PointTime b)
+            {
+                if ((a.point == b.point) && (a.time == b.time))
+                { return false; }
+                return true;
+            }
+            public static bool operator == (PointTime a, PointTime b)
+            {
+                if ((a.point == b.point) && (a.time == b.time))
+                { return true; }
+                return false;
+            }
         }
 
         static void Main(string[] args)
         {
             //*** COUNT BINS ***//
 
-            int binslon = (int)Math.Ceiling(360 / gridsize) + 1; //x (0 to 360)  +1 accounts for centering
-            int binslat = (int)Math.Ceiling(180 / gridsize) + 1; //y (-90 to 90) +1 accounts for centering
-            int binlatcenter = (binslat - 1) / 2;
-            Point lastcenter = new Point();
+            PointTime lasttime = new PointTime();
 
             //*** INITIALIZE BINS ***//
-            List<AreaBox>[,] bins = new List<AreaBox>[binslon, binslat];
-            for (int i = 0; i < binslon; i++)
-            {
-                for (int j = 0; j < binslat; j++)
-                {
-                    bins[i, j] = new List<AreaBox>();
-                }
-            }
+
+            /* 
+             * GOAL
+             * List<GPSBoxed> shows location over time for time plots
+             * 
+             * Point = center of bin location
+             * DateTime = time of entry
+             * GPSBoxed = same bin location with time data and points
+             * 
+             * Dictionary<Point, GPSBoxed>
+             * 
+             */
 
             //*** READS TEXT FILES and find the bin ***//
-            List<GPSBoxed> GPSlist = new List<GPSBoxed>();
+
+            Dictionary<PointTime, List<GPSBoxed>> boxlist =
+                new Dictionary<PointTime, List<GPSBoxed>>();
+
             StreamReader reader = new StreamReader("../../../../gracedata/2002-04-05.1579023002.latlon");
             while (!reader.EndOfStream)
             {
@@ -188,19 +258,29 @@ namespace GRACE_CMD
                 GPSData data = new GPSData(time, latA, lonA, altA, latB, lonB, altB);
                 GPSBoxed box = new GPSBoxed(data, Satellite.GraceA);
 
-                //remove area if already in it
-                Point boxcenter = GetCoord(box.lonbox, box.latbox, binlatcenter);
-                if ((lastcenter.x == boxcenter.x) && (lastcenter.y == boxcenter.y)) { continue; }
-                GPSlist.Add(box);
-                lastcenter = boxcenter;
-
-                if (box.sat == Satellite.GraceA)
+                PointTime current = new PointTime(box.boxcenter, data.time);
+                
+                if (lasttime.point == current.point)
                 {
-                    Point boxsize = GetSize(box.lonbox, box.latbox);
-                    AreaBox area = new AreaBox(coerce(boxcenter.x - (boxsize.x / 2), 0, 360), coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
-                        coerce(boxcenter.y + (boxsize.y / 2), -90, 90), coerce(boxcenter.x + (boxsize.y / 2), -90, 90));
-                    bins[box.lonbox, binlatcenter + box.latbox].Add(area);
+                    //if already inside the area
+                    boxlist.First((e) =>
+                    {
+                        if (e.Key == lasttime)
+                        {
+                            return true;
+                        }
+                        return false;
+                    }).Value.Add(box);
                 }
+                else
+                {
+                    //if not yet inside area
+                    List<GPSBoxed> lbox = new List<GPSBoxed>();
+                    lbox.Add(box);
+                    boxlist.Add(current, lbox);
+                    lasttime = current;
+                }
+                
             }
 
             return;
@@ -209,38 +289,6 @@ namespace GRACE_CMD
         static double coerce(double value, double min, double max)
         {
             return Math.Max(min, Math.Min(max, value));
-        }
-
-        static List<AreaBox> ParseLongitude(double lon)
-        {
-            List<AreaBox> list = new List<AreaBox>();
-            double lat = 0;
-            while (lat < 90)
-            {
-                list.Add(new AreaBox(GetLongitude(lon), GetLatitude(lat), gridsize, gridsize, Anchor.Center));
-                lat += gridsize;
-            }
-            lat = -gridsize;
-            while (lat > -90)
-            {
-                list.Add(new AreaBox(GetLongitude(lon), GetLatitude(lat), gridsize, gridsize, Anchor.Center));
-                lat -= gridsize;
-            }
-            return list;
-        }
-
-        static double GetLongitude(double lon)
-        {
-            if (lon > 360) { return 360; }
-            if (lon < 0) { return 0; }
-            return lon;
-        }
-
-        static double GetLatitude(double lat)
-        {
-            if (lat > 90) { return 90; }
-            if (lat < -90) { return -90; }
-            return lat;
         }
     }
 
