@@ -84,6 +84,20 @@ namespace GRACE_CMD
             this.anchortype = Anchor.Center;
             return;
         }
+        public AreaBox(double xmin, double xmax, double ymin, double ymax)
+        {
+            this.topleft = new Point(xmin, ymin);
+            this.topright = new Point(xmax, ymin);
+            this.bottomleft = new Point(xmin, ymax);
+            this.bottomright = new Point(xmax, ymax);
+            this.center = new Point((xmax - xmin) / 2, (ymax - ymin) / 2);
+            this.anchortype = Anchor.TopLeft;
+            this.width = xmax - xmin;
+            this.height = ymax - ymin;
+            this.x = xmin;
+            this.y = ymin;
+            return;
+        }
 
         public Point topleft, topright, bottomleft, bottomright, center;
         public double width, height, x, y;
@@ -92,11 +106,25 @@ namespace GRACE_CMD
 
     class Program
     {
-        static readonly double gridsize = 3; //degrees
+        static readonly double gridsize = 10; //degrees
 
-        static int GetGridLoc(double lonlat)
+        static int GetGridLoc(double n)
         {
-            return (Math.Sign(lonlat) * (int)Math.Floor((Math.Abs(lonlat) + (gridsize / 2)) / gridsize));
+            return (int)Math.Floor((n / gridsize) - 0.5d) + 1;
+        }
+
+        static Point GetCoord(double boxlon, double boxlat, int boxlatcenter)
+        {
+            double lon = gridsize * boxlon;
+            double lat = gridsize * (boxlat);
+            return new Point(lon, lat);
+        }
+        static Point GetSize(double boxlon, double boxlat)
+        {
+            //gridsize - extra space that was cut
+            double w = gridsize - (boxlon - coerce(boxlon, 0, 360));
+            double h = gridsize - (boxlat - coerce(boxlat, -90, 90));
+            return new Point(w, h);
         }
 
         struct GPSBoxed
@@ -124,15 +152,26 @@ namespace GRACE_CMD
 
         static void Main(string[] args)
         {
-            //*** READS TEXT FILES and find the bin ***///
+            //*** COUNT BINS ***//
+
+            int binslon = (int)Math.Ceiling(360 / gridsize) + 1; //x (0 to 360)  +1 accounts for centering
+            int binslat = (int)Math.Ceiling(180 / gridsize) + 1; //y (-90 to 90) +1 accounts for centering
+            int binlatcenter = (binslat - 1) / 2;
+            Point lastcenter = new Point();
+
+            //*** INITIALIZE BINS ***//
+            List<AreaBox>[,] bins = new List<AreaBox>[binslon, binslat];
+            for (int i = 0; i < binslon; i++)
+            {
+                for (int j = 0; j < binslat; j++)
+                {
+                    bins[i, j] = new List<AreaBox>();
+                }
+            }
+
+            //*** READS TEXT FILES and find the bin ***//
             List<GPSBoxed> GPSlist = new List<GPSBoxed>();
-
-            
-
-
-
-            List<AreaBox> Binlist = new List<AreaBox>();
-            StreamReader reader = new StreamReader("../../../../gracedata/&combined.txt");
+            StreamReader reader = new StreamReader("../../../../gracedata/2002-04-05.1579023002.latlon");
             while (!reader.EndOfStream)
             {
                 string s = reader.ReadLine();
@@ -147,10 +186,29 @@ namespace GRACE_CMD
                 double lonB = Convert.ToDouble(parameters[8]);
                 double altB = Convert.ToDouble(parameters[9]);
                 GPSData data = new GPSData(time, latA, lonA, altA, latB, lonB, altB);
-                GPSlist.Add(new GPSBoxed(data, Satellite.GraceA));
+                GPSBoxed box = new GPSBoxed(data, Satellite.GraceA);
+
+                //remove area if already in it
+                Point boxcenter = GetCoord(box.lonbox, box.latbox, binlatcenter);
+                if ((lastcenter.x == boxcenter.x) && (lastcenter.y == boxcenter.y)) { continue; }
+                GPSlist.Add(box);
+                lastcenter = boxcenter;
+
+                if (box.sat == Satellite.GraceA)
+                {
+                    Point boxsize = GetSize(box.lonbox, box.latbox);
+                    AreaBox area = new AreaBox(coerce(boxcenter.x - (boxsize.x / 2), 0, 360), coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
+                        coerce(boxcenter.y + (boxsize.y / 2), -90, 90), coerce(boxcenter.x + (boxsize.y / 2), -90, 90));
+                    bins[box.lonbox, binlatcenter + box.latbox].Add(area);
+                }
             }
 
             return;
+        }
+
+        static double coerce(double value, double min, double max)
+        {
+            return Math.Max(min, Math.Min(max, value));
         }
 
         static List<AreaBox> ParseLongitude(double lon)
