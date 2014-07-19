@@ -1,5 +1,5 @@
-﻿//#define SEARCHPOWER_0 //low memory & low latency
-#define SEARCHPOWER_1 //low latency
+﻿#define SEARCHPOWER_0 //low memory & low latency
+//#define SEARCHPOWER_1 //low latency
 //#define SEARCHPOWER_2 //WARNING!  Slow and mem-draining!
 
 #define WRITELOG //write to log file (less memory usage) instead of variables
@@ -154,19 +154,20 @@ namespace GRACE_CMD
                 Console.WriteLine("Writing log...");
                 log.WriteLine("GRACE-CMD1 SEARCHPOWER_0");
                 log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
-                log.WriteLine("TimesEntered | BoxIDLon BoxIDLat | BoxCenterLon BoxCenterLat BoxWidthDeg BoxHeightDeg");
+                log.WriteLine("TimesEntered | BoxIDLon BoxIDLat | BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
                 for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
                 {
                     for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
                     {
-                        Structs.Point c = Structs.CoercedBin.GetCenter(i, j - Structs.CoercedBin.BinLatCenter + 1);
+                        int k = j - Structs.CoercedBin.BinLatCenter;
+                        Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
                         Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
-                        /*Structs.AreaBox box = new Structs.AreaBox(Utils.coerce(c.x - (size.x / 2), 0, 360),
+                        Structs.AreaBox box = new Structs.AreaBox(Utils.coerce(c.x - (size.x / 2), 0, 360),
                             Utils.coerce(c.x + (size.x / 2), 0, 360),
                             Utils.coerce(c.y - (size.y / 2), -90, 90),
-                            Utils.coerce(c.y + (size.y / 2), -90, 90));*/
-                        log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", bins[i, j].ToString(), i.ToString(), (j - Structs.CoercedBin.BinLatCenter + 1).ToString(),
-                            c.x.ToString("F3"), c.y.ToString("F3"), size.x.ToString("F3"), size.y.ToString("F3"));
+                            Utils.coerce(c.y + (size.y / 2), -90, 90));
+                        log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", bins[i, j].ToString(), i.ToString(), k.ToString(),
+                            box.topleft.x.ToString("F3"), box.topleft.y.ToString("F3"), box.bottomright.x.ToString("F3"), box.bottomright.y.ToString("F3"));
                     }
                 }
                 #endif
