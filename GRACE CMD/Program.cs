@@ -1,8 +1,8 @@
-﻿#define SEARCHPOWER_0 //low memory & low latency
-//#define SEARCHPOWER_1 //low latency
-//#define SEARCHPOWER_2 //WARNING!  Slow and mem-draining!
+﻿//#define SEARCHPOWER_0 //Entry Count Only
+//#define SEARCHPOWER_1 //List of entries by time
+#define SEARCHPOWER_2 //Entry Count with Dated Entries
 
-#define WRITELOG //write to log file (less memory usage) instead of variables
+//#define WRITELOG //write to log file (less memory usage) instead of variables
 
 using System;
 using System.Collections.Generic;
@@ -37,27 +37,36 @@ namespace GRACE_CMD
                 StreamWriter log = new StreamWriter("output.txt");
                 log.AutoFlush = true;
 
-                #if SEARCHPOWER_2
-                #warning "SEARCHPOWER_2 logs at SEARCHPOWER_1 level only!"
-                log.WriteLine("GRACE-CMD1 SEARCHPOWER_2");
-                log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
-                log.WriteLine("Box");
-                log.WriteLine("EntryTimeUTC | BoxIDLon BoxIDLat | BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
-                #endif
                 #if SEARCHPOWER_1
                 log.WriteLine("GRACE-CMD1 SEARCHPOWER_1");
                 log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
                 log.WriteLine("EntryTimeUTC | BoxIDLon BoxIDLat | BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
+                log.WriteLine(" ");
                 #endif
             #endif
 
             #if SEARCHPOWER_2
-            //initialize ordered GPS data
-            List<Structs.GPSBoxed> lastlist = new List<Structs.GPSBoxed>();
-            ConcurrentDictionary<Structs.PointTime, List<Structs.GPSBoxed>> gpslist =
-                new ConcurrentDictionary<Structs.PointTime, List<Structs.GPSBoxed>>();
+            //initialize grid of bins, with list of all entries in/out
+            List<DateTime>[,] binentry = new List<DateTime>[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
+            for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
+            {
+                for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
+                {
+                    binentry[i, j] = new List<DateTime>();
+                }
+            }
+            //Structs.Point lastbox = new Structs.Point(-1, -1);
+            
+            //List<Structs.BinEntry> lastentry;
+
+            //Dictionary<Structs.CoercedBin, List<Structs.EntryData>>[,] bins = 
+            //    new Dictionary<Structs.CoercedBin, List<Structs.EntryData>>[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
+            //List<Structs.CoercedBin>[,] binentrydata = new List<Structs.CoercedBin>[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
+
+            //ConcurrentDictionary<Structs.CoercedBin, List<Structs.EntryData>> gpslist =
+            //    new ConcurrentDictionary<Structs.CoercedBin, List<Structs.EntryData>>();
             #endif
-            #if (SEARCHPOWER_1 || SEARCHPOWER_2) && (!WRITELOG)
+            #if SEARCHPOWER_1
             //Initialize grid of bins
             List<Structs.CoercedBin>[,] bins = new List<Structs.CoercedBin>[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
             for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
@@ -110,24 +119,22 @@ namespace GRACE_CMD
 
                     Structs.PointTime current = new Structs.PointTime(gpsbox.bin.boxcenter, data.time);
 
-                    if (lasttime.point == current.point)
+                    if (lasttime.point != current.point)
                     {
-                        //if already inside the area
+                        //if not yet inside area (just entering)
                         #if SEARCHPOWER_2
-                        gpslist[lasttime].Add(box);
-                        #endif
-                    }
-                    else
-                    {
-                        //if not yet inside area
-                        lasttime = current;
-                        #if SEARCHPOWER_2
-                            List<Structs.GPSBoxed> lbox = new List<Structs.GPSBoxed>();
-                            lbox.Add(box);
-                            if (!gpslist.TryAdd(lasttime, lbox)) { throw new Exception(); } //add to GPS list
+                            #if WRITELOG
+                            //add new entry
+                            //lastbox = new Structs.Point(gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox);
+                            binentry[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox].Add(
+                                current.time);
+                            #else
+                            binentry[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox].Add(
+                                current.time); //add to bin
+                            #endif
                         #endif
 
-                        #if SEARCHPOWER_1 || SEARCHPOWER_2
+                        #if SEARCHPOWER_1
                             #if WRITELOG
                                 log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", gpsbox.bin.entry.ToString(),
                                     gpsbox.bin.lonbox.ToString(), gpsbox.bin.latbox.ToString(),
@@ -141,6 +148,7 @@ namespace GRACE_CMD
                         #if SEARCHPOWER_0
                             bins[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox]++; //add 1 to bin count
                         #endif
+                        lasttime = current;
                     }
 
                 }
@@ -150,11 +158,39 @@ namespace GRACE_CMD
 
             #if WRITELOG
 
+                #if SEARCHPOWER_2
+                Console.WriteLine("Writing log...");
+                log.WriteLine("GRACE-CMD1 SEARCHPOWER_2");
+                log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
+                log.WriteLine("EntryCount | BoxIDLon BoxIDLat | BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
+                log.WriteLine("--- EntryTimeUTC");
+                log.WriteLine(" ");
+                for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
+                {
+                    for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
+                    {
+                        int k = j - Structs.CoercedBin.BinLatCenter;
+                        Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
+                        Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
+                        Structs.AreaBox box = new Structs.AreaBox(Utils.coerce(c.x - (size.x / 2), 0, 360),
+                            Utils.coerce(c.x + (size.x / 2), 0, 360),
+                            Utils.coerce(c.y - (size.y / 2), -90, 90),
+                            Utils.coerce(c.y + (size.y / 2), -90, 90));
+                        log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", binentry[i, j].Count, i.ToString(), k.ToString(),
+                            box.topleft.x.ToString("F3"), box.topleft.y.ToString("F3"), box.bottomright.x.ToString("F3"), box.bottomright.y.ToString("F3"));
+                        foreach (DateTime item in binentry[i, j])
+                        {
+                            log.WriteLine("--- {0}", item.ToString());
+                        }
+                    }
+                }
+                #endif
                 #if SEARCHPOWER_0
                 Console.WriteLine("Writing log...");
                 log.WriteLine("GRACE-CMD1 SEARCHPOWER_0");
                 log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
                 log.WriteLine("TimesEntered | BoxIDLon BoxIDLat | BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
+                log.WriteLine(" ");
                 for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
                 {
                     for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
@@ -177,7 +213,9 @@ namespace GRACE_CMD
             #endif
 
             Console.WriteLine("Reading complete!");
-
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey(true);
+            
             return;
         }
     }
