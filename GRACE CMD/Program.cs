@@ -1,8 +1,8 @@
-﻿//#define SEARCHPOWER_0 //Entry Count Only
+﻿#define SEARCHPOWER_0 //Entry Count Only
 //#define SEARCHPOWER_1 //List of entries by time
-#define SEARCHPOWER_2 //Entry Count with Dated Entries
+//#define SEARCHPOWER_2 //Entry Count with Dated Entries
 
-//#define WRITELOG //write to log file (less memory usage) instead of variables
+#define WRITELOG //write to log file
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ using System.Collections.Concurrent;
 
 namespace GRACE_CMD
 {
-
     /// <summary>
     /// Main program
     /// </summary>
@@ -55,16 +54,6 @@ namespace GRACE_CMD
                     binentry[i, j] = new List<DateTime>();
                 }
             }
-            //Structs.Point lastbox = new Structs.Point(-1, -1);
-            
-            //List<Structs.BinEntry> lastentry;
-
-            //Dictionary<Structs.CoercedBin, List<Structs.EntryData>>[,] bins = 
-            //    new Dictionary<Structs.CoercedBin, List<Structs.EntryData>>[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
-            //List<Structs.CoercedBin>[,] binentrydata = new List<Structs.CoercedBin>[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
-
-            //ConcurrentDictionary<Structs.CoercedBin, List<Structs.EntryData>> gpslist =
-            //    new ConcurrentDictionary<Structs.CoercedBin, List<Structs.EntryData>>();
             #endif
             #if SEARCHPOWER_1
             //Initialize grid of bins

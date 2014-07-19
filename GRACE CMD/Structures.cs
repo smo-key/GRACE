@@ -12,7 +12,7 @@ namespace GRACE_CMD
     public class Structs
     {
         /// <summary>
-        /// CoercedBin struct with Entry data list
+        /// CoercedBin struct with DateTime list
         /// </summary>
         public struct BinEntry
         {
@@ -25,26 +25,6 @@ namespace GRACE_CMD
             public CoercedBin bin;
             public List<DateTime> entries;
         }
-
-        /*/// <summary>
-        /// Entry and exit bin data
-        /// </summary>
-        public struct EntryData
-        {
-            public EntryData(DateTime entry)
-            {
-                this.entry = entry;
-                this.datapoints = datapoints;
-            }
-            public static EntryData operator ++(EntryData a)
-            {
-                a.datapoints++;
-                return a;
-            }
-
-            public DateTime entry;
-            public int datapoints;
-        }*/
 
         /// <summary>
         /// GPS Data including time, in a specific boxed area
