@@ -160,6 +160,9 @@ namespace GRACE_CMD
             public Anchor anchortype;
         }
 
+        /// <summary>
+        /// GPS data recieved after L2 processing
+        /// </summary>
         public struct GPSData
         {
             public GPSData(DateTime time, double latA, double lonA, double altA,
