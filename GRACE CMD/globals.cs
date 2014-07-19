@@ -14,6 +14,6 @@ namespace GRACE_CMD
         /// <summary>
         /// Gridsize in degrees
         /// </summary>
-        public static double gridsize = 12.1234;
+        public static double gridsize = 10;
     }
 }

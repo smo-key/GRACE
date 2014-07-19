@@ -1,5 +1,5 @@
-﻿#define SEARCHPOWER_0 //low memory & low latency
-//#define SEARCHPOWER_1 //low latency
+﻿//#define SEARCHPOWER_0 //low memory & low latency
+#define SEARCHPOWER_1 //low latency
 //#define SEARCHPOWER_2 //WARNING!  Slow and mem-draining!
 
 #define WRITELOG //write to log file (less memory usage) instead of variables
@@ -40,11 +40,14 @@ namespace GRACE_CMD
                 #if SEARCHPOWER_2
                 #warning "SEARCHPOWER_2 logs at SEARCHPOWER_1 level only!"
                 log.WriteLine("GRACE-CMD1 SEARCHPOWER_2");
-                log.WriteLine("EntryTimeUTC BoxIDLon BoxIDLat BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
+                log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
+                log.WriteLine("Box");
+                log.WriteLine("EntryTimeUTC | BoxIDLon BoxIDLat | BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
                 #endif
                 #if SEARCHPOWER_1
                 log.WriteLine("GRACE-CMD1 SEARCHPOWER_1");
-                log.WriteLine("EntryTimeUTC BoxIDLon BoxIDLat BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
+                log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
+                log.WriteLine("EntryTimeUTC | BoxIDLon BoxIDLat | BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
                 #endif
             #endif
 
@@ -126,9 +129,10 @@ namespace GRACE_CMD
 
                         #if SEARCHPOWER_1 || SEARCHPOWER_2
                             #if WRITELOG
-                                log.WriteLine("{0} {1} {2} {3} {4} {5} {6}", gpsbox.bin.entry.ToString(),
+                                log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", gpsbox.bin.entry.ToString(),
                                     gpsbox.bin.lonbox.ToString(), gpsbox.bin.latbox.ToString(),
-                                    gpsbox.bin.box.topleft.x, gpsbox.bin.box.topleft.y, gpsbox.bin.box.bottomright.x, gpsbox.bin.box.bottomright.y);
+                                    gpsbox.bin.box.topleft.x.ToString("F3"), gpsbox.bin.box.topleft.y.ToString("F3"),
+                                    gpsbox.bin.box.bottomright.x.ToString("F3"), gpsbox.bin.box.bottomright.y.ToString("F3"));
                             #else
                             bins[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox].Add(gpsbox.bin); //add to bin
                             #endif
@@ -149,6 +153,7 @@ namespace GRACE_CMD
                 #if SEARCHPOWER_0
                 Console.WriteLine("Writing log...");
                 log.WriteLine("GRACE-CMD1 SEARCHPOWER_0");
+                log.WriteLine("Boxsize: {0} degrees", Globals.gridsize);
                 log.WriteLine("TimesEntered | BoxIDLon BoxIDLat | BoxCenterLon BoxCenterLat BoxWidthDeg BoxHeightDeg");
                 for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
                 {
