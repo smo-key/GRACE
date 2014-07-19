@@ -2,7 +2,7 @@
 //#define SEARCHPOWER_1 //low latency
 //#define SEARCHPOWER_2 //WARNING!  Slow and mem-draining!
 
-//#define WRITE_LOG //write to log file (less memory usage) instead of variables
+#define WRITELOG //write to log file (less memory usage) instead of variables
 
 using System;
 using System.Collections.Generic;
@@ -29,6 +29,24 @@ namespace GRACE_CMD
              */
 
             Console.WriteLine("Initializing...");
+            Structs.PointTime lasttime = new Structs.PointTime();
+
+            #if WRITELOG
+                //Prepare logging
+                File.Delete("output.txt");
+                StreamWriter log = new StreamWriter("output.txt");
+                log.AutoFlush = true;
+
+                #if SEARCHPOWER_2
+                #warning "SEARCHPOWER_2 logs at SEARCHPOWER_1 level only!"
+                log.WriteLine("GRACE-CMD1 SEARCHPOWER_2");
+                log.WriteLine("EntryTimeUTC BoxIDLon BoxIDLat BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
+                #endif
+                #if SEARCHPOWER_1
+                log.WriteLine("GRACE-CMD1 SEARCHPOWER_1");
+                log.WriteLine("EntryTimeUTC BoxIDLon BoxIDLat BoxTopLeftLon BoxTopLeftLat BoxBottomRightLon BoxBottomRightLat");
+                #endif
+            #endif
 
             #if SEARCHPOWER_2
             //initialize ordered GPS data
@@ -36,33 +54,32 @@ namespace GRACE_CMD
             ConcurrentDictionary<Structs.PointTime, List<Structs.GPSBoxed>> gpslist =
                 new ConcurrentDictionary<Structs.PointTime, List<Structs.GPSBoxed>>();
             #endif
-            Structs.PointTime lasttime = new Structs.PointTime();
-
+            #if (SEARCHPOWER_1 || SEARCHPOWER_2) && (!WRITELOG)
             //Initialize grid of bins
-            #if SEARCHPOWER_1 || SEARCHPOWER_2
-            List<Structs.AreaBox>[,] bins = new List<Structs.AreaBox>[Structs.GPSBoxed.BinsLon, Structs.GPSBoxed.BinsLat];
-            for (int i = 0; i < Structs.GPSBoxed.BinsLon; i++)
+            List<Structs.CoercedBin>[,] bins = new List<Structs.CoercedBin>[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
+            for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
             {
-                for (int j = 0; j < Structs.GPSBoxed.BinsLat; j++)
+                for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
                 {
-                    bins[i, j] = new List<Structs.AreaBox>();
+                    bins[i, j] = new List<Structs.CoercedBin>();
                 }
             }
             #endif
             #if SEARCHPOWER_0
-            //areabox, times intersected (super low memory usage)
-            long[,] bins = new long[Structs.GPSBoxed.BinsLon, Structs.GPSBoxed.BinsLat];
-            for (int i = 0; i < Structs.GPSBoxed.BinsLon; i++)
+            //initialize grid of bins, times intersected only (super low memory usage)
+            int[,] bins = new int[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
+            for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
             {
-                for (int j = 0; j < Structs.GPSBoxed.BinsLat; j++)
+                for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
                 {
-                    bins[i, j] = 0L;
+                    bins[i, j] = 0;
                 }
             }
             #endif
 
             //Read all files
-            string[] files = System.IO.Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
+            //string[] files = new string[1] { "../../../../../gracedata/2002-04-05.1579023002.latlon" };
+            string[] files = Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
             int filen = 1; //current file number
 
             foreach (string file in files)
@@ -86,9 +103,9 @@ namespace GRACE_CMD
                     double lonB = Convert.ToDouble(parameters[8]);
                     double altB = Convert.ToDouble(parameters[9]);
                     Structs.GPSData data = new Structs.GPSData(time, latA, lonA, altA, latB, lonB, altB);
-                    Structs.GPSBoxed box = new Structs.GPSBoxed(data, Structs.Satellite.GraceA);
+                    Structs.GPSBoxed gpsbox = new Structs.GPSBoxed(data, Structs.Satellite.GraceA);
 
-                    Structs.PointTime current = new Structs.PointTime(box.boxcenter, data.time);
+                    Structs.PointTime current = new Structs.PointTime(gpsbox.bin.boxcenter, data.time);
 
                     if (lasttime.point == current.point)
                     {
@@ -102,15 +119,23 @@ namespace GRACE_CMD
                         //if not yet inside area
                         lasttime = current;
                         #if SEARCHPOWER_2
-                        List<Structs.GPSBoxed> lbox = new List<Structs.GPSBoxed>();
-                        lbox.Add(box);
-                        if (!gpslist.TryAdd(lasttime, lbox)) { throw new Exception(); } //add to boxlist
+                            List<Structs.GPSBoxed> lbox = new List<Structs.GPSBoxed>();
+                            lbox.Add(box);
+                            if (!gpslist.TryAdd(lasttime, lbox)) { throw new Exception(); } //add to GPS list
                         #endif
-                        #if SEARCHPOWER_1
-                        bins[box.lonbox, Structs.GPSBoxed.BinLatCenter + box.latbox].Add(box.area); //add to bin
+
+                        #if SEARCHPOWER_1 || SEARCHPOWER_2
+                            #if WRITELOG
+                                log.WriteLine("{0} {1} {2} {3} {4} {5} {6}", gpsbox.bin.entry.ToString(),
+                                    gpsbox.bin.lonbox.ToString(), gpsbox.bin.latbox.ToString(),
+                                    gpsbox.bin.box.topleft.x, gpsbox.bin.box.topleft.y, gpsbox.bin.box.bottomright.x, gpsbox.bin.box.bottomright.y);
+                            #else
+                            bins[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox].Add(gpsbox.bin); //add to bin
+                            #endif
                         #endif
+
                         #if SEARCHPOWER_0
-                        bins[box.lonbox, Structs.GPSBoxed.BinLatCenter + box.latbox]++; //add 1 to bin count
+                            bins[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox]++; //add 1 to bin count
                         #endif
                     }
 
@@ -118,6 +143,32 @@ namespace GRACE_CMD
 
                 System.GC.Collect(); //free some memory
             }
+
+            #if WRITELOG
+
+                #if SEARCHPOWER_0
+                Console.WriteLine("Writing log...");
+                log.WriteLine("GRACE-CMD1 SEARCHPOWER_0");
+                log.WriteLine("TimesEntered | BoxIDLon BoxIDLat | BoxCenterLon BoxCenterLat BoxWidthDeg BoxHeightDeg");
+                for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
+                {
+                    for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
+                    {
+                        Structs.Point c = Structs.CoercedBin.GetCenter(i, j - Structs.CoercedBin.BinLatCenter + 1);
+                        Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
+                        /*Structs.AreaBox box = new Structs.AreaBox(Utils.coerce(c.x - (size.x / 2), 0, 360),
+                            Utils.coerce(c.x + (size.x / 2), 0, 360),
+                            Utils.coerce(c.y - (size.y / 2), -90, 90),
+                            Utils.coerce(c.y + (size.y / 2), -90, 90));*/
+                        log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", bins[i, j].ToString(), i.ToString(), (j - Structs.CoercedBin.BinLatCenter + 1).ToString(),
+                            c.x.ToString("F3"), c.y.ToString("F3"), size.x.ToString("F3"), size.y.ToString("F3"));
+                    }
+                }
+                #endif
+
+                log.Close();
+
+            #endif
 
             Console.WriteLine("Reading complete!");
 

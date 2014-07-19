@@ -24,6 +24,22 @@ namespace GRACE_CMD
             public GPSBoxed(GPSData data, Satellite sat)
             {
                 this.data = data;
+                this.bin = new CoercedBin(data, sat);
+            }
+
+            public CoercedBin bin; //The bounds of the resulting box
+            public GPSData data; //GPS data information
+        }
+        
+        /// <summary>
+        /// A rectangle coerced be a certain size and within coerced positions
+        /// Uses gridsize to determine size
+        /// </summary>
+        public struct CoercedBin
+        {
+            public CoercedBin(GPSData data, Satellite sat)
+            {
+                this.entry = data.time;
                 this.sat = sat;
                 if (sat == Satellite.GraceA)
                 {
@@ -35,20 +51,28 @@ namespace GRACE_CMD
                     this.lonbox = GetGridLoc(data.lonB);
                     this.latbox = GetGridLoc(data.latB);
                 }
-                this.boxcenter = GetCoord(lonbox, latbox);
-                this.boxsize = GetSize(lonbox, latbox);
+                this.boxcenter = GetCenter(lonbox, latbox);
+                this.boxsize = GetSize(boxcenter.x, boxcenter.y);
                 AreaBox box = new AreaBox(Utils.coerce(boxcenter.x - (boxsize.x / 2), 0, 360), Utils.coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
-                        Utils.coerce(boxcenter.y - (boxsize.y / 2), -90, 90), Utils.coerce(boxcenter.y + (boxsize.y / 2), -90, 90));
-                this.area = box;
+                    Utils.coerce(boxcenter.y - (boxsize.y / 2), -90, 90), Utils.coerce(boxcenter.y + (boxsize.y / 2), -90, 90));
+                this.box = box;
             }
 
+            public int lonbox; //X-axis box location
+            public int latbox; //Y-axis box location
+            public Point boxcenter; //Center of box in degrees
+            public Point boxsize; //Size of box as (width, height)
+            public AreaBox box; //Underlying box
+            public DateTime entry; //Time of entry
+            public Satellite sat; //Satellite
+            
             /// <summary>
             /// Get integer location of grid from degree value
             /// </summary>
             /// <param name="n">Degrees</param>
             /// <returns>Grid location, as an integer</returns>
             /// <remarks>Grid location MAY BE NEGATIVE!</remarks>
-            static int GetGridLoc(double n)
+            public static int GetGridLoc(double n)
             {
                 return Math.Sign(n) * ((int)Math.Floor((Math.Abs(n) / Globals.gridsize) - 0.5d) + 1);
             }
@@ -58,10 +82,10 @@ namespace GRACE_CMD
             /// <param name="boxlon">X value of box location</param>
             /// <param name="boxlat">Y value of box location</param>
             /// <returns></returns>
-            static Point GetCoord(double boxlon, double boxlat)
+            public static Point GetCenter(int boxlon, int boxlat)
             {
-                double lon = Globals.gridsize * boxlon;
-                double lat = Globals.gridsize * boxlat;
+                double lon = Globals.gridsize * (double)boxlon;
+                double lat = Globals.gridsize * (double)boxlat;
                 return new Point(lon, lat);
             }
             /// <summary>
@@ -70,7 +94,7 @@ namespace GRACE_CMD
             /// <param name="boxlon">Longitude of box in degrees</param>
             /// <param name="boxlat">Latitude of box in degrees</param>
             /// <returns></returns>
-            static Point GetSize(double boxlon, double boxlat)
+            public static Point GetSize(double boxlon, double boxlat)
             {
                 //Globals.gridsize - extra space that was cut
                 double w = Globals.gridsize - (boxlon - Utils.coerce(boxlon, 0, 360));
@@ -89,14 +113,36 @@ namespace GRACE_CMD
             /// Center bin on latitude axis
             /// </summary>
             public static int BinLatCenter { get { return (BinsLat - 1) / 2; } }
+        }
 
-            public GPSData data; ///GPS data information
-            public AreaBox area; ///The bounds of the resulting box
-            public int lonbox; ///X-axis box location
-            public int latbox; ///Y-axis box location
-            public Point boxcenter; ///Center of box in degrees
-            public Point boxsize; ///Size of box as (width, height)
-            public Satellite sat; ///Satellite enumeration
+        /// <summary>
+        /// A fully defined rectangle
+        /// </summary>
+        public struct AreaBox
+        {
+            public AreaBox(double xmin, double xmax, double ymin, double ymax)
+            {
+                this.topleft = new Point(xmin, ymin);
+                this.topright = new Point(xmax, ymin);
+                this.bottomleft = new Point(xmin, ymax);
+                this.bottomright = new Point(xmax, ymax);
+                this.center = new Point((xmax - xmin) / 2, (ymax - ymin) / 2);
+                this.anchortype = Anchor.TopLeft;
+                this.width = xmax - xmin;
+                this.height = ymax - ymin;
+                this.x = xmin;
+                this.y = ymin;
+                return;
+            }
+
+            /// <summary>
+            /// Anchor of box
+            /// </summary>
+            public enum Anchor { TopLeft, Center }
+
+            public Point topleft, topright, bottomleft, bottomright, center;
+            public double width, height, x, y;
+            public Anchor anchortype;
         }
 
         public struct GPSData
@@ -179,33 +225,6 @@ namespace GRACE_CMD
                 { return true; }
                 return false;
             }
-        }
-
-        public struct AreaBox
-        {
-            public AreaBox(double xmin, double xmax, double ymin, double ymax)
-            {
-                this.topleft = new Point(xmin, ymin);
-                this.topright = new Point(xmax, ymin);
-                this.bottomleft = new Point(xmin, ymax);
-                this.bottomright = new Point(xmax, ymax);
-                this.center = new Point((xmax - xmin) / 2, (ymax - ymin) / 2);
-                this.anchortype = Anchor.TopLeft;
-                this.width = xmax - xmin;
-                this.height = ymax - ymin;
-                this.x = xmin;
-                this.y = ymin;
-                return;
-            }
-
-            /// <summary>
-            /// Anchor of box
-            /// </summary>
-            public enum Anchor { TopLeft, Center }
-
-            public Point topleft, topright, bottomleft, bottomright, center;
-            public double width, height, x, y;
-            public Anchor anchortype;
         }
 
         /// <summary>
