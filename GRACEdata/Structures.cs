@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRACE_CMD
+namespace GRACEdata
 {
     /// <summary>
     /// Structures class

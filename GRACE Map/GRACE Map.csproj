@@ -287,6 +287,12 @@
   <ItemGroup>
     <None Include="Resources\action_add_16xLG.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GRACEdata\GRACEdata.csproj">
+      <Project>{b257ce19-2c05-4ed4-9b5c-4d813db09dd7}</Project>
+      <Name>GRACEdata</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

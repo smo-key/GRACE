@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRACE_CMD
+namespace GRACEdata
 {
     /// <summary>
     /// Globals
@@ -14,6 +14,6 @@ namespace GRACE_CMD
         /// <summary>
         /// Gridsize in degrees
         /// </summary>
-        public static double gridsize = 2;
+        public static double gridsize { get; set; }
     }
 }

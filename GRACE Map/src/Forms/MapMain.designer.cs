@@ -33,9 +33,9 @@
             this.Progress = new System.Windows.Forms.ProgressBar();
             this.Status = new System.Windows.Forms.Label();
             this.OverMap = new System.Windows.Forms.PictureBox();
-            this.ReadData = new System.Windows.Forms.Button();
+            this.ReadNow = new System.Windows.Forms.Button();
             this.gridsize = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
+            this.GridsizeText = new System.Windows.Forms.Label();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -46,9 +46,9 @@
             // 
             // Border
             // 
-            this.Border.Controls.Add(this.label1);
+            this.Border.Controls.Add(this.GridsizeText);
             this.Border.Controls.Add(this.gridsize);
-            this.Border.Controls.Add(this.ReadData);
+            this.Border.Controls.Add(this.ReadNow);
             this.Border.Controls.Add(this.OverMap);
             this.Border.Controls.Add(this.BottomPanel);
             this.Border.Size = new System.Drawing.Size(800, 513);
@@ -56,9 +56,9 @@
             this.Border.Controls.SetChildIndex(this.IconBox, 0);
             this.Border.Controls.SetChildIndex(this.BottomPanel, 0);
             this.Border.Controls.SetChildIndex(this.OverMap, 0);
-            this.Border.Controls.SetChildIndex(this.ReadData, 0);
+            this.Border.Controls.SetChildIndex(this.ReadNow, 0);
             this.Border.Controls.SetChildIndex(this.gridsize, 0);
-            this.Border.Controls.SetChildIndex(this.label1, 0);
+            this.Border.Controls.SetChildIndex(this.GridsizeText, 0);
             // 
             // TopPanel
             // 
@@ -131,28 +131,29 @@
             this.OverMap.TabIndex = 38;
             this.OverMap.TabStop = false;
             // 
-            // ReadData
+            // ReadNow
             // 
-            this.ReadData.AutoEllipsis = true;
-            this.ReadData.BackColor = System.Drawing.Color.Transparent;
-            this.ReadData.FlatAppearance.BorderSize = 0;
-            this.ReadData.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ReadData.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack;
-            this.ReadData.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ReadData.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ReadData.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ReadData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ReadData.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Play_32xLG_color;
-            this.ReadData.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ReadData.Location = new System.Drawing.Point(6, 36);
-            this.ReadData.Name = "ReadData";
-            this.ReadData.Size = new System.Drawing.Size(245, 41);
-            this.ReadData.TabIndex = 40;
-            this.ReadData.TabStop = false;
-            this.ReadData.Text = " Read GRACE Data";
-            this.ReadData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ReadData.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.ReadData.UseVisualStyleBackColor = false;
+            this.ReadNow.AutoEllipsis = true;
+            this.ReadNow.BackColor = System.Drawing.Color.Transparent;
+            this.ReadNow.FlatAppearance.BorderSize = 0;
+            this.ReadNow.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ReadNow.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack;
+            this.ReadNow.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ReadNow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ReadNow.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReadNow.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ReadNow.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Play_32xLG_color;
+            this.ReadNow.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.ReadNow.Location = new System.Drawing.Point(6, 36);
+            this.ReadNow.Name = "ReadNow";
+            this.ReadNow.Size = new System.Drawing.Size(245, 41);
+            this.ReadNow.TabIndex = 40;
+            this.ReadNow.TabStop = false;
+            this.ReadNow.Text = " Read GRACE Data";
+            this.ReadNow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ReadNow.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.ReadNow.UseVisualStyleBackColor = false;
+            this.ReadNow.Click += new System.EventHandler(this.ReadData_Click);
             // 
             // gridsize
             // 
@@ -178,14 +179,14 @@
             0,
             0});
             // 
-            // label1
+            // GridsizeText
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(710, 60);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 13);
-            this.label1.TabIndex = 42;
-            this.label1.Text = "degree Gridsize";
+            this.GridsizeText.AutoSize = true;
+            this.GridsizeText.Location = new System.Drawing.Point(710, 60);
+            this.GridsizeText.Name = "GridsizeText";
+            this.GridsizeText.Size = new System.Drawing.Size(80, 13);
+            this.GridsizeText.TabIndex = 42;
+            this.GridsizeText.Text = "degree Gridsize";
             // 
             // MapMain
             // 
@@ -213,10 +214,10 @@
         private System.Windows.Forms.Panel BottomPanel;
         private System.Windows.Forms.Label Status;
         private System.Windows.Forms.PictureBox OverMap;
-        protected System.Windows.Forms.Button ReadData;
+        protected System.Windows.Forms.Button ReadNow;
         private System.Windows.Forms.ProgressBar Progress;
         private System.Windows.Forms.NumericUpDown gridsize;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label GridsizeText;
 
     }
 }
