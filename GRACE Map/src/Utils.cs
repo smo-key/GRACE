@@ -3,11 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRACEdata;
 
 namespace GRACEMap
 {
     public class Utils
     {
+        /// <summary>
+        /// Blue to red scale, blue = 0, red = 100
+        /// </summary>
+        /// <param name="value">A value between 0 and 100</param>
+        /// <returns>System.Drawing.Color output</returns>
+        public static System.Drawing.Color BlueToRedScale(double value)
+        {
+            HSV color = new HSV(value / 100 * 240, 100, 100);
+            RGB output = HSVtoRGB(color.h, color.s, color.v);
+            return System.Drawing.Color.FromArgb((int)output.r, (int)output.g, (int)output.b);
+        }
+
         //*RGB->HSV*//
         public struct HSV
         {
@@ -17,7 +30,7 @@ namespace GRACEMap
                 this.s = s;
                 this.v = v;
             }
-            double h, s, v;
+            public double h, s, v;
         }
 
         public struct RGB
@@ -28,7 +41,7 @@ namespace GRACEMap
                 this.g = g;
                 this.b = b;
             }
-            double r, g, b;
+            public double r, g, b;
         }
         public static HSV RGBtoHSV(double r, double g, double b)
         {
