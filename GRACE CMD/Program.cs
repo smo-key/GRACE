@@ -81,8 +81,9 @@ namespace GRACE_CMD
             #endif
 
             //Read all files
-            string[] files = new string[1] { "../../../../../gracedata/2002-04-05.1579023002.latlon" };
+            //string[] files = new string[1] { "../../../../../gracedata/2002-09-05.1579023002.latlon" };
             //string[] files = Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
+            string[] files = Directory.GetFiles("../../../../../gracedata/", "2002-09*.latlon", SearchOption.TopDirectoryOnly);
             int filen = 1; //current file number
 
             foreach (string file in files)
