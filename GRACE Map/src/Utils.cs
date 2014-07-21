@@ -10,6 +10,16 @@ namespace GRACEMap
     public class Utils
     {
         /// <summary>
+        /// Takes a CoercedBin location (0 to 360 and -90 to 90) and converts it to a location on the map (800x400)
+        /// </summary>
+        /// <param name="bin"></param>
+        /// <returns></returns>
+        public static System.Drawing.Rectangle BinToMap(Structs.CoercedBin bin)
+        {
+
+        }
+
+        /// <summary>
         /// Blue to red scale, blue = 0, red = 100
         /// </summary>
         /// <param name="value">A value between 0 and 100</param>
