@@ -29,9 +29,11 @@ namespace GRACEMap
             GridsizeText.Enabled = false;
             Status.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Play_16xLG;
             Status.Text = "       Initializing...";
+            Status.ForeColor = Color.FromArgb(64, 64, 64);
             Progress.Value = 0;
 
             Thread thread = new Thread(ReadData);
+            thread.IsBackground = true;
             thread.Name = "Read Data Thread";
             thread.Start();
         }
@@ -40,8 +42,15 @@ namespace GRACEMap
         {
             //** GET FILE COUNT **//
             string[] files = Directory.GetFiles("../../../../../gracedata/", "2002-09*.latlon", SearchOption.TopDirectoryOnly);
-            int filen = 1; //current file number
+            int filen = 0; //current file number
             Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = files.Length; }));
+            SetProgress(filen);
+
+            //** SET SETTINGS **//
+            Globals.gridsize = (double)this.gridsize.Value;
+            Structs.PointTime lasttime = new Structs.PointTime();
+            Structs.Anchor anchor = Structs.Anchor.Uniform;
+            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
             //** INITIALIZE BIN COUNTS **//
             int[,] bins = new int[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
@@ -52,6 +61,62 @@ namespace GRACEMap
                     bins[i, j] = 0;
                 }
             }
+
+            //** READ ALL FILES **//
+            foreach (string file in files)
+            {
+                SetProgress(filen);
+                SetStatus(string.Format("Reading {0}...", file.ToString()));
+                filen++;
+                StreamReader reader = new StreamReader(file);
+                while (!reader.EndOfStream)
+                {
+                    string s = reader.ReadLine();
+                    string[] parameters = s.Split(' ');
+                    int count = parameters.Length;
+
+                    DateTime time = GRACEdata.Utils.GetTime(Convert.ToDouble(parameters[0]));
+                    double latA = Convert.ToDouble(parameters[1]);
+                    double lonA = Convert.ToDouble(parameters[2]);
+                    double altA = Convert.ToDouble(parameters[3]);
+                    double latB = Convert.ToDouble(parameters[7]);
+                    double lonB = Convert.ToDouble(parameters[8]);
+                    double altB = Convert.ToDouble(parameters[9]);
+                    Structs.GPSData data = new Structs.GPSData(time, latA, lonA, altA, latB, lonB, altB);
+                    Structs.GPSBoxed gpsbox = new Structs.GPSBoxed(data, Structs.Satellite.GraceA, Structs.Anchor.Uniform);
+
+                    Structs.PointTime current = new Structs.PointTime(gpsbox.bin.boxcenter, data.time);
+
+                    if (lasttime.point != current.point)
+                    {
+                        //if just entered bin
+                        bins[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox]++; //add 1 to bin count
+                        lasttime = current;
+                    }
+
+                }
+
+                System.GC.Collect(); //free some memory
+            }
+
+            //** WRITE TO BITMAP **//
+            SetProgress(filen);
+            SetStatus("Drawing map...");
+
+
+            //** EXIT **//
+            this.Invoke(new MethodInvoker(delegate 
+            {
+                ReadNow.Enabled = true;
+                gridsize.Enabled = true;
+                GridsizeText.Enabled = true;
+                Status.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Complete_and_ok_16xLG_color;
+                Status.Text = "       Completed successfully!";
+                Status.ForeColor = Color.Green;
+                Progress.Maximum = 100;
+                Progress.Value = 100;
+            }));
+            return;
         }
 
         private void SetProgress(int value)
