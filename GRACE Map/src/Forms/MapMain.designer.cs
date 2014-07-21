@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapMain));
             this.BottomPanel = new System.Windows.Forms.Panel();
+            this.Progress = new System.Windows.Forms.ProgressBar();
             this.Status = new System.Windows.Forms.Label();
             this.OverMap = new System.Windows.Forms.PictureBox();
             this.ReadData = new System.Windows.Forms.Button();
-            this.Progress = new System.Windows.Forms.ProgressBar();
             this.gridsize = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.Border.SuspendLayout();
@@ -51,7 +51,7 @@
             this.Border.Controls.Add(this.ReadData);
             this.Border.Controls.Add(this.OverMap);
             this.Border.Controls.Add(this.BottomPanel);
-            this.Border.Size = new System.Drawing.Size(800, 511);
+            this.Border.Size = new System.Drawing.Size(800, 513);
             this.Border.Controls.SetChildIndex(this.TopPanel, 0);
             this.Border.Controls.SetChildIndex(this.IconBox, 0);
             this.Border.Controls.SetChildIndex(this.BottomPanel, 0);
@@ -94,10 +94,17 @@
             // 
             this.BottomPanel.Controls.Add(this.Progress);
             this.BottomPanel.Controls.Add(this.Status);
-            this.BottomPanel.Location = new System.Drawing.Point(-1, 484);
+            this.BottomPanel.Location = new System.Drawing.Point(-1, 485);
             this.BottomPanel.Name = "BottomPanel";
             this.BottomPanel.Size = new System.Drawing.Size(802, 26);
             this.BottomPanel.TabIndex = 37;
+            // 
+            // Progress
+            // 
+            this.Progress.Location = new System.Drawing.Point(595, 4);
+            this.Progress.Name = "Progress";
+            this.Progress.Size = new System.Drawing.Size(200, 18);
+            this.Progress.TabIndex = 36;
             // 
             // Status
             // 
@@ -147,13 +154,6 @@
             this.ReadData.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.ReadData.UseVisualStyleBackColor = false;
             // 
-            // Progress
-            // 
-            this.Progress.Location = new System.Drawing.Point(595, 4);
-            this.Progress.Name = "Progress";
-            this.Progress.Size = new System.Drawing.Size(200, 18);
-            this.Progress.TabIndex = 36;
-            // 
             // gridsize
             // 
             this.gridsize.DecimalPlaces = 2;
@@ -191,7 +191,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 511);
+            this.ClientSize = new System.Drawing.Size(800, 513);
             this.Name = "MapMain";
             this.Text = "GRACE Frequency Mapper";
             this.title = "GRACE Frequency Map";
