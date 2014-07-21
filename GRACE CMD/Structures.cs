@@ -36,14 +36,19 @@ namespace GRACE_CMD
             /// </summary>
             /// <param name="data">GPSData information from satellite</param>
             /// <param name="sat">Satellite enumeration</param>
-            public GPSBoxed(GPSData data, Satellite sat)
+            public GPSBoxed(GPSData data, Satellite sat, Anchor anchor)
             {
                 this.data = data;
-                this.bin = new CoercedBin(data, sat);
+                this.bin = new CoercedBin(data, sat, anchor);
             }
 
             public CoercedBin bin; //The bounds of the resulting box
             public GPSData data; //GPS data information
+        }
+
+        public enum Anchor
+        {
+            Center, Uniform
         }
         
         /// <summary>
@@ -52,7 +57,7 @@ namespace GRACE_CMD
         /// </summary>
         public struct CoercedBin
         {
-            public CoercedBin(GPSData data, Satellite sat)
+            public CoercedBin(GPSData data, Satellite sat, Anchor anchor)
             {
                 this.entry = data.time;
                 this.sat = sat;
@@ -68,8 +73,20 @@ namespace GRACE_CMD
                 }
                 this.boxcenter = GetCenter(lonbox, latbox);
                 this.boxsize = GetSize(boxcenter.x, boxcenter.y);
-                AreaBox box = new AreaBox(Utils.coerce(boxcenter.x - (boxsize.x / 2), 0, 360), Utils.coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
-                    Utils.coerce(boxcenter.y - (boxsize.y / 2), -90, 90), Utils.coerce(boxcenter.y + (boxsize.y / 2), -90, 90));
+                AreaBox box = new AreaBox();
+                switch (anchor)
+                {
+                    case Anchor.Center:
+                        box = new AreaBox(Utils.coerce(boxcenter.x - (boxsize.x / 2), 0, 360), Utils.coerce(boxcenter.x + (boxsize.x / 2), 0, 360),
+                            Utils.coerce(boxcenter.y - (boxsize.y / 2), -90, 90), Utils.coerce(boxcenter.y + (boxsize.y / 2), -90, 90));
+                        break;
+                    case Anchor.Uniform:
+                        box = new AreaBox(Utils.coerce(boxcenter.x, 0, 360), Utils.coerce(boxcenter.x + boxsize.x, 0, 360),
+                            Utils.coerce(boxcenter.y, -90, 90), Utils.coerce(boxcenter.y + boxsize.y, -90, 90));
+                        break;
+                    default:
+                        break;
+                }
                 this.box = box;
             }
 

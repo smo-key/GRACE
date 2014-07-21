@@ -29,6 +29,8 @@ namespace GRACE_CMD
 
             Console.WriteLine("Initializing...");
             Structs.PointTime lasttime = new Structs.PointTime();
+            Structs.Anchor anchor = Structs.Anchor.Uniform;
+            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
             #if WRITELOG
                 //Prepare logging
@@ -79,8 +81,8 @@ namespace GRACE_CMD
             #endif
 
             //Read all files
-            //string[] files = new string[1] { "../../../../../gracedata/2002-04-05.1579023002.latlon" };
-            string[] files = Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
+            string[] files = new string[1] { "../../../../../gracedata/2002-04-05.1579023002.latlon" };
+            //string[] files = Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
             int filen = 1; //current file number
 
             foreach (string file in files)
@@ -104,7 +106,7 @@ namespace GRACE_CMD
                     double lonB = Convert.ToDouble(parameters[8]);
                     double altB = Convert.ToDouble(parameters[9]);
                     Structs.GPSData data = new Structs.GPSData(time, latA, lonA, altA, latB, lonB, altB);
-                    Structs.GPSBoxed gpsbox = new Structs.GPSBoxed(data, Structs.Satellite.GraceA);
+                    Structs.GPSBoxed gpsbox = new Structs.GPSBoxed(data, Structs.Satellite.GraceA, Structs.Anchor.Uniform);
 
                     Structs.PointTime current = new Structs.PointTime(gpsbox.bin.boxcenter, data.time);
 
@@ -187,10 +189,24 @@ namespace GRACE_CMD
                         int k = j - Structs.CoercedBin.BinLatCenter;
                         Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
                         Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
-                        Structs.AreaBox box = new Structs.AreaBox(Utils.coerce(c.x - (size.x / 2), 0, 360),
-                            Utils.coerce(c.x + (size.x / 2), 0, 360),
-                            Utils.coerce(c.y - (size.y / 2), -90, 90),
-                            Utils.coerce(c.y + (size.y / 2), -90, 90));
+                        Structs.AreaBox box = new Structs.AreaBox();
+                        switch (anchor)
+                        {
+                            case Structs.Anchor.Center:
+                                box = new Structs.AreaBox(Utils.coerce(c.x - (size.x / 2), 0, 360),
+                                    Utils.coerce(c.x + (size.x / 2), 0, 360),
+                                    Utils.coerce(c.y - (size.y / 2), -90, 90),
+                                    Utils.coerce(c.y + (size.y / 2), -90, 90));
+                                break;
+                            case Structs.Anchor.Uniform:
+                                box = new Structs.AreaBox(Utils.coerce(c.x, 0, 360),
+                                    Utils.coerce(c.x + size.x, 0, 360),
+                                    Utils.coerce(c.y, -90, 90),
+                                    Utils.coerce(c.y + size.y, -90, 90));
+                                break;
+                            default:
+                                break;
+                        }
                         log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", bins[i, j].ToString(), i.ToString(), k.ToString(),
                             box.topleft.x.ToString("F3"), box.topleft.y.ToString("F3"), box.bottomright.x.ToString("F3"), box.bottomright.y.ToString("F3"));
                     }
