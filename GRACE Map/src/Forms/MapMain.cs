@@ -47,7 +47,7 @@ namespace GRACEMap
             map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0);
 
             //** GET FILE COUNT **//
-            string[] files = Directory.GetFiles("../../../../../gracedata/", "2002-09*.latlon", SearchOption.TopDirectoryOnly);
+            string[] files = Directory.GetFiles("../../../../../gracedata/", "2002-09*.latlon", SearchOption.TopDirectoryOnly); //2002-09
             int filen = 0; //current file number
             Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = files.Length; }));
             SetProgress(filen);
@@ -72,7 +72,7 @@ namespace GRACEMap
             foreach (string file in files)
             {
                 SetProgress(filen);
-                SetStatus(string.Format("Reading {0}...", file.ToString()));
+                SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
                 filen++;
                 StreamReader reader = new StreamReader(file);
                 while (!reader.EndOfStream)
@@ -104,6 +104,17 @@ namespace GRACEMap
 
                 System.GC.Collect(); //free some memory
             }
+
+            //** GET RANGE **//
+            SetStatus("Parsing range...");
+            int max = 0;
+            for (int a = 0; a < Structs.CoercedBin.BinsLon; a++)
+			{
+			    for (int b = 0; b < Structs.CoercedBin.BinsLat; b++)
+			    {
+			        if (bins[a, b] > max) { max = bins[a, b]; }
+			    }
+			}
 
             //** WRITE TO BITMAP **//
             SetProgress(filen);
@@ -137,12 +148,16 @@ namespace GRACEMap
 
                     RectangleF rect = Utils.BinToMap(box);
 
-                    map.DrawRectangle(new Pen(Color.FromArgb(64, 64, 64, 64)), rect.X, rect.Y, rect.Width, rect.Height);
+                    double value = (double)bins[i, j] * 100d / max;
+                    Color color = Utils.BlueToRedScale(value, 60);
+                    Brush brush = new SolidBrush(color);
+                    map.FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
 
                 }
             }
 
             //** EXIT **//
+            SetProgress(Progress.Maximum);
             this.Invoke(new MethodInvoker(delegate 
             {
                 ReadNow.Enabled = true;
@@ -151,8 +166,6 @@ namespace GRACEMap
                 Status.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Complete_and_ok_16xLG_color;
                 Status.Text = "       Completed successfully!";
                 Status.ForeColor = Color.Green;
-                Progress.Maximum = 100;
-                Progress.Value = 100;
             }));
             return;
         }

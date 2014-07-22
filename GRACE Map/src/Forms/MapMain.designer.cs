@@ -84,6 +84,7 @@
             this.Minimize.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack;
             this.Minimize.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Minimize.Location = new System.Drawing.Point(751, 3);
+            this.Minimize.Visible = false;
             // 
             // IconBox
             // 
@@ -117,7 +118,7 @@
             this.Status.Name = "Status";
             this.Status.Size = new System.Drawing.Size(222, 14);
             this.Status.TabIndex = 35;
-            this.Status.Text = "       Ready to read GRACE groundtrack data.";
+            this.Status.Text = "       Ready to read GRACE groundtrack data!";
             this.Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // OverMap
@@ -159,15 +160,15 @@
             this.gridsize.DecimalPlaces = 2;
             this.gridsize.Location = new System.Drawing.Point(711, 39);
             this.gridsize.Maximum = new decimal(new int[] {
-            89,
+            899,
             0,
             0,
-            0});
+            65536});
             this.gridsize.Minimum = new decimal(new int[] {
             1,
             0,
             0,
-            196608});
+            65536});
             this.gridsize.Name = "gridsize";
             this.gridsize.Size = new System.Drawing.Size(76, 20);
             this.gridsize.TabIndex = 41;

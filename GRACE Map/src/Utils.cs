@@ -30,12 +30,13 @@ namespace GRACEMap
         /// Blue to red scale, blue = 0, red = 100
         /// </summary>
         /// <param name="value">A value between 0 and 100</param>
+        /// <param name="alpha">Alpha value of the color</param>
         /// <returns>System.Drawing.Color output</returns>
-        public static System.Drawing.Color BlueToRedScale(double value)
+        public static System.Drawing.Color BlueToRedScale(double value, int alpha)
         {
-            HSV color = new HSV(value / 100 * 240, 100, 100);
+            HSV color = new HSV(value * 240 / 100, 100, 100);
             RGB output = HSVtoRGB(color.h, color.s, color.v);
-            return System.Drawing.Color.FromArgb((int)output.r, (int)output.g, (int)output.b);
+            return System.Drawing.Color.FromArgb(alpha, (int)(output.r * 255), (int)(output.g * 255), (int)(output.b * 255));
         }
 
         //*RGB->HSV*//
