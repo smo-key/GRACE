@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapMain));
             this.BottomPanel = new System.Windows.Forms.Panel();
             this.Progress = new System.Windows.Forms.ProgressBar();
             this.Status = new System.Windows.Forms.Label();
@@ -51,7 +50,7 @@
             this.Border.Controls.Add(this.ReadNow);
             this.Border.Controls.Add(this.OverMap);
             this.Border.Controls.Add(this.BottomPanel);
-            this.Border.Size = new System.Drawing.Size(800, 513);
+            this.Border.Size = new System.Drawing.Size(803, 514);
             this.Border.Controls.SetChildIndex(this.TopPanel, 0);
             this.Border.Controls.SetChildIndex(this.IconBox, 0);
             this.Border.Controls.SetChildIndex(this.BottomPanel, 0);
@@ -62,7 +61,7 @@
             // 
             // TopPanel
             // 
-            this.TopPanel.Size = new System.Drawing.Size(800, 30);
+            this.TopPanel.Size = new System.Drawing.Size(803, 30);
             // 
             // Title
             // 
@@ -75,7 +74,7 @@
             this.CloseForm.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlLightLight;
             this.CloseForm.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack;
             this.CloseForm.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.CloseForm.Location = new System.Drawing.Point(772, 3);
+            this.CloseForm.Location = new System.Drawing.Point(775, 3);
             this.ToolTips.SetToolTip(this.CloseForm, "Close");
             // 
             // Minimize
@@ -84,7 +83,7 @@
             this.Minimize.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Minimize.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack;
             this.Minimize.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Minimize.Location = new System.Drawing.Point(748, 3);
+            this.Minimize.Location = new System.Drawing.Point(751, 3);
             // 
             // IconBox
             // 
@@ -94,14 +93,14 @@
             // 
             this.BottomPanel.Controls.Add(this.Progress);
             this.BottomPanel.Controls.Add(this.Status);
-            this.BottomPanel.Location = new System.Drawing.Point(-1, 485);
+            this.BottomPanel.Location = new System.Drawing.Point(-1, 486);
             this.BottomPanel.Name = "BottomPanel";
             this.BottomPanel.Size = new System.Drawing.Size(802, 26);
             this.BottomPanel.TabIndex = 37;
             // 
             // Progress
             // 
-            this.Progress.Location = new System.Drawing.Point(595, 4);
+            this.Progress.Location = new System.Drawing.Point(597, 4);
             this.Progress.Name = "Progress";
             this.Progress.Size = new System.Drawing.Size(200, 18);
             this.Progress.TabIndex = 36;
@@ -123,13 +122,13 @@
             // 
             // OverMap
             // 
-            this.OverMap.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("OverMap.BackgroundImage")));
-            this.OverMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.OverMap.Location = new System.Drawing.Point(-1, 85);
+            this.OverMap.BackgroundImage = global::GRACEMap.Properties.Resources.World_Map;
+            this.OverMap.Location = new System.Drawing.Point(0, 85);
             this.OverMap.Name = "OverMap";
-            this.OverMap.Size = new System.Drawing.Size(800, 400);
+            this.OverMap.Size = new System.Drawing.Size(801, 401);
             this.OverMap.TabIndex = 38;
             this.OverMap.TabStop = false;
+            this.OverMap.Paint += new System.Windows.Forms.PaintEventHandler(this.OverMap_Paint);
             // 
             // ReadNow
             // 
@@ -174,7 +173,7 @@
             this.gridsize.TabIndex = 41;
             this.gridsize.TabStop = false;
             this.gridsize.Value = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -192,7 +191,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 513);
+            this.ClientSize = new System.Drawing.Size(803, 514);
             this.Name = "MapMain";
             this.Text = "GRACE Frequency Mapper";
             this.title = "GRACE Frequency Map";

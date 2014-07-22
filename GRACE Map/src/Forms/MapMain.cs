@@ -17,6 +17,8 @@ namespace GRACEMap
 {
     public partial class MapMain : BaseForm
     {
+        private Graphics map;
+
         public MapMain() : base()
         {
             InitializeComponent();
@@ -40,6 +42,10 @@ namespace GRACEMap
 
         private void ReadData()
         {
+            //** CLEAR MAP **//
+            map.Clear(SystemColors.Control);
+            map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0);
+
             //** GET FILE COUNT **//
             string[] files = Directory.GetFiles("../../../../../gracedata/", "2002-09*.latlon", SearchOption.TopDirectoryOnly);
             int filen = 0; //current file number
@@ -103,6 +109,38 @@ namespace GRACEMap
             SetProgress(filen);
             SetStatus("Drawing map...");
 
+            for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
+            {
+                for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
+                {
+                    int k = j - Structs.CoercedBin.BinLatCenter;
+                    Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
+                    Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
+                    Structs.AreaBox box = new Structs.AreaBox();
+                    switch (anchor)
+                    {
+                        case Structs.Anchor.Center:
+                            box = new Structs.AreaBox(GRACEdata.Utils.coerce(c.x - (size.x / 2), 0, 360),
+                                GRACEdata.Utils.coerce(c.x + (size.x / 2), 0, 360),
+                                GRACEdata.Utils.coerce(c.y - (size.y / 2), -90, 90),
+                                GRACEdata.Utils.coerce(c.y + (size.y / 2), -90, 90));
+                            break;
+                        case Structs.Anchor.Uniform:
+                            box = new Structs.AreaBox(GRACEdata.Utils.coerce(c.x, 0, 360),
+                                GRACEdata.Utils.coerce(c.x + size.x, 0, 360),
+                                GRACEdata.Utils.coerce(c.y, -90, 90),
+                                GRACEdata.Utils.coerce(c.y + size.y, -90, 90));
+                            break;
+                        default:
+                            break;
+                    }
+
+                    RectangleF rect = Utils.BinToMap(box);
+
+                    map.DrawRectangle(new Pen(Color.FromArgb(64, 64, 64, 64)), rect.X, rect.Y, rect.Width, rect.Height);
+
+                }
+            }
 
             //** EXIT **//
             this.Invoke(new MethodInvoker(delegate 
@@ -149,6 +187,11 @@ namespace GRACEMap
             Button s = (Button)sender;
             s.ForeColor = Color.FromArgb(64, 64, 64);
             s.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
+        }
+
+        private void OverMap_Paint(object sender, PaintEventArgs e)
+        {
+            map = OverMap.CreateGraphics();
         }
 
     }

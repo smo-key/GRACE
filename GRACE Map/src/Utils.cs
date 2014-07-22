@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRACEdata;
+using System.Drawing;
 
 namespace GRACEMap
 {
@@ -14,9 +15,15 @@ namespace GRACEMap
         /// </summary>
         /// <param name="bin"></param>
         /// <returns></returns>
-        public static System.Drawing.Rectangle BinToMap(Structs.CoercedBin bin)
+        public static RectangleF BinToMap(Structs.AreaBox box)
         {
-
+            // 20/9 = scale factor in all directions
+            float x = (float)((box.topleft.x / 9) * 20);
+            float y = (float)(((box.topleft.y + 90) / 9) * 20);
+            float w = (float)(Math.Abs(box.topright.x - box.topleft.x) * 20 / 9);
+            float h = (float)(Math.Abs((box.bottomleft.y + 90) - (box.topleft.y + 90)) * 20 / 9);
+            RectangleF rect = new RectangleF(x, y, w, h);
+            return rect;
         }
 
         /// <summary>
