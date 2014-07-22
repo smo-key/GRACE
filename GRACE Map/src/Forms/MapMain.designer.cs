@@ -35,6 +35,8 @@
             this.ReadNow = new System.Windows.Forms.Button();
             this.gridsize = new System.Windows.Forms.NumericUpDown();
             this.GridsizeText = new System.Windows.Forms.Label();
+            this.Filter = new System.Windows.Forms.TextBox();
+            this.FilterText = new System.Windows.Forms.Label();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -45,12 +47,14 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.FilterText);
+            this.Border.Controls.Add(this.Filter);
             this.Border.Controls.Add(this.GridsizeText);
             this.Border.Controls.Add(this.gridsize);
             this.Border.Controls.Add(this.ReadNow);
             this.Border.Controls.Add(this.OverMap);
             this.Border.Controls.Add(this.BottomPanel);
-            this.Border.Size = new System.Drawing.Size(803, 514);
+            this.Border.Size = new System.Drawing.Size(803, 516);
             this.Border.Controls.SetChildIndex(this.TopPanel, 0);
             this.Border.Controls.SetChildIndex(this.IconBox, 0);
             this.Border.Controls.SetChildIndex(this.BottomPanel, 0);
@@ -58,6 +62,8 @@
             this.Border.Controls.SetChildIndex(this.ReadNow, 0);
             this.Border.Controls.SetChildIndex(this.gridsize, 0);
             this.Border.Controls.SetChildIndex(this.GridsizeText, 0);
+            this.Border.Controls.SetChildIndex(this.Filter, 0);
+            this.Border.Controls.SetChildIndex(this.FilterText, 0);
             // 
             // TopPanel
             // 
@@ -126,7 +132,7 @@
             this.OverMap.BackgroundImage = global::GRACEMap.Properties.Resources.World_Map;
             this.OverMap.Location = new System.Drawing.Point(0, 85);
             this.OverMap.Name = "OverMap";
-            this.OverMap.Size = new System.Drawing.Size(801, 401);
+            this.OverMap.Size = new System.Drawing.Size(801, 400);
             this.OverMap.TabIndex = 38;
             this.OverMap.TabStop = false;
             this.OverMap.Paint += new System.Windows.Forms.PaintEventHandler(this.OverMap_Paint);
@@ -158,7 +164,7 @@
             // gridsize
             // 
             this.gridsize.DecimalPlaces = 2;
-            this.gridsize.Location = new System.Drawing.Point(711, 39);
+            this.gridsize.Location = new System.Drawing.Point(698, 54);
             this.gridsize.Maximum = new decimal(new int[] {
             899,
             0,
@@ -170,11 +176,11 @@
             0,
             65536});
             this.gridsize.Name = "gridsize";
-            this.gridsize.Size = new System.Drawing.Size(76, 20);
+            this.gridsize.Size = new System.Drawing.Size(89, 20);
             this.gridsize.TabIndex = 41;
             this.gridsize.TabStop = false;
             this.gridsize.Value = new decimal(new int[] {
-            10,
+            2,
             0,
             0,
             0});
@@ -182,17 +188,35 @@
             // GridsizeText
             // 
             this.GridsizeText.AutoSize = true;
-            this.GridsizeText.Location = new System.Drawing.Point(710, 60);
+            this.GridsizeText.Location = new System.Drawing.Point(695, 36);
             this.GridsizeText.Name = "GridsizeText";
-            this.GridsizeText.Size = new System.Drawing.Size(80, 13);
+            this.GridsizeText.Size = new System.Drawing.Size(91, 13);
             this.GridsizeText.TabIndex = 42;
-            this.GridsizeText.Text = "degree Gridsize";
+            this.GridsizeText.Text = "Gridsize (degrees)";
+            // 
+            // Filter
+            // 
+            this.Filter.Location = new System.Drawing.Point(540, 54);
+            this.Filter.Name = "Filter";
+            this.Filter.Size = new System.Drawing.Size(143, 20);
+            this.Filter.TabIndex = 43;
+            this.Filter.TabStop = false;
+            this.Filter.Text = "2002-08";
+            // 
+            // FilterText
+            // 
+            this.FilterText.AutoSize = true;
+            this.FilterText.Location = new System.Drawing.Point(537, 36);
+            this.FilterText.Name = "FilterText";
+            this.FilterText.Size = new System.Drawing.Size(109, 13);
+            this.FilterText.TabIndex = 44;
+            this.FilterText.Text = "Year-Month-Day Filter";
             // 
             // MapMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(803, 514);
+            this.ClientSize = new System.Drawing.Size(803, 516);
             this.Name = "MapMain";
             this.Text = "GRACE Frequency Mapper";
             this.title = "GRACE Frequency Map";
@@ -218,6 +242,8 @@
         private System.Windows.Forms.ProgressBar Progress;
         private System.Windows.Forms.NumericUpDown gridsize;
         private System.Windows.Forms.Label GridsizeText;
+        private System.Windows.Forms.Label FilterText;
+        private System.Windows.Forms.TextBox Filter;
 
     }
 }

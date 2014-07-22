@@ -32,6 +32,8 @@ namespace GRACEMap
             Status.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Play_16xLG;
             Status.Text = "       Initializing...";
             Status.ForeColor = Color.FromArgb(64, 64, 64);
+            Filter.Enabled = false;
+            FilterText.Enabled = false;
             Progress.Value = 0;
 
             Thread thread = new Thread(ReadData);
@@ -47,7 +49,7 @@ namespace GRACEMap
             map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0);
 
             //** GET FILE COUNT **//
-            string[] files = Directory.GetFiles("../../../../../gracedata/", "2002-09*.latlon", SearchOption.TopDirectoryOnly); //2002-09
+            string[] files = Directory.GetFiles("../../../../../gracedata/", Filter.Text + "*.latlon", SearchOption.TopDirectoryOnly); //2002-09
             int filen = 0; //current file number
             Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = files.Length; }));
             SetProgress(filen);
@@ -59,10 +61,10 @@ namespace GRACEMap
             if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
             //** INITIALIZE BIN COUNTS **//
-            int[,] bins = new int[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat];
+            int[,] bins = new int[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat + 1];
             for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
             {
-                for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
+                for (int j = 0; j < Structs.CoercedBin.BinsLat + 1; j++)
                 {
                     bins[i, j] = 0;
                 }
@@ -110,19 +112,19 @@ namespace GRACEMap
             int max = 0;
             for (int a = 0; a < Structs.CoercedBin.BinsLon; a++)
 			{
-			    for (int b = 0; b < Structs.CoercedBin.BinsLat; b++)
+			    for (int b = 0; b < Structs.CoercedBin.BinsLat + 1; b++)
 			    {
 			        if (bins[a, b] > max) { max = bins[a, b]; }
 			    }
 			}
 
             //** WRITE TO BITMAP **//
-            SetProgress(filen);
+            SetProgress(Progress.Maximum - 1);
             SetStatus("Drawing map...");
 
             for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
             {
-                for (int j = 0; j < Structs.CoercedBin.BinsLat; j++)
+                for (int j = 0; j < Structs.CoercedBin.BinsLat + 1; j++)
                 {
                     int k = j - Structs.CoercedBin.BinLatCenter;
                     Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
@@ -166,9 +168,15 @@ namespace GRACEMap
                 Status.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Complete_and_ok_16xLG_color;
                 Status.Text = "       Completed successfully!";
                 Status.ForeColor = Color.Green;
+                Filter.Enabled = true;
+                FilterText.Enabled = true;
             }));
             return;
         }
+
+        private void DrawData()
+        { 
+}
 
         private void SetProgress(int value)
         {
