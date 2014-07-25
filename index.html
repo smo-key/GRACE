@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>GRACE Frequency Map</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Generator" content="https://callum.com">
+    <style type="text/css">
+        body {
+            background-color: #000;
+            font-family: courier;
+            margin: 0;
+            overflow: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: yellow;
+        }
+        #title {
+            position: absolute;
+            left: 0px;
+            width: 100%;
+            top: 8px;
+            text-align: center;
+            z-index: 10;
+            font-size: 1.5em;
+            color: #0f0;
+            pointer-events:none;
+        }
+        #fs_control {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            z-index: 10;
+        }
+        #debug_output {
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
+            z-index: 10;
+            color: orange;
+        }
+    </style>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/rStats.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/TrackballControls.js"></script>
+    <script type="text/javascript" src="js/dat.gui.min.js"></script>
+
+    <script type="text/javascript">
+        var camera, scene, renderer;
+        var rs;
+        var mesh;
+        var mesh_scale = 0.999;
+        var controls;
+        var helper_mesh;
+        var projector;
+        var intersect_point = undefined;
+        var last_mouse_x = Infinity, last_mouse_y = Infinity;
+        var auto_spin = true;
+        var spin_speed = 1.0;
+        var translucent = false;
+        var color = 0x337873;
+
+        document.addEventListener("DOMContentLoaded", start_app, false);
+
+        function start_app() {
+            init();
+            animate();
+        }
+
+        function init() {
+
+            if (!Detector.webgl) {
+                Detector.addGetWebGLMessage();
+            }
+
+            renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+            renderer.setClearColor(0x000000, 1.0);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 10, 1000);
+            camera.position.z = 80;
+
+            var ambient_light = new THREE.AmbientLight(0x333333);
+            scene.add(ambient_light);
+
+            var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(0, -1, 0);
+            scene.add(directionalLight);
+
+            var point_light = new THREE.PointLight(0xffffff);
+            point_light.position.x = 20;
+            point_light.position.y = 50;
+            point_light.position.z = 100;
+            scene.add(point_light);
+
+            var shading_type = THREE.SmoothShading;
+
+            var material = new THREE.MeshPhongMaterial({
+                color: 0x00ff00,
+                shading: shading_type,
+                shininess: 50,
+                transparent: true
+            });
+
+            var geometry = new THREE.IcosahedronGeometry(40, 3);
+
+            mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            controls = new THREE.TrackballControls(camera, renderer.domElement);
+            controls.rotateSpeed = 0.4;
+            controls.noZoom = false;
+            controls.noPan = false;
+            controls.staticMoving = false;
+            controls.minDistance = 50;
+            controls.maxDistance = 400;
+            controls.dynamicDampingFactor = 0.2;
+
+            var gui = new dat.GUI();
+            gui.add(this, 'auto_spin', true).name("Auto Spin");
+            gui.add(this, 'spin_speed', -1.2, 1.2).name("Spin Speed");
+            gui.add(this, 'translucent', true).name("Translucent").onChange(function (value) {
+                if (value)
+                    mesh.material.opacity = 0.5;
+                else
+                    mesh.material.opacity = 1.0;
+            });
+            gui.addColor(this, 'color').name("Object Color").onChange(function (value) {
+                mesh.material.color.setHex(value);
+            });
+
+            rS = new rStats({
+                CSSPath: "css/",
+                values: {
+                    frame: {
+                        caption: 'Total frame time (ms)',
+                        over: 16
+                    },
+                    fps: {
+                        caption: 'Framerate (FPS)',
+                        below: 30
+                    },
+                    render: {
+                        caption: 'Time to render (ms)'
+                    },
+                    rstats: {
+                        caption: 'rStats update (ms)'
+                    },
+                    intersect: {
+                        caption: 'Display update (ms)'
+                    }
+                },
+                groups: [
+                    { caption: 'Framerate',
+                      values: ['fps'] },
+                    { caption: 'Misc',
+                      values: ['rstats', 'intersect'] }
+                ]
+            });
+
+            projector = new THREE.Projector();
+
+            var helper_geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+            helper_mesh = new THREE.Mesh(helper_geometry, new THREE.MeshNormalMaterial());
+            scene.add(helper_mesh);
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onDocumentMouseMove(event) {
+            last_mouse_x = (event.clientX / window.innerWidth) * 2 - 1;
+            last_mouse_y = -(event.clientY / window.innerHeight) * 2 + 1;
+            event.preventDefault();
+
+            checkIntersect();
+        }
+
+        function checkIntersect() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            var vector = new THREE.Vector3(last_mouse_x, last_mouse_y, -1);
+            projector.unprojectVector(vector, camera);
+            var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+            var intersects = raycaster.intersectObject(mesh, true);
+            intersect_point = undefined;
+            if (intersects.length > 0) {
+                if (intersects[0].point !== null ) {
+                    helper_mesh.position.copy(intersects[0].point);
+                    intersect_point = intersects[0].point;
+                    update_output();
+                } else {
+                    update_output();
+                }
+            } else {
+                helper_mesh.position.set(Infinity, 0, 0);
+                update_output();
+            }
+        }
+
+        function update_output() {
+            var div = document.getElementById("debug_output");
+            if ( div ) {
+                if ( typeof intersect_point !== "undefined" ) {
+                    div.innerHTML = "Intersects at " + intersect_point.x.toFixed(2) + ", " + intersect_point.y.toFixed(2) + ", " + intersect_point.z.toFixed(2);
+                } else {
+                    div.innerHTML = "Does not intersect";
+                }
+            }
+        }
+
+        function full_screen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) {
+                document.documentElement.msRequestFullscreen();
+            }
+        }
+
+        function animate() {
+            rS('frame').start();
+            rS('FPS').frame();
+
+            requestAnimationFrame(animate);
+
+            controls.update();
+
+            if (auto_spin) {
+                mesh.rotation.set(Date.now() * 0.0005 * spin_speed, Date.now() * 0.0005 * spin_speed, Date.now() * 0.0005 * spin_speed);
+            }
+
+            rS('render').start();
+            renderer.render(scene, camera);
+            rS('render').end();
+
+            rS('intersect').start();
+            checkIntersect();
+            rS('intersect').end();
+
+            rS('frame').end();
+
+            rS('rStats').start();
+            rS().update();
+            rS('rStats').end();
+        }
+    </script>
+    </head>
+    <body>
+     <div id="title">GRACE Frequency Map</div>
+     <div id="fs_control"><a href="#" onClick="full_screen();">Go Full Screen</a></div>
+     <div id="debug_output"></div>
+    </body>
+</html>
