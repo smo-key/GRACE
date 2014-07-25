@@ -6,6 +6,16 @@ function start() {
   init();
 }
 
+function resizeCanvas() {
+  var width = $(window).width();
+  var height = $(window).height();
+  if (canvas.width != width ||
+      canvas.height != height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+}
+
 // INITIALIZE DRAWING
 function init() {
   canvas = document.getElementById("glcanvas");
@@ -38,5 +48,8 @@ function initWebGL(canvas) {
     gl = null;
   }
   
+  resizeCanvas();
   return gl;
 }
+
+window.addEventListener('resize', resizeCanvas);

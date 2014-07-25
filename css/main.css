@@ -1,0 +1,15 @@
+/* Body */
+body, html { 
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  border: 0px;
+  padding: 0px;
+}
+
+/* WebGL Canvas */
+#glcanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
