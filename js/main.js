@@ -1,3 +1,16 @@
+//*** GLOBALS ***//
+this.view = 'Frequency Map';
+
+//*** DATGUI ***//
+var gui = new dat.GUI({ autoPlace: false });
+var customContainer = document.getElementById('gui-container');
+customContainer.appendChild(gui.domElement);
+
+var viewupdate = gui.add(this, 'view', [ 'Frequency Map', 'Gravity Map' ] );
+viewupdate.onChange(function(value){
+  
+});
+
 //*** INITIALIZE THREE.JS ***//
 var renderer = new THREE.WebGLRenderer({
   antialias: true
@@ -44,9 +57,6 @@ light.shadowMapHeight = 1024;
 var starSphere = createStarfield();
 scene.add(starSphere);
 
-//*** DATGUI ***//
-//var datGUI = new dat.GUI;
-
 //*** EARTH ***//
 //Render Container
 var containerEarth = new THREE.Object3D();
@@ -73,25 +83,25 @@ containerEarth.add(earthCloud);
 //Cloud Animation
 onRenderFcts.push(function(delta, now){
   earthCloud.rotation.y += 1/8 * delta;
-})
+});
 
 //*** CAMERA CONTROLS ***//
 var mouse = {x:0, y:0};
 document.addEventListener('mousemove', function(event){
   mouse.x = (event.clientX / window.innerWidth) - 0.5;
   mouse.y = (event.clientY / window.innerHeight) - 0.5;
-}, false)
+}, false);
 //Animate Camera Position (Speed * 3)
 onRenderFcts.push(function(delta, now) {
   camera.position.x += (mouse.x * 5 - camera.position.x) * (delta * 5);
   camera.position.y += (mouse.y * 5 - camera.position.y) * (delta * 5);
   camera.lookAt(scene.position);
-})
+});
 
 //*** RENDER SCENE ***//
 onRenderFcts.push(function(){
   renderer.render(scene, camera);
-})
+});
 
 //*** LOOP ***//
 var lastTimeMsec = null;
@@ -107,5 +117,5 @@ requestAnimationFrame(function animate(nowMsec){
   //call each update function
   onRenderFcts.forEach(function(onRenderFct){
     onRenderFct(deltaMsec/1000, nowMsec/1000);
-  })
-})
+  });
+});

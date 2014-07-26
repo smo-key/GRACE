@@ -36,6 +36,24 @@ body, html {
   position: absolute;
 }
 
+#gui-container {
+  display: block;
+  background: #000;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 260px;
+  height: 0px;
+  overflow: visible;
+  font-family: 'helvetica';
+  font-weight: 400;
+  font-style: normal;
+}
+
+select {
+  color: #000;
+}
+
 /* Header */
 .header {
   background: transparent;
