@@ -1,10 +1,10 @@
 var createEarth	= function(){
 	var geometry	= new THREE.SphereGeometry(0.5, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
-		map		: THREE.ImageUtils.loadTexture('../img/earthmap1k.jpg'),
-		bumpMap		: THREE.ImageUtils.loadTexture('../img/earthbump1k.jpg'),
+		map		: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
+		bumpMap		: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
 		bumpScale	: 0.05,
-		specularMap	: THREE.ImageUtils.loadTexture('../img/earthspec1k.jpg'),
+		specularMap	: THREE.ImageUtils.loadTexture('img/earthspec1k.jpg'),
 		specular	: new THREE.Color('grey'),
 	})
 	var mesh	= new THREE.Mesh(geometry, material)
@@ -54,9 +54,9 @@ var createEarthCloud	= function(){
 			contextResult.putImageData(dataResult,0,0)	
 			material.map.needsUpdate = true;
 		})
-		imageTrans.src	= '../img/earthcloudmaptrans.jpg';
+		imageTrans.src	= 'img/earthcloudmaptrans.jpg';
 	}, false);
-	imageMap.src	= '../img/earthcloudmap.jpg';
+	imageMap.src	= 'img/earthcloudmap.jpg';
 
 	var geometry	= new THREE.SphereGeometry(0.51, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
@@ -70,7 +70,7 @@ var createEarthCloud	= function(){
 }
 
 var createStarfield	= function(){
-	var texture	= THREE.ImageUtils.loadTexture('../img/starfield.png')
+	var texture	= THREE.ImageUtils.loadTexture('img/starfield.png')
 	var material	= new THREE.MeshBasicMaterial({
 		map	: texture,
 		side	: THREE.BackSide
