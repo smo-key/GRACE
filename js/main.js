@@ -6,7 +6,7 @@ var gui = new dat.GUI({ autoPlace: false });
 var customContainer = document.getElementById('gui-container');
 customContainer.appendChild(gui.domElement);
 
-var viewupdate = gui.add(this, 'view', [ 'Frequency Map', 'Gravity Map' ] );
+var viewupdate = gui.add(this, 'view', [ 'Frequency Map', 'Gravity Map' ] ).name("View");
 viewupdate.onChange(function(value){
   
 });
