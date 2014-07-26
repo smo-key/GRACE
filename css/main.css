@@ -7,29 +7,76 @@ body, html {
   padding: 0px;
   background-color: #000000;
   overflow: hidden;
+  font-family: 'helvetica';
+  font-weight: 400;
+  font-style: normal;
+}
+
+.navbar {
+  background-color: rgba(0,0,0,0.3);
+  color: #fff;
+  border-color: transparent;
+}
+.navbar-default .navbar-brand {
+    color: #fff;
 }
 
 #title {
   color: #fff;
   top: 8px;
-  width: 100%;
+  left: 16px;
   z-index: 15;
   position: absolute;
+}
+#subtitle {
+  color: #ccc;
+  top: 30px;
+  left: 16px;
+  z-index: 15;
+  position: absolute;
+}
+
+/* Header */
+.header {
+  background: transparent;
+  padding-bottom: 24px;
+  position: fixed;
+  margin-right: 24px;
+  right: 0px;
+  top: 0px;
+  z-index: 9999;
   font-family: 'helvetica';
   font-weight: 400;
   font-style: normal;
   text-align: center;
 }
-#subtitle {
-  color: #ccc;
-  top: 30px;
-  width: 100%;
-  z-index: 15;
-  position: absolute;
-  font-family: 'helvetica';
-  font-weight: 300;
-  font-style: normal;
-  text-align: center;
+
+.header-nav > li {
+  display: inline-block;
+  float: none;
+  height: 20px;
+}
+.header-nav > li + li {
+  margin-left: 12px;
+}
+.header-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 1em;
+  color: #fff; /* IE8 proofing */
+  color: rgba(255,255,255,.75);
+  border-bottom: 2px solid transparent;
+}
+.header-nav > li > a:hover,
+.header-nav > li > a:focus {
+  background-color: transparent;
+  border-bottom-color: rgba(255,255,255,.25);
+}
+.header-nav > .active > a,
+.header-nav > .active > a:hover,
+.header-nav > .active > a:focus {
+  color: #fff;
+  border-bottom-color: #fff;
 }
 
 /* Fullscreen Button */
@@ -57,4 +104,44 @@ body, html {
 .mega-octicon:hover,
 .mega-octicon:focus {
   color: rgba(255, 255, 255, 1.0);
+}
+
+@media screen and (max-width: 460px){
+  .header {
+    background: transparent;
+    padding-bottom: 0px;
+    position: fixed;
+    text-align: center;
+    margin-right: 0px;
+    width: 100%;
+    top: 32px;
+    z-index: 9999;
+  }
+  #title {
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    top: 8px;
+    left: 0px;
+    z-index: 15;
+    font-size: 0.8em;
+    margin: none;
+    padding: none;
+  }
+  #subtitle {
+    color: #ccc;
+    text-align: center;
+    width: 100%;
+    top: 22px;
+    left: 0px;
+    font-size: 0.8em;
+    z-index: 15;
+    margin: none;
+    padding: none;
+  }
+  
+  .header-nav > li > a {
+    font-size: 0.8em;
+    height: 32px;
+  }
 }

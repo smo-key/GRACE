@@ -7,13 +7,6 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'helvetica';
-  src: url('helveticaneue/helvetica-neueLTPro-Lt.otf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-
 /*@font-face {
   font-family: 'helvetica';
   src: url('octicons.eot?#iefix') format('embedded-opentype'),
