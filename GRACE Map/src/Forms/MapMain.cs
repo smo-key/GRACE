@@ -41,12 +41,130 @@ namespace GRACEMap
             thread.Name = "Read Data Thread";
             thread.Start();
         }
+        
+        public int FindMax()
+        {
+            //** SET SETTINGS **//
+            Globals.gridsize = (double)this.gridsize.Value;
+            Structs.PointTime lasttime = new Structs.PointTime();
+            Structs.Anchor anchor = Structs.Anchor.Uniform;
+            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
+
+            //*DOES MAXES.TXT EXIST*//
+            if (!File.Exists("../../../maxes.txt"))
+            {
+                FileStream stream = File.Create("../../../maxes.txt");
+                stream.Close();
+            }
+            int maximum = 0;
+
+            //*READ MAXES.TXT*//
+            string[] lines = System.IO.File.ReadAllLines("../../../maxes.txt");
+
+            //*CHECK IF BINSIZE EXISTS*//
+            foreach(string line in lines)
+            {
+                if(Convert.ToDouble(line.Split(' ')[0]) == Globals.gridsize)
+                {
+                    return Convert.ToInt32(line.Split(' ')[1]);
+                }
+            }
+
+            //** GET LIST OF YEAR / MONTH **//
+            List<string> ym = new List<string>();
+            string[] list = Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
+            foreach(string file in list)
+            {
+                FileInfo fi = new FileInfo(file);
+                if(!ym.Contains(fi.Name.Substring(0, 7)))
+                {
+                    ym.Add(fi.Name.Substring(0,7));
+                }
+            }
+
+            int filen = 0; //current file number
+            Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = list.Length; }));
+
+            foreach (string f in ym)
+            {
+                //** GET FILE COUNT **//
+                string[] files = Directory.GetFiles("../../../../../gracedata/", f + "*.latlon", SearchOption.TopDirectoryOnly);
+                SetProgress(filen);
+
+                //** INITIALIZE BIN COUNTS **//
+                int[,] bins = new int[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat + 1];
+                for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
+                {
+                    for (int j = 0; j < Structs.CoercedBin.BinsLat + 1; j++)
+                    {
+                        bins[i, j] = 0;
+                    }
+                }
+                //** READ ALL FILES **//
+                foreach (string file in files)
+                {
+                    SetProgress(filen);
+                    SetStatus(string.Format("Reading {0} for maximum...", Path.GetFileName(file)));
+                    filen++;
+                    StreamReader reader = new StreamReader(file);
+                    while (!reader.EndOfStream)
+                    {
+                        string s = reader.ReadLine();
+                        string[] parameters = s.Split(' ');
+                        int count = parameters.Length;
+
+                        DateTime time = GRACEdata.Utils.GetTime(Convert.ToDouble(parameters[0]));
+                        double latA = Convert.ToDouble(parameters[1]);
+                        double lonA = Convert.ToDouble(parameters[2]);
+                        double altA = Convert.ToDouble(parameters[3]);
+                        double latB = Convert.ToDouble(parameters[7]);
+                        double lonB = Convert.ToDouble(parameters[8]);
+                        double altB = Convert.ToDouble(parameters[9]);
+                        Structs.GPSData data = new Structs.GPSData(time, latA, lonA, altA, latB, lonB, altB);
+                        Structs.GPSBoxed gpsbox = new Structs.GPSBoxed(data, Structs.Satellite.GraceA, Structs.Anchor.Uniform);
+
+                        Structs.PointTime current = new Structs.PointTime(gpsbox.bin.boxcenter, data.time);
+
+                        if (lasttime.point != current.point)
+                        {
+                            //if just entered bin
+                            bins[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox]++; //add 1 to bin count
+                            lasttime = current;
+                        }
+
+                    }
+
+                    System.GC.Collect(); //free some memory
+                }
+
+                //** GET RANGE **//
+                SetStatus("Parsing range...");
+                int max = 0;
+                for (int a = 0; a < Structs.CoercedBin.BinsLon; a++)
+                {
+                    for (int b = 0; b < Structs.CoercedBin.BinsLat + 1; b++)
+                    {
+                        if (bins[a, b] > max) { max = bins[a, b]; }
+                    }
+                }
+                if (maximum < max) { maximum = max; }
+            }
+
+            //WRITE MAX AND BINSIZE TO MAXES.TXT
+            StreamWriter writer = new StreamWriter("../../../maxes.txt");
+            writer.WriteLine(String.Format("{0} {1}", Globals.gridsize, maximum));
+            writer.Flush();
+            writer.Close();
+            return maximum; //largest single bin from largest month
+        }
 
         private void ReadData()
         {
             //** CLEAR MAP **//
             map.Clear(SystemColors.Control);
             map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0);
+
+            int max = FindMax();
 
             //** GET FILE COUNT **//
             string[] files = Directory.GetFiles("../../../../../gracedata/", Filter.Text + "*.latlon", SearchOption.TopDirectoryOnly); //2002-09
@@ -107,17 +225,6 @@ namespace GRACEMap
                 System.GC.Collect(); //free some memory
             }
 
-            //** GET RANGE **//
-            SetStatus("Parsing range...");
-            int max = 0;
-            for (int a = 0; a < Structs.CoercedBin.BinsLon; a++)
-			{
-			    for (int b = 0; b < Structs.CoercedBin.BinsLat + 1; b++)
-			    {
-			        if (bins[a, b] > max) { max = bins[a, b]; }
-			    }
-			}
-
             //** WRITE TO BITMAP **//
             SetProgress(Progress.Maximum - 1);
             SetStatus("Drawing map...");
@@ -173,10 +280,6 @@ namespace GRACEMap
             }));
             return;
         }
-
-        private void DrawData()
-        { 
-}
 
         private void SetProgress(int value)
         {
