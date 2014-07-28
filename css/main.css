@@ -36,12 +36,13 @@ body, html {
   position: absolute;
 }
 
-#title {
+#datelabel {
   color: #fff;
-  top: 8px;
-  left: 16px;
+  bottom: 10px;
+  left: 46px;
   z-index: 15;
   position: absolute;
+  font-size: 20px;
 }
 
 #gui-container {

@@ -1,5 +1,6 @@
 //*** GLOBALS ***//
 this.view = 'Frequency Map';
+this.display = '3D Globe';
 this.year = 2014;
 this.month = 1;
 this.binsize = 2.0;
@@ -11,9 +12,14 @@ var gui = new dat.GUI({ autoPlace: false });
 var customContainer = document.getElementById('gui-container');
 customContainer.appendChild(gui.domElement);
 
-var viewupdate = gui.add(this, 'view', [ 'Frequency Map', 'Gravity Map', 'Earth Altitude',  ] ).name("View");
+var viewupdate = gui.add(this, 'view', [ 'Frequency Map', 'Gravity Map' ] ).name("View");
 viewupdate.onChange(function(value){
   //change viewmodes
+  
+});
+var displayupdate = gui.add(this, 'display', [ '3D Globe', '2D Map'  ] ).name("View");
+displayupdate.onChange(function(value){
+  //change displaymodes
   
 });
 var sizeupdate = gui.add(this, 'binsize', 0.5, 10.0).name("Binsize (degrees)");
