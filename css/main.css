@@ -45,13 +45,14 @@ body, html {
   width: 260px;
   height: 0px;
   overflow: visible;
-  font-family: 'helvetica';
-  font-weight: 400;
-  font-style: normal;
 }
 
 select {
   color: #000;
+}
+input {
+  line-height: normal;
+  padding: 6px;
 }
 
 /* Header */
