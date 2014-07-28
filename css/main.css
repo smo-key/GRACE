@@ -36,6 +36,14 @@ body, html {
   position: absolute;
 }
 
+#title {
+  color: #fff;
+  top: 8px;
+  left: 16px;
+  z-index: 15;
+  position: absolute;
+}
+
 #gui-container {
   display: block;
   background: #000;
@@ -55,62 +63,25 @@ input {
   padding: 6px;
 }
 
-/* Header */
-.header {
-  background: transparent;
-  padding-bottom: 24px;
-  position: fixed;
-  margin-right: 24px;
-  right: 0px;
-  top: 0px;
-  z-index: 9999;
-  font-family: 'helvetica';
-  font-weight: 400;
-  font-style: normal;
-  text-align: center;
-}
-
-.header-nav > li {
-  display: inline-block;
-  float: none;
-  height: 20px;
-}
-.header-nav > li + li {
-  margin-left: 12px;
-}
-.header-nav > li > a {
-  padding-right: 0;
-  padding-left: 0;
-  font-size: 1em;
-  color: #fff; /* IE8 proofing */
-  color: rgba(255,255,255,.75);
-  border-bottom: 2px solid transparent;
-}
-.header-nav > li > a:hover,
-.header-nav > li > a:focus {
-  background-color: transparent;
-  border-bottom-color: rgba(255,255,255,.25);
-}
-.header-nav > .active > a,
-.header-nav > .active > a:hover,
-.header-nav > .active > a:focus {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
 /* Fullscreen Button */
 #fsbutton {
   color: #fff;
-  width: 32px;
-  height: 32px;
   position: absolute;
-  right: 8px;
+  right: 16px;
+  bottom: 8px;
+  z-index: 10;
+}
+
+#runbutton {
+  color: #fff;
+  position: absolute;
+  left: 16px;
   bottom: 8px;
   z-index: 10;
 }
 
 /* Fading Icon */
-.mega-octicon {
+.fadeicon {
   color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   
@@ -120,28 +91,17 @@ input {
   -o-transition: color 0.1s ease-in-out;
   transition: color 0.1s ease-in-out;
 }
-.mega-octicon:hover,
-.mega-octicon:focus {
+.fadeicon:hover,
+.fadeicon:focus {
   color: rgba(255, 255, 255, 1.0);
 }
 
-@media screen and (max-width: 460px){
-  .header {
-    background: transparent;
-    padding-bottom: 0px;
-    position: fixed;
-    text-align: center;
-    margin-right: 0px;
-    width: 100%;
-    top: 32px;
-    z-index: 9999;
-  }
+@media screen and (max-width: 560px){
   #title {
     color: #fff;
     text-align: center;
-    width: 100%;
     top: 8px;
-    left: 0px;
+    left: 8px;
     z-index: 15;
     font-size: 0.8em;
     margin: none;
@@ -150,17 +110,11 @@ input {
   #subtitle {
     color: #ccc;
     text-align: center;
-    width: 100%;
     top: 22px;
-    left: 0px;
+    left: 8px;
     font-size: 0.8em;
     z-index: 15;
     margin: none;
     padding: none;
-  }
-  
-  .header-nav > li > a {
-    font-size: 0.8em;
-    height: 32px;
   }
 }

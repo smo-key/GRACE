@@ -37,11 +37,11 @@ function fsupdateicon()
   if ((window.fullScreen) ||
    (window.innerWidth == screen.width && window.innerHeight == screen.height))
   {
-    document.getElementById('fsbutton').innerHTML = "<span class='mega-octicon octicon-screen-normal' id='fadeicon'></span>";
+    document.getElementById('fsbutton').innerHTML = "<span class='mega-octicon octicon-screen-normal fadeicon'></span>";
   }
   else
   {
-    document.getElementById('fsbutton').innerHTML = "<span class='mega-octicon octicon-screen-full' id='fadeicon'></span>";
+    document.getElementById('fsbutton').innerHTML = "<span class='mega-octicon octicon-screen-full fadeicon'></span>";
   }
 }
 
