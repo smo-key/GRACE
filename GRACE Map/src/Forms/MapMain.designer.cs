@@ -270,7 +270,6 @@
             this.ScaleBox.Name = "ScaleBox";
             this.ScaleBox.Size = new System.Drawing.Size(257, 32);
             this.ScaleBox.TabIndex = 48;
-            this.ScaleBox.Visible = false;
             // 
             // Max
             // 

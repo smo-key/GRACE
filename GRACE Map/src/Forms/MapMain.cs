@@ -36,7 +36,6 @@ namespace GRACEMap
             Filter.Enabled = false;
             FilterText.Enabled = false;
             Progress.Value = 0;
-            ScaleBox.Visible = false;
 
             Thread thread = new Thread(ReadData);
             thread.IsBackground = true;
@@ -173,7 +172,6 @@ namespace GRACEMap
             this.Invoke(new MethodInvoker(delegate
             {
                 Max.Text = max.ToString();
-                ScaleBox.Visible = false;
             }));
         }
 
