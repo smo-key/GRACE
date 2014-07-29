@@ -37,6 +37,8 @@ namespace GRACEMap
             FilterText.Enabled = false;
             Progress.Value = 0;
             SaveScale.Enabled = false;
+            AllM.Enabled = false;
+            AllY.Enabled = false;
 
             Thread thread = new Thread(ReadData);
             thread.IsBackground = true;
@@ -299,6 +301,16 @@ namespace GRACEMap
                 Status.ForeColor = Color.Green;
                 Filter.Enabled = true;
                 FilterText.Enabled = true;
+                if (AllY.Checked || AllM.Checked)
+                {
+                    if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
+                    if (AllM.Checked) { AllM.Enabled = true; } else { AllM.Enabled = false; }
+                }
+                else
+                {
+                    AllY.Enabled = true;
+                    AllM.Enabled = true;
+                }
             }));
             return;
         }
