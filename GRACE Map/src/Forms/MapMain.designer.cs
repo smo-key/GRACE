@@ -37,16 +37,29 @@
             this.GridsizeText = new System.Windows.Forms.Label();
             this.Filter = new System.Windows.Forms.TextBox();
             this.FilterText = new System.Windows.Forms.Label();
+            this.SaveScale = new System.Windows.Forms.CheckBox();
+            this.Scale = new System.Windows.Forms.PictureBox();
+            this.Min = new System.Windows.Forms.Label();
+            this.ScaleBox = new System.Windows.Forms.Panel();
+            this.Max = new System.Windows.Forms.Label();
+            this.SaveImage = new System.Windows.Forms.CheckBox();
+            this.DateLabel = new System.Windows.Forms.Label();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
             this.BottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OverMap)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridsize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Scale)).BeginInit();
+            this.ScaleBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.DateLabel);
+            this.Border.Controls.Add(this.SaveImage);
+            this.Border.Controls.Add(this.ScaleBox);
+            this.Border.Controls.Add(this.SaveScale);
             this.Border.Controls.Add(this.FilterText);
             this.Border.Controls.Add(this.Filter);
             this.Border.Controls.Add(this.GridsizeText);
@@ -54,7 +67,7 @@
             this.Border.Controls.Add(this.ReadNow);
             this.Border.Controls.Add(this.OverMap);
             this.Border.Controls.Add(this.BottomPanel);
-            this.Border.Size = new System.Drawing.Size(803, 516);
+            this.Border.Size = new System.Drawing.Size(803, 552);
             this.Border.Controls.SetChildIndex(this.TopPanel, 0);
             this.Border.Controls.SetChildIndex(this.IconBox, 0);
             this.Border.Controls.SetChildIndex(this.BottomPanel, 0);
@@ -64,6 +77,10 @@
             this.Border.Controls.SetChildIndex(this.GridsizeText, 0);
             this.Border.Controls.SetChildIndex(this.Filter, 0);
             this.Border.Controls.SetChildIndex(this.FilterText, 0);
+            this.Border.Controls.SetChildIndex(this.SaveScale, 0);
+            this.Border.Controls.SetChildIndex(this.ScaleBox, 0);
+            this.Border.Controls.SetChildIndex(this.SaveImage, 0);
+            this.Border.Controls.SetChildIndex(this.DateLabel, 0);
             // 
             // TopPanel
             // 
@@ -100,7 +117,7 @@
             // 
             this.BottomPanel.Controls.Add(this.Progress);
             this.BottomPanel.Controls.Add(this.Status);
-            this.BottomPanel.Location = new System.Drawing.Point(-1, 486);
+            this.BottomPanel.Location = new System.Drawing.Point(-1, 522);
             this.BottomPanel.Name = "BottomPanel";
             this.BottomPanel.Size = new System.Drawing.Size(802, 26);
             this.BottomPanel.TabIndex = 37;
@@ -212,11 +229,87 @@
             this.FilterText.TabIndex = 44;
             this.FilterText.Text = "Year-Month-Day Filter";
             // 
+            // SaveScale
+            // 
+            this.SaveScale.AutoSize = true;
+            this.SaveScale.Checked = true;
+            this.SaveScale.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.SaveScale.Location = new System.Drawing.Point(388, 60);
+            this.SaveScale.Name = "SaveScale";
+            this.SaveScale.Size = new System.Drawing.Size(128, 17);
+            this.SaveScale.TabIndex = 45;
+            this.SaveScale.Text = "Save Date and Scale";
+            this.SaveScale.UseVisualStyleBackColor = true;
+            this.SaveScale.CheckedChanged += new System.EventHandler(this.SaveScale_CheckedChanged);
+            // 
+            // Scale
+            // 
+            this.Scale.Location = new System.Drawing.Point(18, 4);
+            this.Scale.Name = "Scale";
+            this.Scale.Size = new System.Drawing.Size(200, 23);
+            this.Scale.TabIndex = 46;
+            this.Scale.TabStop = false;
+            this.Scale.Paint += new System.Windows.Forms.PaintEventHandler(this.Scale_Paint);
+            // 
+            // Min
+            // 
+            this.Min.AutoSize = true;
+            this.Min.Location = new System.Drawing.Point(3, 9);
+            this.Min.Name = "Min";
+            this.Min.Size = new System.Drawing.Size(13, 13);
+            this.Min.TabIndex = 47;
+            this.Min.Text = "0";
+            // 
+            // ScaleBox
+            // 
+            this.ScaleBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ScaleBox.Controls.Add(this.Max);
+            this.ScaleBox.Controls.Add(this.Scale);
+            this.ScaleBox.Controls.Add(this.Min);
+            this.ScaleBox.Location = new System.Drawing.Point(277, 488);
+            this.ScaleBox.Name = "ScaleBox";
+            this.ScaleBox.Size = new System.Drawing.Size(257, 32);
+            this.ScaleBox.TabIndex = 48;
+            this.ScaleBox.Visible = false;
+            // 
+            // Max
+            // 
+            this.Max.AutoSize = true;
+            this.Max.Location = new System.Drawing.Point(218, 9);
+            this.Max.Name = "Max";
+            this.Max.Size = new System.Drawing.Size(25, 13);
+            this.Max.TabIndex = 48;
+            this.Max.Text = "100";
+            // 
+            // SaveImage
+            // 
+            this.SaveImage.AutoSize = true;
+            this.SaveImage.Checked = true;
+            this.SaveImage.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.SaveImage.Enabled = false;
+            this.SaveImage.Location = new System.Drawing.Point(388, 37);
+            this.SaveImage.Name = "SaveImage";
+            this.SaveImage.Size = new System.Drawing.Size(83, 17);
+            this.SaveImage.TabIndex = 49;
+            this.SaveImage.Text = "Save Image";
+            this.SaveImage.UseVisualStyleBackColor = true;
+            // 
+            // DateLabel
+            // 
+            this.DateLabel.AutoSize = true;
+            this.DateLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DateLabel.Location = new System.Drawing.Point(11, 452);
+            this.DateLabel.Name = "DateLabel";
+            this.DateLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.DateLabel.Size = new System.Drawing.Size(54, 21);
+            this.DateLabel.TabIndex = 47;
+            this.DateLabel.Text = "2002-08";
+            // 
             // MapMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(803, 516);
+            this.ClientSize = new System.Drawing.Size(803, 552);
             this.Name = "MapMain";
             this.Text = "GRACE Frequency Mapper";
             this.title = "GRACE Frequency Map";
@@ -229,6 +322,9 @@
             this.BottomPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OverMap)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridsize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Scale)).EndInit();
+            this.ScaleBox.ResumeLayout(false);
+            this.ScaleBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -244,6 +340,13 @@
         private System.Windows.Forms.Label GridsizeText;
         private System.Windows.Forms.Label FilterText;
         private System.Windows.Forms.TextBox Filter;
+        private System.Windows.Forms.CheckBox SaveScale;
+        private System.Windows.Forms.PictureBox Scale;
+        private System.Windows.Forms.Panel ScaleBox;
+        private System.Windows.Forms.Label Max;
+        private System.Windows.Forms.Label Min;
+        private System.Windows.Forms.CheckBox SaveImage;
+        private System.Windows.Forms.Label DateLabel;
 
     }
 }

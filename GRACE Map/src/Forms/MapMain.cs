@@ -15,9 +15,10 @@ using GRACEdata;
 
 namespace GRACEMap
 {
-    public partial class MapMain : BaseForm
+    public partial class MapMain : GRACEMap.BaseForm
     {
         private Graphics map;
+        private Graphics scale;
 
         public MapMain() : base()
         {
@@ -35,6 +36,7 @@ namespace GRACEMap
             Filter.Enabled = false;
             FilterText.Enabled = false;
             Progress.Value = 0;
+            ScaleBox.Visible = false;
 
             Thread thread = new Thread(ReadData);
             thread.IsBackground = true;
@@ -150,12 +152,29 @@ namespace GRACEMap
                 if (maximum < max) { maximum = max; }
             }
 
+            SetStatus("Drawing scale...");
+            DrawScale(maximum);
+
             //WRITE MAX AND BINSIZE TO MAXES.TXT
             StreamWriter writer = new StreamWriter("../../../maxes.txt");
             writer.WriteLine(String.Format("{0} {1}", Globals.gridsize, maximum));
             writer.Flush();
             writer.Close();
             return maximum; //largest single bin from largest month
+        }
+
+        private void DrawScale(int max)
+        {
+            for (int i = 0; i < 200; i++)
+            {
+                Pen pen = new Pen(Utils.BlueToRedScale(i / 2, 255));
+                scale.DrawLine(pen, i, 0, i, 23);
+            }
+            this.Invoke(new MethodInvoker(delegate
+            {
+                Max.Text = max.ToString();
+                ScaleBox.Visible = false;
+            }));
         }
 
         private void ReadData()
@@ -316,6 +335,25 @@ namespace GRACEMap
         private void OverMap_Paint(object sender, PaintEventArgs e)
         {
             map = OverMap.CreateGraphics();
+        }
+
+        private void SaveScale_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SaveScale.Checked)
+            {
+                ScaleBox.Location = new Point(SaveScale.Location.X, 447);
+                DateLabel.Visible = true;
+            }
+            else
+            {
+                ScaleBox.Location = new Point(SaveScale.Location.X, 488);
+                DateLabel.Visible = false;
+            }
+        }
+
+        private void Scale_Paint(object sender, PaintEventArgs e)
+        {
+            scale = Scale.CreateGraphics();
         }
 
     }
