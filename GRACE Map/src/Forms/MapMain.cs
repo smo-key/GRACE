@@ -36,6 +36,7 @@ namespace GRACEMap
             Filter.Enabled = false;
             FilterText.Enabled = false;
             Progress.Value = 0;
+            SaveScale.Enabled = false;
 
             Thread thread = new Thread(ReadData);
             thread.IsBackground = true;

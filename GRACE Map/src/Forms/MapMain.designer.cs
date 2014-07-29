@@ -232,8 +232,6 @@
             // SaveScale
             // 
             this.SaveScale.AutoSize = true;
-            this.SaveScale.Checked = true;
-            this.SaveScale.CheckState = System.Windows.Forms.CheckState.Checked;
             this.SaveScale.Location = new System.Drawing.Point(388, 60);
             this.SaveScale.Name = "SaveScale";
             this.SaveScale.Size = new System.Drawing.Size(128, 17);
@@ -301,6 +299,7 @@
             this.DateLabel.Size = new System.Drawing.Size(54, 21);
             this.DateLabel.TabIndex = 47;
             this.DateLabel.Text = "2002-08";
+            this.DateLabel.Visible = false;
             // 
             // MapMain
             // 
