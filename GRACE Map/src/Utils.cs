@@ -33,10 +33,12 @@ namespace GRACEMap
         /// <param name="alpha">Alpha value of the color</param>
         /// <param name="max">maximum number of passes</param>
         /// <returns>System.Drawing.Color output</returns>
-        public static System.Drawing.Color BlueToRedScale(double value, int max, int alpha)
+        public static System.Drawing.Color BlueToRedScale(double value, int max, double sensitivity, int alpha)
         {
             double x = value;
-            double y = (100 * (Math.Pow(x, 1/3.6177))/Math.Pow((double)max, 1/3.6177));
+            double a = 1 / (10 - sensitivity);
+            double b = 100 / Math.Pow((double)max, a);
+            double y = b * Math.Pow(x, a);
             HSV color = new HSV(y, 100, 100);
             RGB output = HSVtoRGB(color.h, color.s, color.v);
             return System.Drawing.Color.FromArgb(alpha, (int)(output.r * 255), (int)(output.g * 255), (int)(output.b * 255));

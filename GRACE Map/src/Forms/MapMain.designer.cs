@@ -46,6 +46,8 @@
             this.DateLabel = new System.Windows.Forms.Label();
             this.AllM = new System.Windows.Forms.CheckBox();
             this.AllY = new System.Windows.Forms.CheckBox();
+            this.SensitivityText = new System.Windows.Forms.Label();
+            this.Sensitivity = new System.Windows.Forms.NumericUpDown();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -54,10 +56,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridsize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Scale)).BeginInit();
             this.ScaleBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Sensitivity)).BeginInit();
             this.SuspendLayout();
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.SensitivityText);
+            this.Border.Controls.Add(this.Sensitivity);
             this.Border.Controls.Add(this.AllY);
             this.Border.Controls.Add(this.AllM);
             this.Border.Controls.Add(this.DateLabel);
@@ -87,6 +92,8 @@
             this.Border.Controls.SetChildIndex(this.DateLabel, 0);
             this.Border.Controls.SetChildIndex(this.AllM, 0);
             this.Border.Controls.SetChildIndex(this.AllY, 0);
+            this.Border.Controls.SetChildIndex(this.Sensitivity, 0);
+            this.Border.Controls.SetChildIndex(this.SensitivityText, 0);
             // 
             // TopPanel
             // 
@@ -329,6 +336,39 @@
             this.AllY.UseVisualStyleBackColor = true;
             this.AllY.CheckedChanged += new System.EventHandler(this.AllY_CheckedChanged);
             // 
+            // SensitivityText
+            // 
+            this.SensitivityText.AutoSize = true;
+            this.SensitivityText.Location = new System.Drawing.Point(698, 505);
+            this.SensitivityText.Name = "SensitivityText";
+            this.SensitivityText.Size = new System.Drawing.Size(81, 13);
+            this.SensitivityText.TabIndex = 53;
+            this.SensitivityText.Text = "Color Sensitivity";
+            // 
+            // Sensitivity
+            // 
+            this.Sensitivity.DecimalPlaces = 3;
+            this.Sensitivity.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.Sensitivity.Location = new System.Drawing.Point(701, 520);
+            this.Sensitivity.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            196608});
+            this.Sensitivity.Name = "Sensitivity";
+            this.Sensitivity.Size = new System.Drawing.Size(89, 20);
+            this.Sensitivity.TabIndex = 52;
+            this.Sensitivity.TabStop = false;
+            this.Sensitivity.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
             // MapMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -349,6 +389,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Scale)).EndInit();
             this.ScaleBox.ResumeLayout(false);
             this.ScaleBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Sensitivity)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -373,6 +414,8 @@
         private System.Windows.Forms.Label DateLabel;
         private System.Windows.Forms.CheckBox AllY;
         private System.Windows.Forms.CheckBox AllM;
+        private System.Windows.Forms.Label SensitivityText;
+        private System.Windows.Forms.NumericUpDown Sensitivity;
 
     }
 }

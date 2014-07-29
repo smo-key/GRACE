@@ -39,6 +39,8 @@ namespace GRACEMap
             SaveScale.Enabled = false;
             AllM.Enabled = false;
             AllY.Enabled = false;
+            Sensitivity.Enabled = false;
+            SensitivityText.Enabled = false;
 
             Thread thread = new Thread(ReadData);
             thread.IsBackground = true;
@@ -171,7 +173,7 @@ namespace GRACEMap
         {
             for (int i = 0; i < 200; i++)
             {
-                Pen pen = new Pen(Utils.BlueToRedScale(i / 2, max, 255));
+                Pen pen = new Pen(Utils.BlueToRedScale(i / 2, 100, (double)Sensitivity.Value, 255));
                 scale.DrawLine(pen, i, 0, i, 23);
             }
             this.Invoke(new MethodInvoker(delegate
@@ -282,7 +284,7 @@ namespace GRACEMap
                     RectangleF rect = Utils.BinToMap(box);
 
                     double value = (double)bins[i, j] * 100d / max;
-                    Color color = Utils.BlueToRedScale(value, max, 200);
+                    Color color = Utils.BlueToRedScale(value, max, (double)Sensitivity.Value, 200);
                     Brush brush = new SolidBrush(color);
                     map.FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
 
@@ -301,6 +303,8 @@ namespace GRACEMap
                 Status.ForeColor = Color.Green;
                 Filter.Enabled = true;
                 FilterText.Enabled = true;
+                Sensitivity.Enabled = true;
+                SensitivityText.Enabled = true;
                 if (AllY.Checked || AllM.Checked)
                 {
                     if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
