@@ -41,6 +41,9 @@ namespace GRACEMap
             AllY.Enabled = false;
             Sensitivity.Enabled = false;
             SensitivityText.Enabled = false;
+            DateLabel.Text = Filter.Text;
+            DispBack.Enabled = false;
+            if (SaveScale.Checked) { DateLabel.Visible = true; } else { DateLabel.Visible = false; }
 
             Thread thread = new Thread(ReadData);
             thread.IsBackground = true;
@@ -83,7 +86,7 @@ namespace GRACEMap
 
             //** GET LIST OF YEAR / MONTH **//
             List<string> ym = new List<string>();
-            string[] list = Directory.GetFiles("../../../../../gracedata/", "*.latlon", SearchOption.TopDirectoryOnly);
+            string[] list = Directory.GetFiles("../../../../../gracedata/groundtrack/", "*.latlon", SearchOption.TopDirectoryOnly);
             foreach(string file in list)
             {
                 FileInfo fi = new FileInfo(file);
@@ -99,7 +102,7 @@ namespace GRACEMap
             foreach (string f in ym)
             {
                 //** GET FILE COUNT **//
-                string[] files = Directory.GetFiles("../../../../../gracedata/", f + "*.latlon", SearchOption.TopDirectoryOnly);
+                string[] files = Directory.GetFiles("../../../../../gracedata/groundtrack/", f + "*.latlon", SearchOption.TopDirectoryOnly);
                 SetProgress(filen);
 
                 //** INITIALIZE BIN COUNTS **//
@@ -182,18 +185,26 @@ namespace GRACEMap
             }));
         }
 
+        private void SetDate(string date)
+        {
+            DateLabel.Invoke(new MethodInvoker(delegate
+            {
+                DateLabel.Text = date;
+            }));
+        }
+
         private void ReadData()
         {
             //** CLEAR MAP **//
             map.Clear(SystemColors.Control);
-            map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0);
+            if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
 
             int max = FindMax();
             SetStatus("Drawing scale...");
             DrawScale(max);
 
             //** GET FILE COUNT **//
-            string[] files = Directory.GetFiles("../../../../../gracedata/", Filter.Text + "*.latlon", SearchOption.TopDirectoryOnly); //2002-09
+            string[] files = Directory.GetFiles("../../../../../gracedata/groundtrack/", Filter.Text + "*.latlon", SearchOption.TopDirectoryOnly); //2002-09
             int filen = 0; //current file number
             Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = files.Length; }));
             SetProgress(filen);
@@ -255,6 +266,9 @@ namespace GRACEMap
             SetProgress(Progress.Maximum - 1);
             SetStatus("Drawing map...");
 
+            int alpha = 200;
+            if (!DispBack.Checked) { alpha = 255; }
+
             for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
             {
                 for (int j = 0; j < Structs.CoercedBin.BinsLat + 1; j++)
@@ -284,12 +298,14 @@ namespace GRACEMap
                     RectangleF rect = Utils.BinToMap(box);
 
                     double value = (double)bins[i, j] * 100d / max;
-                    Color color = Utils.BlueToRedScale(value, max, (double)Sensitivity.Value, 200);
+                    Color color = Utils.BlueToRedScale(value, max, (double)Sensitivity.Value, alpha);
                     Brush brush = new SolidBrush(color);
                     map.FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
 
                 }
             }
+
+            if (SaveImage.Checked) { SaveFrame("../../../output.gif"); }
 
             //** EXIT **//
             SetProgress(Progress.Maximum);
@@ -305,6 +321,7 @@ namespace GRACEMap
                 FilterText.Enabled = true;
                 Sensitivity.Enabled = true;
                 SensitivityText.Enabled = true;
+                //DispBack.Enabled = true;
                 if (AllY.Checked || AllM.Checked)
                 {
                     if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
@@ -317,6 +334,34 @@ namespace GRACEMap
                 }
             }));
             return;
+        }
+
+        private void SaveFrame(string name)
+        {
+            SetStatus("Saving image...");
+            Rectangle b = this.Bounds;
+            Rectangle bounds = new Rectangle(b.Left, b.Top + 102, 801, 400);
+
+            this.Invoke(new MethodInvoker(delegate
+            {
+                this.TopMost = true;
+            }));
+
+            File.Delete(name);
+
+            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                }
+                bitmap.Save(name, System.Drawing.Imaging.ImageFormat.Gif);
+            }
+
+            this.Invoke(new MethodInvoker(delegate
+            {
+                this.TopMost = false;
+            }));
         }
 
         private void SetProgress(int value)
@@ -360,13 +405,11 @@ namespace GRACEMap
         {
             if (SaveScale.Checked)
             {
-                ScaleBox.Location = new Point(ScaleBox.Location.X, 447);
-                DateLabel.Visible = true;
+                ScaleBox.Location = new Point(ScaleBox.Location.X, 465);
             }
             else
             {
-                ScaleBox.Location = new Point(ScaleBox.Location.X, 488);
-                DateLabel.Visible = false;
+                ScaleBox.Location = new Point(ScaleBox.Location.X, 506);
             }
         }
 
@@ -403,6 +446,12 @@ namespace GRACEMap
                 AllM.Enabled = true;
                 Filter.Enabled = true;
             }
+        }
+
+        private void DispBack_CheckedChanged(object sender, EventArgs e)
+        {
+            map.Clear(SystemColors.Control);
+            if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
         }
 
     }

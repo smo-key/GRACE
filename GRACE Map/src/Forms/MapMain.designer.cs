@@ -48,6 +48,7 @@
             this.AllY = new System.Windows.Forms.CheckBox();
             this.SensitivityText = new System.Windows.Forms.Label();
             this.Sensitivity = new System.Windows.Forms.NumericUpDown();
+            this.DispBack = new System.Windows.Forms.CheckBox();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -61,6 +62,7 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.DispBack);
             this.Border.Controls.Add(this.SensitivityText);
             this.Border.Controls.Add(this.Sensitivity);
             this.Border.Controls.Add(this.AllY);
@@ -94,6 +96,7 @@
             this.Border.Controls.SetChildIndex(this.AllY, 0);
             this.Border.Controls.SetChildIndex(this.Sensitivity, 0);
             this.Border.Controls.SetChildIndex(this.SensitivityText, 0);
+            this.Border.Controls.SetChildIndex(this.DispBack, 0);
             // 
             // TopPanel
             // 
@@ -245,7 +248,7 @@
             // SaveScale
             // 
             this.SaveScale.AutoSize = true;
-            this.SaveScale.Location = new System.Drawing.Point(388, 68);
+            this.SaveScale.Location = new System.Drawing.Point(388, 56);
             this.SaveScale.Name = "SaveScale";
             this.SaveScale.Size = new System.Drawing.Size(128, 17);
             this.SaveScale.TabIndex = 45;
@@ -294,8 +297,7 @@
             // SaveImage
             // 
             this.SaveImage.AutoSize = true;
-            this.SaveImage.Enabled = false;
-            this.SaveImage.Location = new System.Drawing.Point(388, 45);
+            this.SaveImage.Location = new System.Drawing.Point(388, 33);
             this.SaveImage.Name = "SaveImage";
             this.SaveImage.Size = new System.Drawing.Size(83, 17);
             this.SaveImage.TabIndex = 49;
@@ -306,7 +308,7 @@
             // 
             this.DateLabel.AutoSize = true;
             this.DateLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DateLabel.Location = new System.Drawing.Point(11, 452);
+            this.DateLabel.Location = new System.Drawing.Point(11, 469);
             this.DateLabel.Name = "DateLabel";
             this.DateLabel.Padding = new System.Windows.Forms.Padding(3);
             this.DateLabel.Size = new System.Drawing.Size(54, 21);
@@ -369,6 +371,19 @@
             0,
             0});
             // 
+            // DispBack
+            // 
+            this.DispBack.AutoSize = true;
+            this.DispBack.Checked = true;
+            this.DispBack.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DispBack.Location = new System.Drawing.Point(388, 79);
+            this.DispBack.Name = "DispBack";
+            this.DispBack.Size = new System.Drawing.Size(121, 17);
+            this.DispBack.TabIndex = 54;
+            this.DispBack.Text = "Display Background";
+            this.DispBack.UseVisualStyleBackColor = true;
+            this.DispBack.CheckedChanged += new System.EventHandler(this.DispBack_CheckedChanged);
+            // 
             // MapMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -416,6 +431,7 @@
         private System.Windows.Forms.CheckBox AllM;
         private System.Windows.Forms.Label SensitivityText;
         private System.Windows.Forms.NumericUpDown Sensitivity;
+        private System.Windows.Forms.CheckBox DispBack;
 
     }
 }
