@@ -167,7 +167,7 @@ namespace GRACEMap
         {
             for (int i = 0; i < 200; i++)
             {
-                Pen pen = new Pen(Utils.BlueToRedScale(i / 2, 255));
+                Pen pen = new Pen(Utils.BlueToRedScale(i / 2, max, 255));
                 scale.DrawLine(pen, i, 0, i, 23);
             }
             this.Invoke(new MethodInvoker(delegate
@@ -277,7 +277,7 @@ namespace GRACEMap
                     RectangleF rect = Utils.BinToMap(box);
 
                     double value = (double)bins[i, j] * 100d / max;
-                    Color color = Utils.BlueToRedScale(value, 200);
+                    Color color = Utils.BlueToRedScale(value, max, 200);
                     Brush brush = new SolidBrush(color);
                     map.FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
 
