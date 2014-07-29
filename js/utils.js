@@ -74,12 +74,12 @@ function deactivateDate() {
 function changeDate() {
   var mval = $("#dbutm").val();
   var yval = $("#dbuty").val();
+  if ((mval > 5) && (yval == 2014)) { mval = '05'; $("#dbutm").val('05'); }
+  if ((mval < 4) && (yval == 2002)) { mval = '04'; $("#dbutm").val('04'); }
   var mtxt = $("#dbutm option:selected").text();
   var ytxt = $("#dbuty option:selected").text();
   deactivateDate();
-  if ((mval > 5) && (yval == 2014)) { return; }
-  if ((yval > 2014) || (yval < 2002)) { return; }
-  if ((mval < 4) && (yval == 2002)) { return; }
+  
   $("#dlabm").html(mtxt);
   $("#dlaby").html(ytxt);
   this.year = yval;
