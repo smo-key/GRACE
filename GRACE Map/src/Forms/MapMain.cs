@@ -151,9 +151,6 @@ namespace GRACEMap
                 if (maximum < max) { maximum = max; }
             }
 
-            SetStatus("Drawing scale...");
-            DrawScale(maximum);
-
             //WRITE MAX AND BINSIZE TO MAXES.TXT
             StreamWriter writer = new StreamWriter("../../../maxes.txt");
             writer.WriteLine(String.Format("{0} {1}", Globals.gridsize, maximum));
@@ -182,6 +179,8 @@ namespace GRACEMap
             map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0);
 
             int max = FindMax();
+            SetStatus("Drawing scale...");
+            DrawScale(max);
 
             //** GET FILE COUNT **//
             string[] files = Directory.GetFiles("../../../../../gracedata/", Filter.Text + "*.latlon", SearchOption.TopDirectoryOnly); //2002-09
