@@ -44,6 +44,8 @@
             this.Max = new System.Windows.Forms.Label();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.DateLabel = new System.Windows.Forms.Label();
+            this.AllM = new System.Windows.Forms.CheckBox();
+            this.AllY = new System.Windows.Forms.CheckBox();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -56,6 +58,8 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.AllY);
+            this.Border.Controls.Add(this.AllM);
             this.Border.Controls.Add(this.DateLabel);
             this.Border.Controls.Add(this.SaveImage);
             this.Border.Controls.Add(this.ScaleBox);
@@ -67,7 +71,7 @@
             this.Border.Controls.Add(this.ReadNow);
             this.Border.Controls.Add(this.OverMap);
             this.Border.Controls.Add(this.BottomPanel);
-            this.Border.Size = new System.Drawing.Size(803, 552);
+            this.Border.Size = new System.Drawing.Size(803, 571);
             this.Border.Controls.SetChildIndex(this.TopPanel, 0);
             this.Border.Controls.SetChildIndex(this.IconBox, 0);
             this.Border.Controls.SetChildIndex(this.BottomPanel, 0);
@@ -81,6 +85,8 @@
             this.Border.Controls.SetChildIndex(this.ScaleBox, 0);
             this.Border.Controls.SetChildIndex(this.SaveImage, 0);
             this.Border.Controls.SetChildIndex(this.DateLabel, 0);
+            this.Border.Controls.SetChildIndex(this.AllM, 0);
+            this.Border.Controls.SetChildIndex(this.AllY, 0);
             // 
             // TopPanel
             // 
@@ -117,7 +123,7 @@
             // 
             this.BottomPanel.Controls.Add(this.Progress);
             this.BottomPanel.Controls.Add(this.Status);
-            this.BottomPanel.Location = new System.Drawing.Point(-1, 522);
+            this.BottomPanel.Location = new System.Drawing.Point(-1, 542);
             this.BottomPanel.Name = "BottomPanel";
             this.BottomPanel.Size = new System.Drawing.Size(802, 26);
             this.BottomPanel.TabIndex = 37;
@@ -147,7 +153,7 @@
             // OverMap
             // 
             this.OverMap.BackgroundImage = global::GRACEMap.Properties.Resources.World_Map;
-            this.OverMap.Location = new System.Drawing.Point(0, 85);
+            this.OverMap.Location = new System.Drawing.Point(0, 102);
             this.OverMap.Name = "OverMap";
             this.OverMap.Size = new System.Drawing.Size(801, 400);
             this.OverMap.TabIndex = 38;
@@ -167,9 +173,9 @@
             this.ReadNow.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ReadNow.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Play_32xLG_color;
             this.ReadNow.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.ReadNow.Location = new System.Drawing.Point(6, 36);
+            this.ReadNow.Location = new System.Drawing.Point(6, 44);
             this.ReadNow.Name = "ReadNow";
-            this.ReadNow.Size = new System.Drawing.Size(245, 41);
+            this.ReadNow.Size = new System.Drawing.Size(253, 41);
             this.ReadNow.TabIndex = 40;
             this.ReadNow.TabStop = false;
             this.ReadNow.Text = " Read GRACE Data";
@@ -181,7 +187,7 @@
             // gridsize
             // 
             this.gridsize.DecimalPlaces = 2;
-            this.gridsize.Location = new System.Drawing.Point(698, 54);
+            this.gridsize.Location = new System.Drawing.Point(698, 52);
             this.gridsize.Maximum = new decimal(new int[] {
             899,
             0,
@@ -205,7 +211,7 @@
             // GridsizeText
             // 
             this.GridsizeText.AutoSize = true;
-            this.GridsizeText.Location = new System.Drawing.Point(695, 36);
+            this.GridsizeText.Location = new System.Drawing.Point(695, 34);
             this.GridsizeText.Name = "GridsizeText";
             this.GridsizeText.Size = new System.Drawing.Size(91, 13);
             this.GridsizeText.TabIndex = 42;
@@ -213,7 +219,7 @@
             // 
             // Filter
             // 
-            this.Filter.Location = new System.Drawing.Point(540, 54);
+            this.Filter.Location = new System.Drawing.Point(540, 52);
             this.Filter.Name = "Filter";
             this.Filter.Size = new System.Drawing.Size(143, 20);
             this.Filter.TabIndex = 43;
@@ -223,7 +229,7 @@
             // FilterText
             // 
             this.FilterText.AutoSize = true;
-            this.FilterText.Location = new System.Drawing.Point(537, 36);
+            this.FilterText.Location = new System.Drawing.Point(537, 34);
             this.FilterText.Name = "FilterText";
             this.FilterText.Size = new System.Drawing.Size(109, 13);
             this.FilterText.TabIndex = 44;
@@ -232,7 +238,7 @@
             // SaveScale
             // 
             this.SaveScale.AutoSize = true;
-            this.SaveScale.Location = new System.Drawing.Point(388, 60);
+            this.SaveScale.Location = new System.Drawing.Point(388, 68);
             this.SaveScale.Name = "SaveScale";
             this.SaveScale.Size = new System.Drawing.Size(128, 17);
             this.SaveScale.TabIndex = 45;
@@ -264,7 +270,7 @@
             this.ScaleBox.Controls.Add(this.Max);
             this.ScaleBox.Controls.Add(this.Scale);
             this.ScaleBox.Controls.Add(this.Min);
-            this.ScaleBox.Location = new System.Drawing.Point(277, 488);
+            this.ScaleBox.Location = new System.Drawing.Point(277, 506);
             this.ScaleBox.Name = "ScaleBox";
             this.ScaleBox.Size = new System.Drawing.Size(257, 32);
             this.ScaleBox.TabIndex = 48;
@@ -282,7 +288,7 @@
             // 
             this.SaveImage.AutoSize = true;
             this.SaveImage.Enabled = false;
-            this.SaveImage.Location = new System.Drawing.Point(388, 37);
+            this.SaveImage.Location = new System.Drawing.Point(388, 45);
             this.SaveImage.Name = "SaveImage";
             this.SaveImage.Size = new System.Drawing.Size(83, 17);
             this.SaveImage.TabIndex = 49;
@@ -301,11 +307,33 @@
             this.DateLabel.Text = "2002-08";
             this.DateLabel.Visible = false;
             // 
+            // AllM
+            // 
+            this.AllM.AutoSize = true;
+            this.AllM.Location = new System.Drawing.Point(540, 75);
+            this.AllM.Name = "AllM";
+            this.AllM.Size = new System.Drawing.Size(75, 17);
+            this.AllM.TabIndex = 50;
+            this.AllM.Text = "All Months";
+            this.AllM.UseVisualStyleBackColor = true;
+            this.AllM.CheckedChanged += new System.EventHandler(this.AllM_CheckedChanged);
+            // 
+            // AllY
+            // 
+            this.AllY.AutoSize = true;
+            this.AllY.Location = new System.Drawing.Point(622, 75);
+            this.AllY.Name = "AllY";
+            this.AllY.Size = new System.Drawing.Size(67, 17);
+            this.AllY.TabIndex = 51;
+            this.AllY.Text = "All Years";
+            this.AllY.UseVisualStyleBackColor = true;
+            this.AllY.CheckedChanged += new System.EventHandler(this.AllY_CheckedChanged);
+            // 
             // MapMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(803, 552);
+            this.ClientSize = new System.Drawing.Size(803, 571);
             this.Name = "MapMain";
             this.Text = "GRACE Frequency Mapper";
             this.title = "GRACE Frequency Map";
@@ -343,6 +371,8 @@
         private System.Windows.Forms.Label Min;
         private System.Windows.Forms.CheckBox SaveImage;
         private System.Windows.Forms.Label DateLabel;
+        private System.Windows.Forms.CheckBox AllY;
+        private System.Windows.Forms.CheckBox AllM;
 
     }
 }

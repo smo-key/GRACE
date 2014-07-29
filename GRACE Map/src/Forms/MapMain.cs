@@ -359,5 +359,35 @@ namespace GRACEMap
             scale = Scale.CreateGraphics();
         }
 
+        private void AllM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AllM.Checked)
+            {
+                AllY.Enabled = false;
+                Filter.Enabled = false;
+                Filter.Text = "2002-08";
+            }
+            else
+            {
+                AllY.Enabled = true;
+                Filter.Enabled = true;
+            }
+        }
+
+        private void AllY_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AllY.Checked)
+            {
+                AllM.Enabled = false;
+                Filter.Enabled = false;
+                Filter.Text = "2002";
+            }
+            else
+            {
+                AllM.Enabled = true;
+                Filter.Enabled = true;
+            }
+        }
+
     }
 }
