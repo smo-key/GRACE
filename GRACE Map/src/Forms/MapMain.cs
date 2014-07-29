@@ -19,6 +19,7 @@ namespace GRACEMap
     {
         private Graphics map;
         private Graphics scale;
+        private int filen = 0; //current file number
 
         public MapMain() : base()
         {
@@ -96,7 +97,7 @@ namespace GRACEMap
                 }
             }
 
-            int filen = 0; //current file number
+            filen = 0; //current file number
             Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = list.Length; }));
 
             foreach (string f in ym)
@@ -105,51 +106,8 @@ namespace GRACEMap
                 string[] files = Directory.GetFiles("../../../../../gracedata/groundtrack/", f + "*.latlon", SearchOption.TopDirectoryOnly);
                 SetProgress(filen);
 
-                //** INITIALIZE BIN COUNTS **//
-                int[,] bins = new int[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat + 1];
-                for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
-                {
-                    for (int j = 0; j < Structs.CoercedBin.BinsLat + 1; j++)
-                    {
-                        bins[i, j] = 0;
-                    }
-                }
                 //** READ ALL FILES **//
-                foreach (string file in files)
-                {
-                    SetProgress(filen);
-                    SetStatus(string.Format("Reading {0} for maximum...", Path.GetFileName(file)));
-                    filen++;
-                    StreamReader reader = new StreamReader(file);
-                    while (!reader.EndOfStream)
-                    {
-                        string s = reader.ReadLine();
-                        string[] parameters = s.Split(' ');
-                        int count = parameters.Length;
-
-                        DateTime time = GRACEdata.Utils.GetTime(Convert.ToDouble(parameters[0]));
-                        double latA = Convert.ToDouble(parameters[1]);
-                        double lonA = Convert.ToDouble(parameters[2]);
-                        double altA = Convert.ToDouble(parameters[3]);
-                        double latB = Convert.ToDouble(parameters[7]);
-                        double lonB = Convert.ToDouble(parameters[8]);
-                        double altB = Convert.ToDouble(parameters[9]);
-                        Structs.GPSData data = new Structs.GPSData(time, latA, lonA, altA, latB, lonB, altB);
-                        Structs.GPSBoxed gpsbox = new Structs.GPSBoxed(data, Structs.Satellite.GraceA, Structs.Anchor.Uniform);
-
-                        Structs.PointTime current = new Structs.PointTime(gpsbox.bin.boxcenter, data.time);
-
-                        if (lasttime.point != current.point)
-                        {
-                            //if just entered bin
-                            bins[gpsbox.bin.lonbox, Structs.CoercedBin.BinLatCenter + gpsbox.bin.latbox]++; //add 1 to bin count
-                            lasttime = current;
-                        }
-
-                    }
-
-                    System.GC.Collect(); //free some memory
-                }
+                int[,] bins = GetData(files);
 
                 //** GET RANGE **//
                 SetStatus("Parsing range...");
@@ -193,27 +151,22 @@ namespace GRACEMap
             }));
         }
 
-        private void ReadData()
+        private void ReadAllData()
         {
-            //** CLEAR MAP **//
-            map.Clear(SystemColors.Control);
-            if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
+            if ((!(AllM.Checked || AllY.Checked)) && (SaveImage.Checked))
+            {
+                ReadData();
+                return;
+            }
 
-            int max = FindMax();
-            SetStatus("Drawing scale...");
-            DrawScale(max);
+            //create multi-month/year GIF
 
-            //** GET FILE COUNT **//
-            string[] files = Directory.GetFiles("../../../../../gracedata/groundtrack/", Filter.Text + "*.latlon", SearchOption.TopDirectoryOnly); //2002-09
-            int filen = 0; //current file number
-            Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = files.Length; }));
-            SetProgress(filen);
 
-            //** SET SETTINGS **//
-            Globals.gridsize = (double)this.gridsize.Value;
+        }
+
+        private int[,] GetData(string[] files)
+        {
             Structs.PointTime lasttime = new Structs.PointTime();
-            Structs.Anchor anchor = Structs.Anchor.Uniform;
-            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
             //** INITIALIZE BIN COUNTS **//
             int[,] bins = new int[Structs.CoercedBin.BinsLon, Structs.CoercedBin.BinsLat + 1];
@@ -262,6 +215,39 @@ namespace GRACEMap
                 System.GC.Collect(); //free some memory
             }
 
+            return bins;
+        }
+
+        private void ReadData()
+        {
+            //** CLEAR MAP **//
+            map.Clear(SystemColors.Control);
+            if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
+
+            int max = FindMax();
+            SetStatus("Drawing scale...");
+            DrawScale(max);
+
+            //** CREATE GIF **/
+            Rectangle b = this.Bounds;
+            Rectangle bounds = new Rectangle(b.Left, b.Top + 102, 801, 400);
+            Bitmap gif = new Bitmap(bounds.Width, bounds.Height);
+            Graphics g = Graphics.FromImage(gif);  
+
+            //** GET FILE COUNT **//
+            string[] files = Directory.GetFiles("../../../../../gracedata/groundtrack/", Filter.Text + "*.latlon", SearchOption.TopDirectoryOnly); //2002-09
+            filen = 0;
+            Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = files.Length; }));
+            SetProgress(filen);
+
+            //** SET SETTINGS **//
+            Globals.gridsize = (double)this.gridsize.Value;
+            Structs.Anchor anchor = Structs.Anchor.Uniform;
+            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
+
+            //** READ DATA **//
+            int[,] bins = GetData(files);
+
             //** WRITE TO BITMAP **//
             SetProgress(Progress.Maximum - 1);
             SetStatus("Drawing map...");
@@ -305,7 +291,17 @@ namespace GRACEMap
                 }
             }
 
-            if (SaveImage.Checked) { SaveFrame("../../../output.gif"); }
+            if (!(AllM.Checked || AllY.Checked))
+            {
+                //save image (only one)
+                if (SaveImage.Checked) { SaveFrame("../../../output.gif"); }
+            }
+            else
+            {
+                //add to GIF
+                if (SaveImage.Checked) { AddFrame(); }
+            }
+
 
             //** EXIT **//
             SetProgress(Progress.Maximum);
@@ -362,6 +358,11 @@ namespace GRACEMap
             {
                 this.TopMost = false;
             }));
+        }
+
+        private void AddFrame()
+        {
+
         }
 
         private void SetProgress(int value)
