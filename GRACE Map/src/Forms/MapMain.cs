@@ -52,16 +52,21 @@ namespace GRACEMap
             Structs.Anchor anchor = Structs.Anchor.Uniform;
             if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
+            string maxestext = "../../../maxmonth.txt";
+            int sublen = 7;
+            if (Filter.Text.Length < 6) { maxestext = "../../../maxyear.txt"; sublen = 4; }
+
             //*DOES MAXES.TXT EXIST*//
-            if (!File.Exists("../../../maxes.txt"))
+            
+            if (!File.Exists(maxestext))
             {
-                FileStream stream = File.Create("../../../maxes.txt");
+                FileStream stream = File.Create(maxestext);
                 stream.Close();
             }
             int maximum = 0;
 
             //*READ MAXES.TXT*//
-            string[] lines = System.IO.File.ReadAllLines("../../../maxes.txt");
+            string[] lines = System.IO.File.ReadAllLines(maxestext);
 
             //*CHECK IF BINSIZE EXISTS*//
             foreach(string line in lines)
@@ -78,9 +83,9 @@ namespace GRACEMap
             foreach(string file in list)
             {
                 FileInfo fi = new FileInfo(file);
-                if(!ym.Contains(fi.Name.Substring(0, 7)))
+                if (!ym.Contains(fi.Name.Substring(0, sublen)))
                 {
-                    ym.Add(fi.Name.Substring(0,7));
+                    ym.Add(fi.Name.Substring(0, sublen));
                 }
             }
 
@@ -153,7 +158,7 @@ namespace GRACEMap
             }
 
             //WRITE MAX AND BINSIZE TO MAXES.TXT
-            StreamWriter writer = new StreamWriter("../../../maxes.txt");
+            StreamWriter writer = new StreamWriter(maxestext);
             writer.WriteLine(String.Format("{0} {1}", Globals.gridsize, maximum));
             writer.Flush();
             writer.Close();
