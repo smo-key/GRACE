@@ -35,6 +35,15 @@ body, html {
   z-index: 15;
   position: absolute;
 }
+#copyright {
+  color: #ccc;
+  bottom: 10px;
+  width: 100%;
+  z-index: 15;
+  position: absolute;
+  font-size: 10px;
+  text-align: center;
+}
 
 .datelabels {
   color: #fff;

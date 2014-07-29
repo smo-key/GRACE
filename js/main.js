@@ -15,7 +15,7 @@ viewupdate.onChange(function(value){
   //change viewmodes
   
 });
-var displayupdate = gui.add(this, 'display', [ '3D Globe', '2D Map'  ] ).name("View");
+var displayupdate = gui.add(this, 'display', [ '3D Globe', '2D Map'  ] ).name("Display");
 displayupdate.onChange(function(value){
   //change displaymodes
   
