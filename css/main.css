@@ -39,7 +39,7 @@ body, html {
   color: #ccc;
   bottom: 10px;
   width: 100%;
-  z-index: 15;
+  z-index:  5;
   position: absolute;
   font-size: 10px;
   text-align: center;
