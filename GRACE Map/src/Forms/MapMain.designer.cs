@@ -274,7 +274,7 @@
             // Max
             // 
             this.Max.AutoSize = true;
-            this.Max.Location = new System.Drawing.Point(218, 9);
+            this.Max.Location = new System.Drawing.Point(220, 9);
             this.Max.Name = "Max";
             this.Max.Size = new System.Drawing.Size(25, 13);
             this.Max.TabIndex = 48;
@@ -283,8 +283,6 @@
             // SaveImage
             // 
             this.SaveImage.AutoSize = true;
-            this.SaveImage.Checked = true;
-            this.SaveImage.CheckState = System.Windows.Forms.CheckState.Checked;
             this.SaveImage.Enabled = false;
             this.SaveImage.Location = new System.Drawing.Point(388, 37);
             this.SaveImage.Name = "SaveImage";

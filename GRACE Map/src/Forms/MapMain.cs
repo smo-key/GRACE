@@ -338,12 +338,12 @@ namespace GRACEMap
         {
             if (SaveScale.Checked)
             {
-                ScaleBox.Location = new Point(SaveScale.Location.X, 447);
+                ScaleBox.Location = new Point(ScaleBox.Location.X, 447);
                 DateLabel.Visible = true;
             }
             else
             {
-                ScaleBox.Location = new Point(SaveScale.Location.X, 488);
+                ScaleBox.Location = new Point(ScaleBox.Location.X, 488);
                 DateLabel.Visible = false;
             }
         }
