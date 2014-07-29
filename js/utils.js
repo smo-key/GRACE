@@ -1,3 +1,7 @@
+this.year = '2002';
+this.month = '04';
+this.ym = '2002-04'
+
 //*** FULL SCREEN ***//
 function fullscreen() {
   if ((window.fullScreen) ||
@@ -55,3 +59,35 @@ function resizeCanvas() {
   fsupdateicon();
 }
 window.addEventListener('resize', resizeCanvas);
+
+//*** CHANGE MONTH/YEAR ***//
+function activateDate() {
+  $("#dlab").css("display", "none");
+  $("#dbut").css("display", "block");
+  $("#dbutm").val(this.month);
+  $("#dbuty").val(this.year);
+}
+function deactivateDate() {
+  $("#dlab").css("display", "block");
+  $("#dbut").css("display", "none");
+}
+function changeDate() {
+  var mval = $("#dbutm").val();
+  var yval = $("#dbuty").val();
+  var mtxt = $("#dbutm option:selected").text();
+  var ytxt = $("#dbuty option:selected").text();
+  deactivateDate();
+  if ((mval > 5) && (yval == 2014)) { return; }
+  if ((yval > 2014) || (yval < 2002)) { return; }
+  if ((mval < 4) && (yval == 2002)) { return; }
+  $("#dlabm").html(mtxt);
+  $("#dlaby").html(ytxt);
+  this.year = yval;
+  this.month = mval;
+  this.ym = yval.concat("-").concat(mval);
+}
+
+//*** ACTIVATE ANIMATION ***//
+function runGif() {
+  
+}

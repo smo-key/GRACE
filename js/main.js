@@ -1,8 +1,6 @@
 //*** GLOBALS ***//
 this.view = 'Frequency Map';
 this.display = '3D Globe';
-this.year = 2014;
-this.month = 1;
 this.binsize = 2.0;
 this.speed = 1;
 this.run = false;
@@ -23,7 +21,10 @@ displayupdate.onChange(function(value){
   
 });
 var sizeupdate = gui.add(this, 'binsize', 0.5, 10.0).name("Binsize (degrees)");
-var speedupdate = gui.add(this, 'speed', 0.1, 10).name("Timelapse Speed");
+sizeupdate.onChange(function(value){
+  binsize = Math.floor(binsize * 2) / 2;
+});
+var speedupdate = gui.add(this, 'speed', 0.1, 2).name("Timelapse Speed");
 
 //*** INITIALIZE THREE.JS ***//
 var renderer = new THREE.WebGLRenderer({
