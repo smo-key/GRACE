@@ -46,6 +46,7 @@ namespace GRACEMap
             SensitivityText.Enabled = false;
             DateLabel.Text = Filter.Text;
             BinDeg.Text = this.gridsize.Value.ToString("F2") + " deg";
+            Transp.Enabled = false;
 
             DispBack.Enabled = false;
             if (SaveScale.Checked) { DateLabel.Visible = true; } else { DateLabel.Visible = false; }
@@ -285,6 +286,7 @@ namespace GRACEMap
                 Sensitivity.Enabled = true;
                 SensitivityText.Enabled = true;
                 SaveImage.Enabled = true;
+                Transp.Enabled = true;
                 if (AllY.Checked || AllM.Checked)
                 {
                     if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
@@ -356,7 +358,7 @@ namespace GRACEMap
         private void ReadData()
         {
             //** CLEAR MAP **//
-            map.Clear(SystemColors.Control);
+            if (Transp.Checked) { map.Clear(Color.Transparent); } else { map.Clear(SystemColors.Control); }
             if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
 
             int max = FindMax();
@@ -366,7 +368,7 @@ namespace GRACEMap
             //** CREATE GIF **/
             Rectangle b = this.Bounds;
             Rectangle bounds = new Rectangle(b.Left, b.Top + 102, 801, 400);
-            Bitmap gif = new Bitmap(bounds.Width, bounds.Height);
+            Bitmap gif = new Bitmap(bounds.Width, bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(gif);
 
             //** GET FILE COUNT **//
@@ -421,14 +423,30 @@ namespace GRACEMap
                     double value = (double)bins[i, j] * 100d / max;
                     Color color = Utils.BlueToRedScale(value, max, (double)Sensitivity.Value, alpha);
                     Brush brush = new SolidBrush(color);
+                    if (Transp.Checked)
+                    {
+                        color = Utils.BlueToRedScale(value, max, (double)Sensitivity.Value);
+                        brush = new SolidBrush(color);
+                    }
                     map.FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
+                    if (Transp.Checked) { g.FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height); }
 
                 }
             }
 
             //save image (only one)
             SetStatus("Saving image...");
-            if (SaveImage.Checked) { SaveFrame("../../../output.gif"); }
+            if (SaveImage.Checked) 
+            {
+                if (!Transp.Checked)
+                {
+                    SaveFrame("../../../output");
+                }
+                else
+                {
+                    gif.Save("../../../output.png", System.Drawing.Imaging.ImageFormat.Png);
+                }
+            }
 
             //** EXIT **//
             SetProgress(Progress.Maximum);
@@ -445,6 +463,7 @@ namespace GRACEMap
                 Sensitivity.Enabled = true;
                 SensitivityText.Enabled = true;
                 SaveImage.Enabled = true;
+                Transp.Enabled = true;
                 if (AllY.Checked || AllM.Checked)
                 {
                     if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
@@ -473,14 +492,10 @@ namespace GRACEMap
 
             File.Delete(name);
 
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
-            {
-                using (Graphics g = Graphics.FromImage(bitmap))
-                {
-                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-                }
-                bitmap.Save(name, System.Drawing.Imaging.ImageFormat.Gif);
-            }
+            Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+            g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+            bitmap.Save(name + ".gif", System.Drawing.Imaging.ImageFormat.Gif);
 
             this.Invoke(new MethodInvoker(delegate
             {
@@ -491,9 +506,13 @@ namespace GRACEMap
 
         private void DrawScale(int max)
         {
+            scale.Clear(SystemColors.Control);
             for (int i = 0; i < max; i++)
             {
-                Brush brush = new System.Drawing.SolidBrush(Utils.BlueToRedScale((double)i / (double)max * 100.0d, 100, (double)Sensitivity.Value, 255));
+                Color color;
+                if (Transp.Checked) { color = Utils.BlueToRedScale((double)i / (double)max * 100.0d, 100, (double)Sensitivity.Value); }
+                else { color = Utils.BlueToRedScale((double)i / (double)max * 100.0d, 100, (double)Sensitivity.Value, 255); }
+                Brush brush = new System.Drawing.SolidBrush( color );
                 scale.FillRectangle(brush, (float)i / (float)max * 200.0f, 0.0f, (float)200.0f / max, 23.0f);
             }
             this.Invoke(new MethodInvoker(delegate

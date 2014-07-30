@@ -50,6 +50,7 @@
             this.Sensitivity = new System.Windows.Forms.NumericUpDown();
             this.DispBack = new System.Windows.Forms.CheckBox();
             this.BinDeg = new System.Windows.Forms.Label();
+            this.Transp = new System.Windows.Forms.CheckBox();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -63,6 +64,7 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.Transp);
             this.Border.Controls.Add(this.BinDeg);
             this.Border.Controls.Add(this.DispBack);
             this.Border.Controls.Add(this.SensitivityText);
@@ -100,6 +102,7 @@
             this.Border.Controls.SetChildIndex(this.SensitivityText, 0);
             this.Border.Controls.SetChildIndex(this.DispBack, 0);
             this.Border.Controls.SetChildIndex(this.BinDeg, 0);
+            this.Border.Controls.SetChildIndex(this.Transp, 0);
             // 
             // TopPanel
             // 
@@ -252,7 +255,7 @@
             // SaveScale
             // 
             this.SaveScale.AutoSize = true;
-            this.SaveScale.Location = new System.Drawing.Point(388, 56);
+            this.SaveScale.Location = new System.Drawing.Point(388, 50);
             this.SaveScale.Name = "SaveScale";
             this.SaveScale.Size = new System.Drawing.Size(128, 17);
             this.SaveScale.TabIndex = 45;
@@ -380,7 +383,7 @@
             this.DispBack.AutoSize = true;
             this.DispBack.Checked = true;
             this.DispBack.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.DispBack.Location = new System.Drawing.Point(388, 79);
+            this.DispBack.Location = new System.Drawing.Point(388, 68);
             this.DispBack.Name = "DispBack";
             this.DispBack.Size = new System.Drawing.Size(121, 17);
             this.DispBack.TabIndex = 54;
@@ -399,6 +402,17 @@
             this.BinDeg.Text = "2.00 deg";
             this.BinDeg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.BinDeg.Visible = false;
+            // 
+            // Transp
+            // 
+            this.Transp.AutoSize = true;
+            this.Transp.Location = new System.Drawing.Point(388, 85);
+            this.Transp.Name = "Transp";
+            this.Transp.Size = new System.Drawing.Size(115, 17);
+            this.Transp.TabIndex = 56;
+            this.Transp.TabStop = false;
+            this.Transp.Text = "Transparent Image";
+            this.Transp.UseVisualStyleBackColor = true;
             // 
             // MapMain
             // 
@@ -449,6 +463,7 @@
         private System.Windows.Forms.NumericUpDown Sensitivity;
         private System.Windows.Forms.CheckBox DispBack;
         private System.Windows.Forms.Label BinDeg;
+        private System.Windows.Forms.CheckBox Transp;
 
     }
 }
