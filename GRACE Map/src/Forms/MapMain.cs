@@ -46,7 +46,7 @@ namespace GRACEMap
             DispBack.Enabled = false;
             if (SaveScale.Checked) { DateLabel.Visible = true; } else { DateLabel.Visible = false; }
 
-            Thread thread = new Thread(ReadData);
+            Thread thread = new Thread(ReadAllData);
             thread.IsBackground = true;
             thread.Name = "Read Data Thread";
             thread.Start();
@@ -153,15 +153,109 @@ namespace GRACEMap
 
         private void ReadAllData()
         {
-            if ((!(AllM.Checked || AllY.Checked)) && (SaveImage.Checked))
+            if (!(AllM.Checked || AllY.Checked))
             {
                 ReadData();
                 return;
             }
+            if (!SaveImage.Checked) 
+            { 
+                Filter.Text = "";
+                ReadData(); 
+                return;
+            }
 
             //create multi-month/year GIF
+            int sublen = 7;
+            if (Filter.Text.Length < 6) { sublen = 4; }
 
+            //** SET SETTINGS **//
+            Globals.gridsize = (double)this.gridsize.Value;
+            Structs.Anchor anchor = Structs.Anchor.Uniform;
+            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
+            //** GET LIST OF YEAR / MONTH **//
+            List<string> ym = new List<string>();
+            string[] list = Directory.GetFiles("../../../../../gracedata/groundtrack/", "*.latlon", SearchOption.TopDirectoryOnly);
+            foreach (string file in list)
+            {
+                FileInfo fi = new FileInfo(file);
+                if (!ym.Contains(fi.Name.Substring(0, sublen)))
+                {
+                    ym.Add(fi.Name.Substring(0, sublen));
+                }
+            }
+            Progress.Invoke(new MethodInvoker(delegate { Progress.Maximum = list.Length; }));
+            filen = 0;
+            SetProgress(filen);
+
+            int max = FindMax();
+            SetStatus("Drawing scale...");
+            DrawScale(max);
+
+            foreach (string f in ym)
+            {
+                //** CLEAR MAP **//
+                map.Clear(SystemColors.Control);
+                if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
+
+                //** CREATE GIF **/
+                Rectangle b = this.Bounds;
+                Rectangle bounds = new Rectangle(b.Left, b.Top + 102, 801, 400);
+                Bitmap gif = new Bitmap(bounds.Width, bounds.Height);
+                Graphics g = Graphics.FromImage(gif);
+
+                //** GET FILE COUNT **//
+                string[] files = Directory.GetFiles("../../../../../gracedata/groundtrack/", f + "*.latlon", SearchOption.TopDirectoryOnly);
+                SetProgress(filen);
+
+                //** READ ALL FILES **//
+                int[,] bins = GetData(files);
+
+                //** WRITE TO BITMAP **//
+                SetProgress(Progress.Maximum - 1);
+                SetStatus("Drawing map...");
+
+                int alpha = 200;
+                if (!DispBack.Checked) { alpha = 255; }
+
+                for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
+                {
+                    for (int j = 0; j < Structs.CoercedBin.BinsLat + 1; j++)
+                    {
+                        int k = j - Structs.CoercedBin.BinLatCenter;
+                        Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
+                        Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
+                        Structs.AreaBox box = new Structs.AreaBox();
+                        switch (anchor)
+                        {
+                            case Structs.Anchor.Center:
+                                box = new Structs.AreaBox(GRACEdata.Utils.coerce(c.x - (size.x / 2), 0, 360),
+                                    GRACEdata.Utils.coerce(c.x + (size.x / 2), 0, 360),
+                                    GRACEdata.Utils.coerce(c.y - (size.y / 2), -90, 90),
+                                    GRACEdata.Utils.coerce(c.y + (size.y / 2), -90, 90));
+                                break;
+                            case Structs.Anchor.Uniform:
+                                box = new Structs.AreaBox(GRACEdata.Utils.coerce(c.x, 0, 360),
+                                    GRACEdata.Utils.coerce(c.x + size.x, 0, 360),
+                                    GRACEdata.Utils.coerce(c.y, -90, 90),
+                                    GRACEdata.Utils.coerce(c.y + size.y, -90, 90));
+                                break;
+                            default:
+                                break;
+                        }
+
+                        RectangleF rect = Utils.BinToMap(box);
+
+                        double value = (double)bins[i, j] * 100d / max;
+                        Color color = Utils.BlueToRedScale(value, max, (double)Sensitivity.Value, alpha);
+                        Brush brush = new SolidBrush(color);
+                        map.FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
+
+                    }
+                }
+            }
+            
         }
 
         private int[,] GetData(string[] files)
@@ -291,17 +385,8 @@ namespace GRACEMap
                 }
             }
 
-            if (!(AllM.Checked || AllY.Checked))
-            {
-                //save image (only one)
-                if (SaveImage.Checked) { SaveFrame("../../../output.gif"); }
-            }
-            else
-            {
-                //add to GIF
-                if (SaveImage.Checked) { AddFrame(); }
-            }
-
+            //save image (only one)
+            if (SaveImage.Checked) { SaveFrame("../../../output.gif"); }
 
             //** EXIT **//
             SetProgress(Progress.Maximum);
@@ -452,8 +537,4 @@ namespace GRACEMap
         private void DispBack_CheckedChanged(object sender, EventArgs e)
         {
             map.Clear(SystemColors.Control);
-            if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
-        }
-
-    }
-}
+            if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properti
