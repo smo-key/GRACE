@@ -149,6 +149,8 @@ namespace GRACEMap
                 return;
             }
 
+            SaveImage.Invoke(new MethodInvoker(delegate { SaveImage.Enabled = false; }));
+
             //create multi-month/year GIF
             int sublen = 7;
             if (Filter.Text.Length < 6) { sublen = 4; }
@@ -281,6 +283,7 @@ namespace GRACEMap
                 FilterText.Enabled = true;
                 Sensitivity.Enabled = true;
                 SensitivityText.Enabled = true;
+                SaveImage.Enabled = true;
                 if (AllY.Checked || AllM.Checked)
                 {
                     if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
@@ -439,7 +442,7 @@ namespace GRACEMap
                 FilterText.Enabled = true;
                 Sensitivity.Enabled = true;
                 SensitivityText.Enabled = true;
-                //DispBack.Enabled = true;
+                SaveImage.Enabled = true;
                 if (AllY.Checked || AllM.Checked)
                 {
                     if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
