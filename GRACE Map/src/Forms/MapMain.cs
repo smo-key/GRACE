@@ -267,6 +267,7 @@ namespace GRACEMap
                 
             }
 
+            SetStatus("Saving image...");
             gEnc.Save(new FileStream("../../../output.gif", FileMode.Create));
 
             //** EXIT **//
@@ -426,6 +427,7 @@ namespace GRACEMap
             }
 
             //save image (only one)
+            SetStatus("Saving image...");
             if (SaveImage.Checked) { SaveFrame("../../../output.gif"); }
 
             //** EXIT **//
