@@ -84,6 +84,25 @@ body, html {
   z-index: 60;
 }
 
+#loadcontainer {
+  display: block;
+  width: 100%;
+  z-index: 2;
+  position: absolute;
+  text-align: center;
+  color: #fff;
+  font-family: 'helvetica';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 28px;
+}
+
+.verticalmiddle {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 select {
   color: #000;
 }

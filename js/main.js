@@ -158,7 +158,7 @@ if(!Detector.webgl){
 		currentLang = lang;
 		currentRes = res;
 //		document.getElementById(currentLang + currentRes).style.color = '#fff';
-//		document.getElementById('load').innerHTML = 'Loading...';
+		$('#loadcontainer').css('display', 'block');
 		var xhr;
 
 		xhr = new XMLHttpRequest();
@@ -174,7 +174,7 @@ if(!Detector.webgl){
 					globe.addData(data);
 					globe.createPoints();
 					globe.animate();
-					document.getElementById('load').innerHTML = ' ';
+					$('#loadcontainer').css('display', 'none');
 				}
 			}
 		};
