@@ -489,10 +489,10 @@ namespace GRACEMap
 
         private void DrawScale(int max)
         {
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < max; i++)
             {
-                Pen pen = new Pen(Utils.BlueToRedScale(i / 2, 100, (double)Sensitivity.Value, 255));
-                scale.DrawLine(pen, i, 0, i, 23);
+                Brush brush = new System.Drawing.SolidBrush(Utils.BlueToRedScale((double)i / (double)max * 100.0d, 100, (double)Sensitivity.Value, 255));
+                scale.FillRectangle(brush, (float)i / (float)max * 200.0f, 0.0f, (float)200.0f / max, 23.0f);
             }
             this.Invoke(new MethodInvoker(delegate
             {
