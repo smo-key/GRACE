@@ -278,7 +278,6 @@ namespace GRACEMap
                 FilterText.Enabled = true;
                 Sensitivity.Enabled = true;
                 SensitivityText.Enabled = true;
-                //DispBack.Enabled = true;
                 if (AllY.Checked || AllM.Checked)
                 {
                     if (AllY.Checked) { AllY.Enabled = true; } else { AllY.Enabled = false; }
@@ -533,6 +532,19 @@ namespace GRACEMap
             Button s = (Button)sender;
             s.ForeColor = Color.FromArgb(64, 64, 64);
             s.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
+        }
+
+        internal override void DragEvent(object sender, MouseEventArgs e)
+        {
+            int l = e.X + this.Left - locx;
+            int t = e.Y + this.Top - locy;
+            Rectangle rect = Screen.PrimaryScreen.WorkingArea;
+            if (l < rect.X) { l = rect.X; }
+            if (t < rect.Y) { t = rect.Y; }
+            if (l + this.Width > rect.Right) { l = rect.Right - this.Width; }
+            if (t + this.Height > rect.Bottom) { t = rect.Bottom - this.Height; }
+            this.Left = l;
+            this.Top = t;
         }
 
         private void OverMap_Paint(object sender, PaintEventArgs e)

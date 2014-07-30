@@ -61,9 +61,9 @@ namespace GRACEMap
         }
 
         #region Drag
-        private int locx = 0;
-        private int locy = 0;
-        private bool drag = false;
+        internal int locx = 0;
+        internal int locy = 0;
+        internal bool drag = false;
         internal bool dragenabled = true;
         private void Control_MouseDown(object sender, MouseEventArgs e)
         {
@@ -83,16 +83,21 @@ namespace GRACEMap
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    int l = e.X + this.Left - locx;
-                    int t = e.Y + this.Top - locy;
-                    this.Left = l;
-                    this.Top = t;
+                    DragEvent(sender, e);
                 }
                 else
                 {
                     drag = false;
                 }
             }
+        }
+
+        internal virtual void DragEvent(object sender, MouseEventArgs e)
+        {
+            int l = e.X + this.Left - locx;
+            int t = e.Y + this.Top - locy;
+            this.Left = l;
+            this.Top = t;
         }
         #endregion
 
