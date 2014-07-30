@@ -90,6 +90,16 @@ onRenderFcts.push(function(delta, now){
   earthMesh.rotation.y += 1/32 * delta;
 });
 
+//Data Mesh
+var dataMesh = createData();
+dataMesh.recieveShadow = false;
+dataMesh.castShadow = false;
+containerEarth.add(dataMesh);
+dataMesh.rotation.y = Math.PI;
+onRenderFcts.push(function(delta, now){
+  dataMesh.rotation.y += 1/32 * delta;
+});
+
 //Clouds
 var earthCloud = createEarthCloud()
 earthCloud.recieveShadow = true;

@@ -1,14 +1,18 @@
+this.cloudopacity = 0.0;
+this.dataopacity = 0.3;
+this.datatexture = 'img/3deg-65-allmonth_debug.gif';
+
 var createEarth	= function(){
-	var geometry	= new THREE.SphereGeometry(0.5, 32, 32)
+	var geometry	= new THREE.SphereGeometry(0.50, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
-		map		: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
+		map		: THREE.ImageUtils.loadTexture('img/earthlights1k.jpg'),
 		bumpMap		: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
 		bumpScale	: 0.05,
 		specularMap	: THREE.ImageUtils.loadTexture('img/earthspec1k.jpg'),
 		specular	: new THREE.Color('grey'),
 	})
 	var mesh	= new THREE.Mesh(geometry, material)
-	return mesh	
+	return mesh;
 }
 
 var createEarthCloud	= function(){
@@ -22,7 +26,7 @@ var createEarthCloud	= function(){
 	var imageMap	= new Image();
 	imageMap.addEventListener("load", function() {
 		
-		// create dataMap ImageData for earthcloudmap
+		// create dataMap ImageData for earthcloudmap1
 		var canvasMap	= document.createElement('canvas')
 		canvasMap.width	= imageMap.width
 		canvasMap.height= imageMap.height
@@ -63,10 +67,22 @@ var createEarthCloud	= function(){
 		map		: new THREE.Texture(canvasResult),
 		side		: THREE.DoubleSide,
 		transparent	: true,
-		opacity		: 0.8,
+		opacity		: this.cloudopacity,
 	})
 	var mesh	= new THREE.Mesh(geometry, material)
-	return mesh	
+	return mesh;
+}
+
+var createData	= function(){
+	var geometry	= new THREE.SphereGeometry(0.53, 32, 32)
+	var material	= new THREE.MeshPhongMaterial({
+		map		: THREE.ImageUtils.loadTexture('img/output.gif'),
+        side    : THREE.DoubleSide,
+        transparent : true,
+        opacity : this.dataopacity,
+	});
+	var mesh	= new THREE.Mesh(geometry, material);
+	return mesh;
 }
 
 var createStarfield	= function(){
