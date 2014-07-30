@@ -64,18 +64,22 @@ namespace GRACEMap
         private int locx = 0;
         private int locy = 0;
         private bool drag = false;
+        internal bool dragenabled = true;
         private void Control_MouseDown(object sender, MouseEventArgs e)
         {
-            //locx and locy = the mouse's position ON THE FORM
-            locx = e.X;
-            locy = e.Y;
-            drag = true;
-            BringToFront();
+            if (dragenabled)
+            {
+                //locx and locy = the mouse's position ON THE FORM
+                locx = e.X;
+                locy = e.Y;
+                drag = true;
+                BringToFront();
+            }
         }
 
         private void Control_MouseMove(object sender, MouseEventArgs e)
         {
-            if (drag == true)
+            if (drag == true && dragenabled)
             {
                 if (e.Button == MouseButtons.Left)
                 {
