@@ -45,8 +45,11 @@ namespace GRACEMap
             Sensitivity.Enabled = false;
             SensitivityText.Enabled = false;
             DateLabel.Text = Filter.Text;
+            BinDeg.Text = this.gridsize.Value.ToString("F2") + " deg";
+
             DispBack.Enabled = false;
             if (SaveScale.Checked) { DateLabel.Visible = true; } else { DateLabel.Visible = false; }
+            if (SaveScale.Checked) { BinDeg.Visible = true; } else { BinDeg.Visible = false; }
 
             Thread thread = new Thread(ReadAllData);
             thread.IsBackground = true;
@@ -603,6 +606,11 @@ namespace GRACEMap
         {
             map.Clear(SystemColors.Control);
             if (DispBack.Checked) { map.DrawImageUnscaled(global::GRACEMap.Properties.Resources.World_Map, 0, 0); }
+        }
+
+        private void gridsize_ValueChanged(object sender, EventArgs e)
+        {
+            BinDeg.Text = this.gridsize.Value.ToString("F2") + " deg";
         }
 
     }

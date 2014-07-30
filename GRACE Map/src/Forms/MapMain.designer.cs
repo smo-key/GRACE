@@ -49,6 +49,7 @@
             this.SensitivityText = new System.Windows.Forms.Label();
             this.Sensitivity = new System.Windows.Forms.NumericUpDown();
             this.DispBack = new System.Windows.Forms.CheckBox();
+            this.BinDeg = new System.Windows.Forms.Label();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -62,6 +63,7 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.BinDeg);
             this.Border.Controls.Add(this.DispBack);
             this.Border.Controls.Add(this.SensitivityText);
             this.Border.Controls.Add(this.Sensitivity);
@@ -97,6 +99,7 @@
             this.Border.Controls.SetChildIndex(this.Sensitivity, 0);
             this.Border.Controls.SetChildIndex(this.SensitivityText, 0);
             this.Border.Controls.SetChildIndex(this.DispBack, 0);
+            this.Border.Controls.SetChildIndex(this.BinDeg, 0);
             // 
             // TopPanel
             // 
@@ -217,6 +220,7 @@
             0,
             0,
             0});
+            this.gridsize.ValueChanged += new System.EventHandler(this.gridsize_ValueChanged);
             // 
             // GridsizeText
             // 
@@ -306,14 +310,14 @@
             // 
             // DateLabel
             // 
-            this.DateLabel.AutoSize = true;
             this.DateLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DateLabel.Location = new System.Drawing.Point(11, 469);
             this.DateLabel.Name = "DateLabel";
             this.DateLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.DateLabel.Size = new System.Drawing.Size(54, 21);
+            this.DateLabel.Size = new System.Drawing.Size(66, 21);
             this.DateLabel.TabIndex = 47;
             this.DateLabel.Text = "2002-08";
+            this.DateLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.DateLabel.Visible = false;
             // 
             // AllM
@@ -384,6 +388,18 @@
             this.DispBack.UseVisualStyleBackColor = true;
             this.DispBack.CheckedChanged += new System.EventHandler(this.DispBack_CheckedChanged);
             // 
+            // BinDeg
+            // 
+            this.BinDeg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.BinDeg.Location = new System.Drawing.Point(724, 469);
+            this.BinDeg.Name = "BinDeg";
+            this.BinDeg.Padding = new System.Windows.Forms.Padding(3);
+            this.BinDeg.Size = new System.Drawing.Size(66, 21);
+            this.BinDeg.TabIndex = 55;
+            this.BinDeg.Text = "2.00 deg";
+            this.BinDeg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BinDeg.Visible = false;
+            // 
             // MapMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -432,6 +448,7 @@
         private System.Windows.Forms.Label SensitivityText;
         private System.Windows.Forms.NumericUpDown Sensitivity;
         private System.Windows.Forms.CheckBox DispBack;
+        private System.Windows.Forms.Label BinDeg;
 
     }
 }
