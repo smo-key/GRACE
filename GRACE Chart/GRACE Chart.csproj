@@ -86,16 +86,16 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\BaseForm.cs">
+    <Compile Include="src\Forms\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\BaseForm.designer.cs">
+    <Compile Include="src\Forms\BaseForm.designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\MainChart.cs">
+    <Compile Include="src\Forms\MainChart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\MainChart.Designer.cs">
+    <Compile Include="src\Forms\MainChart.Designer.cs">
       <DependentUpon>MainChart.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
@@ -109,10 +109,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="src\BaseForm.resx">
+    <EmbeddedResource Include="src\Forms\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\MainChart.resx">
+    <EmbeddedResource Include="src\Forms\MainChart.resx">
       <DependentUpon>MainChart.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace GRACEMap
+namespace GRACEChart
 {
     public partial class BaseForm : Form
     {
@@ -53,6 +53,8 @@ namespace GRACEMap
                 sorted.Values.ElementAt(i).Location = p;
             } 
             //Resizer.BringToFront();
+
+            Title.Location = ;
         }
 
         internal virtual void CloseForm_Click(object sender, EventArgs e)

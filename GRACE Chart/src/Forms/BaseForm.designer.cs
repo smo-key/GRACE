@@ -1,4 +1,4 @@
-﻿namespace GRACEMap
+﻿namespace GRACEChart
 {
     partial class BaseForm
     {
@@ -55,7 +55,7 @@
             // IconBox
             // 
             this.IconBox.BackColor = System.Drawing.Color.Transparent;
-            this.IconBox.Image = global::GRACEMap.Properties.Resources.StatusAnnotations_Play_16xLG;
+            this.IconBox.Image = global::GRACEChart.Properties.Resources.StatusAnnotations_Play_16xLG;
             this.IconBox.Location = new System.Drawing.Point(6, 6);
             this.IconBox.Name = "IconBox";
             this.IconBox.Size = new System.Drawing.Size(16, 16);
@@ -88,7 +88,7 @@
             this.Minimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Minimize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Minimize.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.Minimize.Image = global::GRACEMap.Properties.Resources.type_16xLG;
+            this.Minimize.Image = global::GRACEChart.Properties.Resources.type_16xLG;
             this.Minimize.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Minimize.Location = new System.Drawing.Point(242, 3);
             this.Minimize.Name = "Minimize";
@@ -113,7 +113,7 @@
             this.CloseForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CloseForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CloseForm.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.CloseForm.Image = global::GRACEMap.Properties.Resources.Symbols_Critical_16xLG;
+            this.CloseForm.Image = global::GRACEChart.Properties.Resources.Symbols_Critical_16xLG;
             this.CloseForm.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.CloseForm.Location = new System.Drawing.Point(271, 3);
             this.CloseForm.Name = "CloseForm";
@@ -139,6 +139,7 @@
             this.Title.Size = new System.Drawing.Size(32, 17);
             this.Title.TabIndex = 6;
             this.Title.Text = "Title";
+            this.Title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.Title.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Control_MouseDown);
             this.Title.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Control_MouseMove);
             // 
