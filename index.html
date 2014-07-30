@@ -26,37 +26,15 @@
   <script type="text/javascript" src="js/planets.js"></script>
   
   <!--  BODY  -->
-  <body style=''>
+  <body onload="loadData('en', 1);">
     
     <!--  datGUI Container  -->
     <div id="gui-container"></div>
-    
-    <!--  3D Rendering  -->
-    <div id="container"></div>
-    
-    <script type="text/javascript" src="js/ThreeWebGL.js"></script>
-  <script type="text/javascript" src="js/ThreeExtras.js"></script>
-  <script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
-  <script type="text/javascript" src="js/Detector.js"></script>
-  <script type="text/javascript" src="js/globe.js"></script>    
-    
-    <script type="text/javascript" src="js/utils.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
-    
     
     <!--  2D GUI Items  -->
     <div id="title">Gravity Recovery and Climate Experiment</div>
     <div id="subtitle">Data Analyst</div>
     <div id="copyright">Copyright (c) 2014 Arthur Pachachura and Naoki Ellis<br>In cooperation with NASA JSC and UT CSR</div>
-<!--
-    <div class="header clearfix content">
-      <ul class="nav header-nav">
-        <li class="active"><a href="">Frequency</a></li>
-              <li><a href="">Gravity</a></li>
-              <li><a href="about">About</a></li>
-      </ul>
-    </div>
--->
 
     <div id="fsbutton" href="" onClick="fullscreen();"><span class="mega-octicon octicon-screen-full fadeicon"></span></div>
     <div id="runbutton" href="" onClick="runGif();"><span class="mega-octicon octicon-playback-play fadeicon"></span></div>
@@ -95,9 +73,26 @@
         <option value="2014">2014</option>
       </select>
     </div>
+    
+    <!--  3D Rendering  -->
+    <div id="container"></div>
+    
+    <script type="text/javascript" src="js/ThreeWebGL.js"></script>
+    <script type="text/javascript" src="js/ThreeExtras.js"></script>
+    <script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/globe.js"></script>    
+    
+    <script type="text/javascript" src="js/utils.js"></script>
+    
   </body>
   
   <!-- DELAYED LOADING -->
-  <link href="js/bootstrap.min.js" rel="stylesheet">
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+  
+  <script>
+    
+  </script>
   
 </html>

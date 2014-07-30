@@ -180,6 +180,5 @@ if(!Detector.webgl){
 		};
 		xhr.send(null);
 	};
-	
-	loadData('en', 1);
+
 }
