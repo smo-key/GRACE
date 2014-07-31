@@ -14,10 +14,10 @@
 var DAT = DAT || {};
 
 DAT.Globe = function(container, colorFn) {
-  
-  var hbias = 225;
-  var hsub = 1.002;
 
+  hbias = 100; //225
+  hsub = -0.5; //0.75 //0.35
+    
   colorFn = colorFn || function(x) {
     var c = new THREE.Color();
     if (x==0.0) {
@@ -217,9 +217,9 @@ DAT.Globe = function(container, colorFn) {
     var phi = (90 - lat) * Math.PI / 180;
     var theta = (180 - lng) * Math.PI / 180;
 
-    point.position.x = 200 * Math.sin(phi) * Math.cos(theta);
-    point.position.y = 200 * Math.cos(phi);
-    point.position.z = 200 * Math.sin(phi) * Math.sin(theta);
+    point.position.x = 100 * Math.sin(phi) * Math.cos(theta);
+    point.position.y = 100 * Math.cos(phi);
+    point.position.z = 100 * Math.sin(phi) * Math.sin(theta);
 
     point.lookAt(mesh.position);
 
