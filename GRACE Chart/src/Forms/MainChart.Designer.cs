@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen5 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen6 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen7 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen8 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen1 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen2 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen3 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen4 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -133,7 +133,6 @@
             this.GLDAS.TabIndex = 52;
             this.GLDAS.Text = "Show GLDAS";
             this.GLDAS.UseVisualStyleBackColor = true;
-            this.GLDAS.CheckedChanged += new System.EventHandler(this.GLDAS_CheckedChanged);
             // 
             // RL05
             // 
@@ -248,6 +247,7 @@
             this.Progress.Name = "Progress";
             this.Progress.Size = new System.Drawing.Size(200, 18);
             this.Progress.TabIndex = 36;
+            this.Progress.Click += new System.EventHandler(this.Progress_Click);
             // 
             // Status
             // 
@@ -263,6 +263,7 @@
             this.Status.TabIndex = 35;
             this.Status.Text = "       Ready To Read Time Series Data!";
             this.Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.Status.Click += new System.EventHandler(this.Status_Click);
             // 
             // Chart
             // 
@@ -282,27 +283,27 @@
             this.Chart.Location = new System.Drawing.Point(90, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen5.Color = System.Drawing.Color.Black;
-            chartPen5.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen5.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen5;
+            chartPen1.Color = System.Drawing.Color.Black;
+            chartPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen1.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen1;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen6.Color = System.Drawing.Color.Black;
-            chartPen6.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen6.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen6;
-            chartPen7.Color = System.Drawing.Color.Silver;
-            chartPen7.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen7.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen7;
+            chartPen2.Color = System.Drawing.Color.Black;
+            chartPen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen2.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen2;
+            chartPen3.Color = System.Drawing.Color.Silver;
+            chartPen3.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen3.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen3;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen8.Color = System.Drawing.Color.Silver;
-            chartPen8.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen8.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen8;
+            chartPen4.Color = System.Drawing.Color.Silver;
+            chartPen4.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen4.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen4;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);
@@ -311,6 +312,7 @@
             this.Chart.TimerMode = ChartLib.TimerMode.Disabled;
             this.Chart.unit = " cm";
             this.Chart.Load += new System.EventHandler(this.Chart_Load);
+            this.Chart.Paint += new System.Windows.Forms.PaintEventHandler(this.Chart_Paint);
             // 
             // yAxis
             // 

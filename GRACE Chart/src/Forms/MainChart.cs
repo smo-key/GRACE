@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using GRACEdata;
 using System.IO.Pipes;
@@ -14,14 +15,19 @@ namespace GRACEChart
 {
     public partial class MainChart : BaseForm
     {   
-        String[] GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS");
-        String[] RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05");
+        String[] GLDASData;
+        String[] RL05Data;
         List<String> GRACEData = new List<string>();
         List<Point> gldas = new List<Point>();
         List<Point> rl05 = new List<Point>();
         List<Point> grace = new List<Point>();
         List<Point> graceGLDAS = new List<Point>();
         List<Point> graceRL05 = new List<Point>();
+        Graphics g;
+        int max;
+        int max2;
+        int filen;
+        bool isRead = false;
 
         public MainChart()
         {
@@ -30,7 +36,10 @@ namespace GRACEChart
             GLDAS.Enabled = true;
             RL05.Enabled = true;
             GRACE.Enabled = true;
-            SaveImage.Enabled = false;
+            SaveImage.Enabled = true;
+            GLDAS.Checked = true;
+            RL05.Checked = true;
+            GRACE.Checked = true;
 
             /** GET LIST OF YEAR / MONTH **/
             List<string> ym = new List<string>();
@@ -49,9 +58,15 @@ namespace GRACEChart
             {
                 FileInfo info = new FileInfo(i);
                 if (ym.Contains(info.Name.Substring(0, 4))) { GRACEData.Add(i); }
-            }
+            }       
+            String item = Convert.ToString(Location.SelectedItem);
+            GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", item);
+            RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", item);
+            max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
+            max2 = gldas.Count + rl05.Count + grace.Count + graceGLDAS.Count + graceRL05.Count;
+            filen = 0;
         }
-
+               
 
         //*START*//
         private void DrawButton_Click(object sender, EventArgs e)
@@ -60,38 +75,67 @@ namespace GRACEChart
             GLDAS.Enabled = false;
             RL05.Enabled = false;
             GRACE.Enabled = false;
-            Graphics g = this.CreateGraphics();
-            Status.Text = ("Reading Data");
-            readGLDAS();
-            readRL05();
-            readGRACE();
-            Status.Text = ("Creating Graphs");
-            if (GLDAS.Checked)
-            {
-                showGLDAS(g);
-            }
-            else
-            {
-                dontShowGLDAS(g);
-            }
+            DrawButton.Enabled = false;
+            Progress.Maximum = max + max2;
 
-            if (RL05.Checked)
+            Thread thread = new Thread(ReadAllData);
+            thread.IsBackground = true;
+            thread.Name = "Read Data Thread";
+            thread.Start();
+        }
+        public void ReadAllData()
+        {
+            if (!isRead)
             {
-                showRL05(g);
+                readGLDAS();
+                readRL05();
+                readGRACE();
+                isRead = true;
             }
-            else
-            {
-                dontShowRL05(g);
-            }
+            
 
-            if (GRACE.Checked)
+                if (GLDAS.Checked)
+                {
+                    showGLDAS(g);
+                }
+                else
+                {
+                    dontShowGLDAS(g);
+                }
+
+                if (RL05.Checked)
+                {
+                    showRL05(g);
+                }
+                else
+                {
+                    dontShowRL05(g);
+                }
+
+                if (GRACE.Checked)
+                {
+                    showGRACE(g);
+                }
+                else
+                {
+                    dontShowGRACE(g);
+                }
+             //** EXIT **//
+            SetProgress(Progress.Maximum);
+            this.Invoke(new MethodInvoker(delegate
             {
-                showGRACE(g);
-            }
-            else
-            {
-                dontShowGRACE(g);
-            }
+                DrawButton.Enabled = true;
+                SetStatus("Completed Successfully!");
+                CloseForm.Enabled = true;
+                GLDAS.Enabled = true;
+                RL05.Enabled = true;
+                GRACE.Enabled = true;
+                SaveImage.Enabled = false;
+                GLDAS.Checked = true;
+                RL05.Checked = true;
+                GRACE.Checked = true;
+
+            }));
         }
         private void Border_Paint(object sender, PaintEventArgs e)
         {
@@ -105,10 +149,7 @@ namespace GRACEChart
         {
 
         }
-        private void GLDAS_CheckedChanged(object sender, EventArgs e)
-        {
 
-        }
 
         
       //*READ GLDAS DATA*// 
@@ -128,6 +169,9 @@ namespace GRACEChart
                     Point p = new Point(t, height);
                     gldas.Add(p);
                 }
+                filen++;
+                SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
+                SetProgress(filen);
             }
         }
 
@@ -149,6 +193,9 @@ namespace GRACEChart
                     Point p = new Point(t, height);
                     rl05.Add(p);
                 }
+                filen++;
+                SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
+                SetProgress(filen);
             }
         }
         //*READ GRACE DATA*//
@@ -240,6 +287,9 @@ namespace GRACEChart
                     }
 
                 }
+                filen++;
+                SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
+                SetProgress(filen);
             }
 
         }
@@ -251,8 +301,9 @@ namespace GRACEChart
             for (int k = 0; k < gldas.Count - 1; k++)
             {
                 g.DrawLine(myPen, gldas[k], gldas[k + 1]);
+                SetStatus("Creating GLDAS Graph");
+                SetProgress(filen);
             }
-            BringToFront();
         }
         public void dontShowGLDAS(Graphics g)
         {
@@ -262,6 +313,8 @@ namespace GRACEChart
             for (int k = 0; k < gldas.Count - 1; k++)
             {
                 g.DrawLine(myPen, gldas[k], gldas[k + 1]);
+                SetStatus("Creating GLDAS Graph");
+                SetProgress(filen);
             }
             BringToFront();
         }
@@ -274,8 +327,10 @@ namespace GRACEChart
             for (int k = 0; k < rl05.Count - 1; k++)
             {
                 g.DrawLine(myPen, rl05[k], rl05[k + 1]);
+                SetStatus("Creating RL-05 Graph");
+                SetProgress(filen);
             }
-            BringToFront();
+
         }
         public void dontShowRL05(Graphics g)
         {
@@ -285,8 +340,10 @@ namespace GRACEChart
             for (int k = 0; k < rl05.Count - 1; k++)
             {
                 g.DrawLine(myPen, rl05[k], rl05[k + 1]);
+                SetStatus("Creating RL-05 Graph");
+                SetProgress(filen);
             }
-            BringToFront();
+
         }
 
         //*GRACE GRAPH(S)*//
@@ -302,6 +359,8 @@ namespace GRACEChart
                     foreach (Point p in grace)
                     {
                         g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
                 else
@@ -309,6 +368,8 @@ namespace GRACEChart
                     for (int k = 0; k < graceRL05.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
                
@@ -320,6 +381,8 @@ namespace GRACEChart
                     for (int k = 0; k < graceGLDAS.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
                 else
@@ -327,15 +390,19 @@ namespace GRACEChart
                     for (int k = 0; k < graceRL05.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
 
                     for (int k = 0; k < graceGLDAS.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
             }
-            BringToFront();
+
         }
         public void dontShowGRACE(Graphics g)
         {
@@ -349,6 +416,8 @@ namespace GRACEChart
                     foreach (Point p in grace)
                     {
                         g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
                 else
@@ -356,6 +425,8 @@ namespace GRACEChart
                     for (int k = 0; k < graceRL05.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
 
@@ -367,6 +438,8 @@ namespace GRACEChart
                     for (int k = 0; k < graceGLDAS.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
                 else
@@ -374,21 +447,45 @@ namespace GRACEChart
                     for (int k = 0; k < graceRL05.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
 
                     for (int k = 0; k < graceGLDAS.Count - 1; k++)
                     {
                         g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
+                        SetStatus("Creating GRACE Graph");
+                        SetProgress(filen);
                     }
                 }
             }
-            BringToFront();
+
 
         }
 
-        private void Chart_Load(object sender, EventArgs e)
+
+
+        private void Progress_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Status_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void SetProgress(int value)
+        {
+            Progress.Invoke(new MethodInvoker(delegate { Progress.Value = value; }));
+        }
+        private void SetStatus(string message)
+        {
+            Status.Invoke(new MethodInvoker(delegate { Status.Text = "       " + message; }));
+        }
+
+        private void Chart_Paint(object sender, PaintEventArgs e)
+        {
+            g = Chart.CreateGraphics();
         }
     }
 }
