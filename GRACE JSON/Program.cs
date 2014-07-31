@@ -29,15 +29,17 @@ namespace GRACE_JSON
             ];*/
 
             Console.WriteLine("GRACE Data Automated JSON Converter");
+            Console.Write("\r\nType binsize (degrees): ");
+            gridsize = Convert.ToDouble(Console.ReadLine());
             Console.Write("Continuing will DELETE all currently created data! [y/n] ");
-            if (Console.ReadKey().ToString() != "y") { return; }
+            if (Console.ReadKey().Key != ConsoleKey.Y) { return; }
 
             //Prepare JSON
+            Console.WriteLine("\r\nInitializing...");
             File.Delete(jsonfile);
             StreamWriter json = new StreamWriter(jsonfile);
             json.AutoFlush = true;
-            json.Write("var data = [\r\n" +
-                       "    [\r\n");
+            json.Write("var data = [\r\n");
 
             //** SET SETTINGS **//
             Globals.gridsize = gridsize;
@@ -57,9 +59,9 @@ namespace GRACE_JSON
             }
             filen = 0;
             filescount = list.Length;
-            bool first = true;
 
             int max = FindMax();
+            bool firstd = true;
 
             foreach (string f in ym)
             {
@@ -69,8 +71,11 @@ namespace GRACE_JSON
                 //** READ ALL FILES **//
                 int[,] bins = GetData(files);
 
+                if (!firstd) { json.Write(",\r\n"); } else { firstd = false; }
+
                 json.WriteLine("    [");
                 json.Write("'" + f + "', [");
+                bool first = true;
 
                 for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
                 {
@@ -79,11 +84,15 @@ namespace GRACE_JSON
                         int k = j - Structs.CoercedBin.BinLatCenter;
                         Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
 
-                        if (!first) { json.Write(","); } else { first = false; }
-                        System.Drawing.Color col = GRACEMap.Utils.BlueToRedScale(bins[i, j], max, 6.5d);
-                        double value = col.A / 100;
+                        
+                        System.Drawing.Color col = GRACEMap.Utils.BlueToRedScale(bins[i, j], max, 3.5d);
+                        double value = (double)col.A / 255.0d;
 
-                        json.Write("{0},{1},{2}", c.y.ToString("I"), c.x.ToString("I"), value.ToString("F2") );
+                        if (Math.Abs(c.y) != 90)
+                        {
+                            if (!first) { json.Write(","); } else { first = false; }
+                            json.Write("{0},{1},{2}", c.y.ToString(), c.x.ToString(), value.ToString("F3"));
+                        }
 
                         //log.WriteLine("{0} | {1} {2} | {3} {4} {5} {6}", bins[i, j].ToString(), i.ToString(), k.ToString(),
                         //    box.topleft.x.ToString("F3"), box.topleft.y.ToString("F3"), box.bottomright.x.ToString("F3"), box.bottomright.y.ToString("F3"));
@@ -91,13 +100,13 @@ namespace GRACE_JSON
                 }
 
                 json.Write("]\r\n" +
-                           "    ],\r\n");
+                           "    ]");
             }
 
-            json.Write("];");
+            json.Write("\r\n];");
             json.Close();
-            Console.Write("Write completed!");
-            Console.Write("Press enter to continue...");
+            Console.WriteLine("\r\nWrite completed!");
+            Console.WriteLine("Press enter to continue...");
             Console.ReadKey(true);
         }
 
@@ -105,11 +114,8 @@ namespace GRACE_JSON
         {
             //** SET SETTINGS **//
             Globals.gridsize = gridsize;
-            Structs.PointTime lasttime = new Structs.PointTime();
-            Structs.Anchor anchor = Structs.Anchor.Uniform;
-            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
-            string maxestext = "../../../GRACE Map/maxmonth.txt";
+            string maxestext = "../../../../output/maxmonth.txt";
 
             //*DOES MAXES.TXT EXIST*//
 
