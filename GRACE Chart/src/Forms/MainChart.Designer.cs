@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen1 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen2 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen3 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen4 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen5 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen6 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen7 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen8 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -47,6 +47,9 @@
             this.yAxis = new System.Windows.Forms.Label();
             this.yAxis3 = new System.Windows.Forms.Label();
             this.yAxis2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -55,6 +58,9 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.label3);
+            this.Border.Controls.Add(this.label2);
+            this.Border.Controls.Add(this.label1);
             this.Border.Controls.Add(this.yAxis2);
             this.Border.Controls.Add(this.yAxis3);
             this.Border.Controls.Add(this.yAxis);
@@ -85,6 +91,9 @@
             this.Border.Controls.SetChildIndex(this.yAxis, 0);
             this.Border.Controls.SetChildIndex(this.yAxis3, 0);
             this.Border.Controls.SetChildIndex(this.yAxis2, 0);
+            this.Border.Controls.SetChildIndex(this.label1, 0);
+            this.Border.Controls.SetChildIndex(this.label2, 0);
+            this.Border.Controls.SetChildIndex(this.label3, 0);
             // 
             // TopPanel
             // 
@@ -283,27 +292,27 @@
             this.Chart.Location = new System.Drawing.Point(90, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen1.Color = System.Drawing.Color.Black;
-            chartPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen1.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen1;
+            chartPen5.Color = System.Drawing.Color.Black;
+            chartPen5.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen5.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen5;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen2.Color = System.Drawing.Color.Black;
-            chartPen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen2.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen2;
-            chartPen3.Color = System.Drawing.Color.Silver;
-            chartPen3.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen3.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen3;
+            chartPen6.Color = System.Drawing.Color.Black;
+            chartPen6.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen6.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen6;
+            chartPen7.Color = System.Drawing.Color.Silver;
+            chartPen7.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen7.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen7;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen4.Color = System.Drawing.Color.Silver;
-            chartPen4.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen4.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen4;
+            chartPen8.Color = System.Drawing.Color.Silver;
+            chartPen8.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen8.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen8;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);
@@ -319,7 +328,7 @@
             this.yAxis.AutoSize = true;
             this.yAxis.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.yAxis.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.yAxis.Location = new System.Drawing.Point(11, 273);
+            this.yAxis.Location = new System.Drawing.Point(16, 263);
             this.yAxis.Name = "yAxis";
             this.yAxis.Size = new System.Drawing.Size(46, 17);
             this.yAxis.TabIndex = 62;
@@ -331,7 +340,7 @@
             this.yAxis3.AutoSize = true;
             this.yAxis3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.yAxis3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.yAxis3.Location = new System.Drawing.Point(11, 307);
+            this.yAxis3.Location = new System.Drawing.Point(16, 297);
             this.yAxis3.Name = "yAxis3";
             this.yAxis3.Size = new System.Drawing.Size(36, 17);
             this.yAxis3.TabIndex = 63;
@@ -342,11 +351,44 @@
             this.yAxis2.AutoSize = true;
             this.yAxis2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.yAxis2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.yAxis2.Location = new System.Drawing.Point(11, 290);
+            this.yAxis2.Location = new System.Drawing.Point(16, 280);
             this.yAxis2.Name = "yAxis2";
             this.yAxis2.Size = new System.Drawing.Size(49, 17);
             this.yAxis2.TabIndex = 64;
             this.yAxis2.Text = "Height";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label1.Location = new System.Drawing.Point(682, 504);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.TabIndex = 65;
+            this.label1.Text = "8764";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label2.Location = new System.Drawing.Point(87, 504);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(13, 13);
+            this.label2.TabIndex = 66;
+            this.label2.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label3.Location = new System.Drawing.Point(71, 284);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(13, 13);
+            this.label3.TabIndex = 67;
+            this.label3.Text = "0";
             // 
             // MainChart
             // 
@@ -384,5 +426,8 @@
         private System.Windows.Forms.Label yAxis;
         private System.Windows.Forms.Label yAxis2;
         private System.Windows.Forms.Label yAxis3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
     }
 }
