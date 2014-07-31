@@ -150,7 +150,7 @@ if(!Detector.webgl){
 	Detector.addGetWebGLMessage();
 } else {
 	var container = document.getElementById('container');
-	var globe = new DAT.Globe(container);
+	var globe = new DAT.Globe(container, gui);
 	var currentLang = 'en';
 	var currentRes = 1;
 

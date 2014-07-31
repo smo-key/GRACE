@@ -11,12 +11,15 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-var DAT = DAT || {};
+var DAT = DAT || { };
 
-DAT.Globe = function(container, colorFn) {
-
-  hbias = 100; //225
-  hsub = -0.5; //0.75 //0.35
+DAT.Globe = function(container, gui, colorFn) {
+  hbias = 125; //225
+  this.hmult = 0.92;
+  this.hsub = 0.35; //0.75 //0.35
+  this.basegeometry = new THREE.Geometry();
+  
+  var biasupdate = gui.add(this, 'hmult', 0.80, 1.05).name("Height Bias");
     
   colorFn = colorFn || function(x) {
     var c = new THREE.Color();
@@ -148,14 +151,14 @@ DAT.Globe = function(container, colorFn) {
     mesh.updateMatrix();
     sceneAtmosphere.addObject(mesh);
 
-    geometry = new THREE.Cube(0.75, 0.75, 1, 1, 1, 1, null, false, { px: true,
+    var geometry = new THREE.Cube(0.75, 0.75, 1, 1, 1, 1, null, false, { px: true,
           nx: true, py: true, ny: true, pz: false, nz: true});
 
     for (var i = 0; i < geometry.vertices.length; i++) {
 
       var vertex = geometry.vertices[i];
       vertex.position.z = vertex.position.z * 2;
-      vertex.position.z += hsub;
+      //vertex.position.z += -this.hsub;
     }
 
     point = new THREE.Mesh(geometry);
@@ -195,12 +198,15 @@ DAT.Globe = function(container, colorFn) {
       lng = data[i + 1];
       color = colorFn(data[i+2]);
       size = data[i + 2];
+      //size += -this.hsub;
       size = size*hbias;
+      size += this.hsub * 100;
       addPoint(lat, lng, size, color, subgeo);
     }
     this._baseGeometry = subgeo;
-
   };
+  
+  
 
   function createPoints() {
     if (this._baseGeometry !== undefined) {
@@ -210,6 +216,10 @@ DAT.Globe = function(container, colorFn) {
               morphTargets: false
       }));
       scene.addObject(points);
+      biasupdate.onChange(function(value){
+        //change bias
+        points.scale.set(value, value, value);
+      });
     }
   }
 
@@ -220,10 +230,12 @@ DAT.Globe = function(container, colorFn) {
     point.position.x = 100 * Math.sin(phi) * Math.cos(theta);
     point.position.y = 100 * Math.cos(phi);
     point.position.z = 100 * Math.sin(phi) * Math.sin(theta);
+    //point.position.z += -this.hsub;
 
     point.lookAt(mesh.position);
 
     //point.scale.z = -size;
+    //size += this.hsub;
     point.scale.z = Math.max( size, 0.1 );
     point.updateMatrix();
     var i;
