@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>b0110ee7-e341-444f-9f5a-e95ac3c4e59d</ProjectGuid>
+    <ProjectGuid>{A77124AA-8A74-439E-AEB9-3D011107633B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GRACE_JSON</RootNamespace>
@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GRACE Map\GRACE Map.csproj">
+      <Project>{85fbd3fa-25fa-4852-8f22-1a84bcc655c0}</Project>
+      <Name>GRACE Map</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GRACEdata\GRACEdata.csproj">
+      <Project>{b257ce19-2c05-4ed4-9b5c-4d813db09dd7}</Project>
+      <Name>GRACEdata</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

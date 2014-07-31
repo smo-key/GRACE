@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GRACE 3D", "GRACE 3D", "{E1C93458-1120-4713-8D46-387E351DBBB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRACE JSON", "GRACE JSON\GRACE JSON.csproj", "{A77124AA-8A74-439E-AEB9-3D011107633B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -196,6 +198,20 @@ Global
 		{F2FF6C46-A791-4CAE-AB46-BD1A37F3FCD7}.Release|x64.ActiveCfg = Release|Any CPU
 		{F2FF6C46-A791-4CAE-AB46-BD1A37F3FCD7}.Release|x86.ActiveCfg = Release|x86
 		{F2FF6C46-A791-4CAE-AB46-BD1A37F3FCD7}.Release|x86.Build.0 = Release|x86
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Release|Win32.ActiveCfg = Release|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Release|x64.ActiveCfg = Release|Any CPU
+		{A77124AA-8A74-439E-AEB9-3D011107633B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

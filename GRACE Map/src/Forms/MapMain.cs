@@ -66,9 +66,9 @@ namespace GRACEMap
             Structs.Anchor anchor = Structs.Anchor.Uniform;
             if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
-            string maxestext = "../../../maxmonth.txt";
+            string maxestext = "../../../../output/maxmonth.txt";
             int sublen = 7;
-            if (Filter.Text.Length < 6) { maxestext = "../../../maxyear.txt"; sublen = 4; }
+            if (Filter.Text.Length < 6) { maxestext = "../../../../output/maxyear.txt"; sublen = 4; }
 
             //*DOES MAXES.TXT EXIST*//
 
