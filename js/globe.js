@@ -191,7 +191,8 @@ DAT.Globe = function(container, colorFn) {
       lat = data[i];
       lng = data[i + 1];
       color = colorFn(data[i+2]);
-      size = 0; // data[i + 2]; // CHANGED
+      size = data[i + 2];
+      size = size*200;
       addPoint(lat, lng, size, color, subgeo);
     }
     this._baseGeometry = subgeo;
@@ -219,7 +220,8 @@ DAT.Globe = function(container, colorFn) {
 
     point.lookAt(mesh.position);
 
-    point.scale.z = -size;
+    //point.scale.z = -size;
+    point.scale.z = Math.max( size, 0.1 );
     point.updateMatrix();
     var i;
     for (i = 0; i < point.geometry.faces.length; i++) {

@@ -1,8 +1,8 @@
 //*** GLOBALS ***//
 this.view = 'Frequency Map';
 this.display = '3D Globe';
-this.binsize = 2.0;
-this.speed = 1;
+this.binsize = 3.0;
+this.speed = 1.0;
 this.run = false;
 
 //*** DATGUI ***//
@@ -20,7 +20,7 @@ displayupdate.onChange(function(value){
   //change displaymodes
   
 });
-var sizeupdate = gui.add(this, 'binsize', 0.5, 10.0).name("Binsize (degrees)");
+var sizeupdate = gui.add(this, 'binsize', 0.5, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
 });
@@ -162,16 +162,19 @@ if(!Detector.webgl){
 		var xhr;
 
 		xhr = new XMLHttpRequest();
-		xhr.open('GET', 'data/data-' +lang + res + '.json', true);
+		xhr.open('GET', 'data/monthdata-3' + '.json', true);
 		
 		xhr.onreadystatechange = function(e) {
 			if (xhr.readyState === 4) {
 				if (xhr.status === 200) {
-					var data = [];
-					data = JSON.parse(xhr.responseText);
+                    var data = [];
+				    data = JSON.parse(xhr.responseText);
 					window.data = data;
 					globe.clearData();
-					globe.addData(data);
+                    for ( var i = 0; i < data.length; i++ ) {
+                      globe.addData( data[i][1], 'magnitude', data[i][0] );
+                    }
+					//globe.addData(data);
 					globe.createPoints();
 					globe.animate();
 					$('#loadcontainer').css('display', 'none');
