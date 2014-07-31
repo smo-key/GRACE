@@ -39,7 +39,7 @@ namespace GRACE_JSON
             File.Delete(jsonfile);
             StreamWriter json = new StreamWriter(jsonfile);
             json.AutoFlush = true;
-            json.Write("var data = [\r\n");
+            json.Write("[\r\n");
 
             //** SET SETTINGS **//
             Globals.gridsize = gridsize;
@@ -74,7 +74,7 @@ namespace GRACE_JSON
                 if (!firstd) { json.Write(",\r\n"); } else { firstd = false; }
 
                 json.WriteLine("    [");
-                json.Write("'" + f + "', [");
+                json.Write("\"" + f + "\", [");
                 bool first = true;
 
                 for (int i = 0; i < Structs.CoercedBin.BinsLon; i++)
@@ -103,7 +103,7 @@ namespace GRACE_JSON
                            "    ]");
             }
 
-            json.Write("\r\n];");
+            json.Write("\r\n]");
             json.Close();
             Console.WriteLine("\r\nWrite completed!");
             Console.WriteLine("Press enter to continue...");
