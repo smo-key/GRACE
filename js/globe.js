@@ -14,6 +14,9 @@
 var DAT = DAT || {};
 
 DAT.Globe = function(container, colorFn) {
+  
+  var hbias = 225;
+  var hsub = 1.002;
 
   colorFn = colorFn || function(x) {
     var c = new THREE.Color();
@@ -151,8 +154,8 @@ DAT.Globe = function(container, colorFn) {
     for (var i = 0; i < geometry.vertices.length; i++) {
 
       var vertex = geometry.vertices[i];
-      vertex.position.z += 0.5;
-
+      vertex.position.z = vertex.position.z * 2;
+      vertex.position.z += hsub;
     }
 
     point = new THREE.Mesh(geometry);
@@ -192,7 +195,7 @@ DAT.Globe = function(container, colorFn) {
       lng = data[i + 1];
       color = colorFn(data[i+2]);
       size = data[i + 2];
-      size = size*200;
+      size = size*hbias;
       addPoint(lat, lng, size, color, subgeo);
     }
     this._baseGeometry = subgeo;
