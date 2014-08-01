@@ -20,6 +20,7 @@
     <script type="text/javascript" src="js/include/jquery.min.js"></script>
     <script type="text/javascript" src="js/include/three.min.js"></script>
     <script type="text/javascript" src="js/include/dat.gui.min.js"></script>
+<!--    <script type="text/javascript" src="js/include/THREEx.KeyboardState.js"></script>-->
     <script type="text/javascript" src="js/include/bootstrap.min.js"></script>
   </head>
   
@@ -36,11 +37,12 @@
     
     <!--  2D GUI Items  -->
     <div id="title">Gravity Recovery and Climate Experiment</div>
-    <div id="subtitle">Data Analyst</div>
+    <div id="subtitle">Orbit and Groundtrack Simulation</div>
     <div id="copyright">Copyright (c) 2014 Arthur Pachachura and Naoki Ellis<br>In cooperation with NASA JSC and UT CSR</div>
 
     <div id="fsbutton" href="" onClick="fullscreen();"><span class="mega-octicon octicon-screen-full fadeicon"></span></div>
     <div id="runbutton" href="" onClick="startSimul();"><span class="mega-octicon octicon-playback-pause fadeicon"></span></div>
+    <div id="resetbutton" href="" onClick="resetSimul();"><span class="mega-octicon octicon-history fadeicon"></span></div>
     
     <!--  3D Rendering  -->
     <div id="container"></div>

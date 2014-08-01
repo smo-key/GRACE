@@ -100,12 +100,24 @@ function startSimul() {
     $("#runbutton").html("<span class='mega-octicon octicon-playback-pause fadeicon'>");
   }
 }
-function stopSimul() {
-  
-}
 function resetSimul() {
-  
+  earthMesh.rotation.y = 0;
+  if (this.run == 1) { startSimul(); }
 }
+
+//*** READING KEYBOARD ***//
+document.addEventListener('keydown', onDocumentKeyDown, false);
+function onDocumentKeyDown(event) {
+  switch (event.keyCode) {
+    case 32: //spacebar
+      startSimul();
+      event.preventDefault(); break;
+    case 82: //R key
+      resetSimul();
+      event.preventDefault(); break;
+  }
+}
+
 
 //*** ACTIVATE ANIMATION ***//
 function runGif() {
