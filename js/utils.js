@@ -103,7 +103,7 @@ function startSimul() {
 }
 function resetSimul() {
   if (this.run == 1) { startSimul(); }
-  earthMesh.rotation.y = 0;
+  containerEarth.rotation.y = 0;
   this.time = 0;
 }
 function updateTime()

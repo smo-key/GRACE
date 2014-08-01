@@ -6,7 +6,8 @@ this.run = 1;
 
 var deltarealt = 1.778; //set zero to realtime (1 delta = 1 second)
 var stellarday = 86164.1 / 86400; //seconds in a stellar day / solar day
-var tropicalyear = 365.2422; //days in one revolution around the Earth
+var tropicalyear = 31556926.08; //seconds in one revolution around the Earth
+var earthaxistilt = 23.4; //in degrees, difference from north and celestial north
 
 //*** DATGUI ***//
 var gui = new dat.GUI({ autoPlace: false });
@@ -22,19 +23,7 @@ var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
 });
-var speedupdate = gui.add(this, 'speed', 0.0, 5).name("Simulation Speed");
-
-//** LOAD GLOBE **//
-/*if(!Detector.webgl){
-  Detector.addGetWebGLMessage();
-} else {
-  var container = document.getElementById('container');
-  var globe = new DAT.Globe(container);
-  globe.clearData();
-  globe.createPoints();
-  globe.animate();
-  
-}*/
+var speedupdate = gui.add(this, 'speed', 0.0, 6.0).name("Simulation Speed");
 
 //*** INITIALIZE THREE.JS ***//
 var renderer = new THREE.WebGLRenderer({
@@ -59,7 +48,7 @@ scene.add(light);
 
 //*** DIRECTIONAL LIGHT ***//
 var light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5,5,5);
+light.position.set(5,0,5);
 scene.add(light);
 
 light.castShadow = true;
@@ -85,7 +74,7 @@ scene.add(starSphere);
 //*** EARTH ***//
 //Render Container
 var containerEarth = new THREE.Object3D();
-containerEarth.rotateZ(-23.4 * Math.PI/180);
+containerEarth.rotateZ(-earthaxistilt * Math.PI/180);
 containerEarth.position.z = 0;
 scene.add(containerEarth);
 
@@ -99,13 +88,15 @@ containerEarth.add(earthMesh);
 onRenderFcts.push(function(delta, now){
   //one Earth minute per delta
   this.time += delta * 60 * Math.pow(10,(this.speed - deltarealt)) * run;
+  var rotsun = this.time / tropicalyear * 2 * Math.PI; //revolution of Earth
+  light.position.set(5*Math.cos(-rotsun),0,5*Math.sin(-rotsun)); //rotsun = counterclockwise revolution
   updateTime();
 });
 
 //Animate Mesh
 onRenderFcts.push(function(delta, now){
   //one Earth minute per delta
-  earthMesh.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * stellarday;
+  containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * stellarday;
 });
 
 //Clouds
