@@ -89,7 +89,16 @@ function changeDate() {
 
 //*** SIMULATION CONTROLS ***//
 function startSimul() {
-  
+  if (this.run == 1)
+  {
+    this.run = 0;
+    $("#runbutton").html("<span class='mega-octicon octicon-playback-play fadeicon'>");
+  }
+  else
+  {
+    this.run = 1;
+    $("#runbutton").html("<span class='mega-octicon octicon-playback-pause fadeicon'>");
+  }
 }
 function stopSimul() {
   

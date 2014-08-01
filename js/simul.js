@@ -1,8 +1,8 @@
 //*** GLOBALS ***//
 this.display = '3D Globe';
-this.binsize = 2.0;
+this.binsize = 3.0;
 this.speed = 1.0;
-this.run = false;
+this.run = 1;
 
 //*** DATGUI ***//
 var gui = new dat.GUI({ autoPlace: false });
@@ -14,7 +14,7 @@ displayupdate.onChange(function(value){
   //change displaymodes
   
 });
-var sizeupdate = gui.add(this, 'binsize', 0.5, 5.0).name("Binsize (degrees)");
+var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
 });
@@ -93,7 +93,7 @@ containerEarth.add(earthMesh);
 
 //Animate Mesh
 onRenderFcts.push(function(delta, now){
-  earthMesh.rotation.y += 1/32 * delta * Math.pow(10,(this.speed - 1));
+  earthMesh.rotation.y += 1/32 * delta * Math.pow(10,(this.speed - 1)) * run;
 });
 
 //Clouds
@@ -103,7 +103,7 @@ earthCloud.castShadow = true;
 containerEarth.add(earthCloud);
 //Cloud Animation
 onRenderFcts.push(function(delta, now){
-  earthCloud.rotation.y += 1/8 * delta * this.speed;
+  earthCloud.rotation.y += 1/8 * delta * Math.pow(10,(this.speed - 1)) * run;
 });*/
 
 //*** CAMERA CONTROLS ***//
