@@ -9,6 +9,7 @@ var stellarday = 86164.1 / 86400; //seconds in a stellar day / solar day
 var tropicalyear = 31556926.08; //seconds in one revolution around the Earth
 var earthaxistilt = 23.4; //in degrees, difference from true north and celestial north
 var earthradius = 6378.1; //in kilometers
+var PI_HALF = Math.PI / 2; //tau
 
 //GRACE Orbital Parameters
 var g_a = 6871.0; //Semi-major axis in kilometers, also radius since e is about zero
@@ -127,7 +128,7 @@ scene.add( new THREE.Line( geometry, material ) );
 
 
 //*** CAMERA CONTROLS ***//
-var mouse = {x:0, y:0};
+/*var mouse = {x:0, y:0};
 document.addEventListener('mousemove', function(event){
   mouse.x = (event.clientX / window.innerWidth) - 0.5;
   mouse.y = (event.clientY / window.innerHeight) - 0.5;
@@ -137,6 +138,94 @@ onRenderFcts.push(function(delta, now) {
   camera.position.x += (mouse.x * 5 - camera.position.x) * (delta * 5);
   camera.position.y += (mouse.y * 5 - camera.position.y) * (delta * 5);
   camera.lookAt(scene.position);
+});*/
+
+var curZoomSpeed = 0;
+var zoomSpeed = 0.002;
+var overRenderer; //is the mouse on the actual control?
+
+var mouse = { x: 0, y: 0 }, mouseOnDown = { x: 0, y: 0 };
+var rotation = { x: 0, y: 0 },
+    target = { x: Math.PI*3/2, y: Math.PI / 6.0 },
+    targetOnDown = { x: 0, y: 0 };
+
+var distance = 3, distanceTarget = 3;
+
+window.addEventListener('mousedown', onMouseDown, false);
+window.addEventListener('mousewheel', onMouseWheel, false);
+
+function onMouseDown(event) {
+  event.preventDefault();
+
+  window.addEventListener('mousemove', onMouseMove, false);
+  window.addEventListener('mouseup', onMouseUp, false);
+  window.addEventListener('mouseout', onMouseOut, false);
+
+  mouseOnDown.x = - event.clientX;
+  mouseOnDown.y = event.clientY;
+
+  targetOnDown.x = target.x;
+  targetOnDown.y = target.y;
+
+  //window.style.cursor = 'move';
+}
+
+function onMouseMove(event) {
+  mouse.x = - event.clientX;
+  mouse.y = event.clientY;
+
+  var zoomDamp = distance/1000;
+
+  target.x = targetOnDown.x + (mouse.x - mouseOnDown.x) * 0.005 * zoomDamp;
+  target.y = targetOnDown.y + (mouse.y - mouseOnDown.y) * 0.005 * zoomDamp;
+
+  target.y = target.y > PI_HALF ? PI_HALF : target.y;
+  target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
+}
+
+function onMouseUp(event) {
+  window.removeEventListener('mousemove', onMouseMove, false);
+  window.removeEventListener('mouseup', onMouseUp, false);
+  window.removeEventListener('mouseout', onMouseOut, false);
+  
+  //window.style.cursor = 'auto';
+}
+
+function onMouseOut(event) {
+  window.removeEventListener('mousemove', onMouseMove, false);
+  window.removeEventListener('mouseup', onMouseUp, false);
+  window.removeEventListener('mouseout', onMouseOut, false);
+}
+
+function onMouseWheel(event) {
+  event.preventDefault();
+  if (overRenderer) {
+    zoom(event.wheelDeltaY * 0.3);
+  }
+  return false;
+}
+
+window.addEventListener('mouseover', function() {
+  overRenderer = true;
+}, false);
+
+window.addEventListener('mouseout', function() {
+  overRenderer = false;
+}, false);
+
+function zoom(delta) {
+  distanceTarget -= delta;
+  distanceTarget = distanceTarget > 5 ? 5 : distanceTarget;
+  distanceTarget = distanceTarget < 1.1 ? 1.1 : distanceTarget;
+}
+
+onRenderFcts.push(function(delta, now){
+  zoom(curZoomSpeed);
+  distance += (distanceTarget - distance) * 0.3;
+
+  camera.position.x = distance * Math.sin(rotation.x) * Math.cos(rotation.y);
+  camera.position.y = distance * Math.sin(rotation.y);
+  camera.position.z = distance * Math.cos(rotation.x) * Math.cos(rotation.y);
 });
 
 //*** RENDER SCENE ***//
