@@ -44,6 +44,7 @@ renderer.setClearColor(0x000000, 1.0);
 document.body.appendChild(renderer.domElement);
 //Allow shadow mapping
 renderer.shadowMapEnabled = true;
+renderer.shadowMapSoft = true;
 
 //*** CREATE SCENE AND CAMERA ***//
 var onRenderFcts=[]; //rendering stack
@@ -120,12 +121,21 @@ onRenderFcts.push(function(delta, now){
 //*** GRACE ORBIT ***//
 var radius   = g_a / earthradius;
 var segments = 64;
-var material = new THREE.LineBasicMaterial( { color: 0x0044ff } ),
+var ccolor = 0x0044ff;
+var material = new THREE.LineBasicMaterial( { color: ccolor } ),
+
 geometry = new THREE.CircleGeometry( radius, segments );
-
 geometry.vertices.shift(); // Remove center vertex
-scene.add( new THREE.Line( geometry, material ) );
+var circle = new THREE.Line(geometry, material);
+circle.rotation.x = -1 * Math.PI / 180;
+circle.castShadow = circle.receiveShadow = false;
+scene.add(circle);
 
+/*geometry = new THREE.CircleGeometry( radius, segments );
+geometry.vertices.shift(); // Remove center vertex
+geometry.rotation.z = 1.0 * Math.PI/180;
+
+scene.add( new THREE.Line( geometry, material ) );*/
 
 
 //*** CAMERA CONTROLS ***//
@@ -137,7 +147,7 @@ controls.noPan = true;
 controls.staticMoving = false;
 controls.minDistance = 1.75;
 controls.maxDistance = 8.5;
-controls.dynamicDampingFactor = 0.2;
+controls.dynamicDampingFactor = 0.25;
 
 //*** RENDER SCENE ***//
 onRenderFcts.push(function(){
