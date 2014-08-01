@@ -1,10 +1,11 @@
 //*** GLOBALS ***//
 this.display = '3D Globe';
 this.binsize = 3.0;
-this.speed = 0.0;
+this.speed = 1.0;
+this.exagg = 1.2;
 this.run = 1;
 
-var deltarealt = 1.778; //set zero to realtime (1 delta = 1 second)
+var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
 var stellarday = 86164.1 / 86400; //seconds in a stellar day / solar day
 var tropicalyear = 31556926.08; //seconds in one revolution around the Earth
 var earthaxistilt = 23.4; //in degrees, difference from true north and celestial north
@@ -31,7 +32,8 @@ var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
 });
-var speedupdate = gui.add(this, 'speed', 0.0, 6.0).name("Simulation Speed");
+gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
+gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
 
 //*** INITIALIZE THREE.JS ***//
 var renderer = new THREE.WebGLRenderer({
@@ -44,13 +46,12 @@ renderer.setClearColor(0x000000, 1.0);
 document.body.appendChild(renderer.domElement);
 //Allow shadow mapping
 renderer.shadowMapEnabled = true;
-renderer.shadowMapSoft = true;
 
 //*** CREATE SCENE AND CAMERA ***//
 var onRenderFcts=[]; //rendering stack
 var scene = new THREE.Scene(); //initilize scene
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 800); //add new camera definition (FOV deg, aspect ratio, near, far)
-camera.position.z = 2.5; //set z axis camera position
+camera.position.z = 4; //set z axis camera position
 
 //*** TIMER ***//
 onRenderFcts.push(function(delta, now){
@@ -130,6 +131,10 @@ var circle = new THREE.Line(geometry, material);
 circle.rotation.x = -1 * Math.PI / 180;
 circle.castShadow = circle.receiveShadow = false;
 scene.add(circle);
+
+onRenderFcts.push(function(){
+ circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
+});
 
 /*geometry = new THREE.CircleGeometry( radius, segments );
 geometry.vertices.shift(); // Remove center vertex
