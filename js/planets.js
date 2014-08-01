@@ -1,11 +1,10 @@
 this.cloudopacity = 0.0;
 this.dataopacity = 1;
-this.datatexture = 'img/3deg-65-allmonth_debug.gif';
 
 var createEarth	= function(){
 	var geometry	= new THREE.SphereGeometry(0.50, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
-		map		: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
+		map		: THREE.ImageUtils.loadTexture('img/earthmap4k.jpg'),
 		bumpMap		: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
 		bumpScale	: 0.05,
 	})
@@ -68,18 +67,6 @@ var createEarthCloud	= function(){
 		opacity		: this.cloudopacity,
 	})
 	var mesh	= new THREE.Mesh(geometry, material)
-	return mesh;
-}
-
-var createData	= function(){
-	var geometry	= new THREE.SphereGeometry(0.53, 32, 32)
-	var material	= new THREE.MeshPhongMaterial({
-		map		: THREE.ImageUtils.loadTexture('img/outputgreen.png'),
-        side    : THREE.DoubleSide,
-        transparent : true,
-        opacity : this.dataopacity,
-	});
-	var mesh	= new THREE.Mesh(geometry, material);
 	return mesh;
 }
 

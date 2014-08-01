@@ -1,6 +1,6 @@
 this.year = '2002';
 this.month = '04';
-this.ym = '2002-04'
+this.ym = '2002-04';
 
 //*** FULL SCREEN ***//
 function fullscreen() {
@@ -51,10 +51,10 @@ function fsupdateicon()
 
 //*** RESIZE CANVAS ***//
 function resizeCanvas() {
-  /*camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   
-  renderer.setSize(window.innerWidth, window.innerHeight);*/
+  renderer.setSize(window.innerWidth, window.innerHeight);
   
   fsupdateicon();
 }
@@ -85,6 +85,17 @@ function changeDate() {
   this.year = yval;
   this.month = mval;
   this.ym = yval.concat("-").concat(mval);
+}
+
+//*** SIMULATION CONTROLS ***//
+function startSimul() {
+  
+}
+function stopSimul() {
+  
+}
+function resetSimul() {
+  
 }
 
 //*** ACTIVATE ANIMATION ***//

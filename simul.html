@@ -9,24 +9,27 @@
     <meta name="ROBOTS" content="INDEX, FOLLOW">
     <meta name="Keywords" content="NASA, UTCSR, GRACE">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Gravity Recovery and Climate Experiment Data Analysis">
+    <meta name="description" content="Gravity Recovery and Climate Experiment Orbit Simulation">
 <!--    <meta http-equiv="refresh" content="0; url=analyst" />   -->
+    
+    <!--  Load External Javascript -->
+    <script type="text/javascript" src="js/include/ThreeWebGL.js"></script>
+    <script type="text/javascript" src="js/include/ThreeExtras.js"></script>
+    <script type="text/javascript" src="js/include/RequestAnimationFrame.js"></script>
+    <script type="text/javascript" src="js/include/Detector.js"></script>
+    <script type="text/javascript" src="js/include/jquery.min.js"></script>
+    <script type="text/javascript" src="js/include/three.min.js"></script>
+    <script type="text/javascript" src="js/include/dat.gui.min.js"></script>
+    <script type="text/javascript" src="js/include/bootstrap.min.js"></script>
   </head>
   
   <!--  Load CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/include/bootstrap.min.css" rel="stylesheet">
   <link href="fonts/fonts.css" rel="stylesheet">
   <link href="css/main.css" rel="stylesheet">
   
-  <!--  Load External Javascript -->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script type="text/javascript" src="js/three.min.js"></script>
-  <script type="text/javascript" src="js/dat.gui.min.js"></script>
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/planets.js"></script>
-  
   <!--  BODY  -->
-  <body onload="loadData('en', 1);">
+  <body>
     
     <!--  datGUI Container  -->
     <div id="gui-container"></div>
@@ -35,63 +38,21 @@
     <div id="title">Gravity Recovery and Climate Experiment</div>
     <div id="subtitle">Data Analyst</div>
     <div id="copyright">Copyright (c) 2014 Arthur Pachachura and Naoki Ellis<br>In cooperation with NASA JSC and UT CSR</div>
-    
-    <div class="verticalmiddle" id="loadcontainer">Loading...</div>
 
     <div id="fsbutton" href="" onClick="fullscreen();"><span class="mega-octicon octicon-screen-full fadeicon"></span></div>
     <div id="runbutton" href="" onClick="runGif();"><span class="mega-octicon octicon-playback-play fadeicon"></span></div>
-    <div class="datelabels fadeicon" onClick="activateDate()" id="dlab">
-      <div class="datemonth" href="" id="dlabm">April</div>
-      <div class="dateyear" href="" id="dlaby">2002</div>
-    </div>
-    <div class="datelabels" style="display: none" id="dbut">
-      <select class="datemonth" onClick="changeDate()" id="dbutm">
-        <option value="01">January</option>
-        <option value="02">February</option>
-        <option value="03">March</option>
-        <option value="04">April</option>
-        <option value="05">May</option>
-        <option value="06">June</option>
-        <option value="07">July</option>
-        <option value="08">August</option>
-        <option value="09">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-      </select>
-      <select class="dateyear" onClick="changeDate()" style="float:right" id="dbuty">
-        <option value="2002">2002</option>
-        <option value="2003">2003</option>
-        <option value="2004">2004</option>
-        <option value="2005">2005</option>
-        <option value="2006">2006</option>
-        <option value="2007">2007</option>
-        <option value="2008">2008</option>
-        <option value="2009">2009</option>
-        <option value="2010">2010</option>
-        <option value="2011">2011</option>
-        <option value="2012">2012</option>
-        <option value="2013">2013</option>
-        <option value="2014">2014</option>
-      </select>
-    </div>
     
     <!--  3D Rendering  -->
     <div id="container"></div>
     
-    <script type="text/javascript" src="js/ThreeWebGL.js"></script>
-    <script type="text/javascript" src="js/ThreeExtras.js"></script>
-    <script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
-    <script type="text/javascript" src="js/Detector.js"></script>
-  <script type="text/javascript" src="js/Tween.js"></script>
-    <script type="text/javascript" src="js/globe.js"></script>    
+<!--    <script type="text/javascript" src="js/include/globe.js"></script>-->
     
+    <script type="text/javascript" src="js/planets.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     
   </body>
   
   <!-- DELAYED LOADING -->
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/main.js"></script>
+  <script type="text/javascript" src="js/simul.js"></script>
   
 </html>

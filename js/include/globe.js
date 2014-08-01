@@ -18,8 +18,10 @@ DAT.Globe = function(container, gui, colorFn) {
   this.hmult = 0.92;
   this.hsub = 0.35; //0.75 //0.35
   this.basegeometry = new THREE.Geometry();
-  
-  var biasupdate = gui.add(this, 'hmult', 0.80, 1.05).name("Height Bias");
+  if (gui !== undefined)
+  {
+    var biasupdate = gui.add(this, 'hmult', 0.80, 1.05).name("Height Bias");
+  }
     
   colorFn = colorFn || function(x) {
     var c = new THREE.Color();
