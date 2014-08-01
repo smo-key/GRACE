@@ -1,0 +1,168 @@
+/* Body */
+body, html { 
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  border: 0px;
+  padding: 0px;
+  background-color: #000000;
+  overflow: hidden;
+  font-family: 'helvetica';
+  font-weight: 400;
+  font-style: normal;
+}
+
+.navbar {
+  background-color: rgba(0,0,0,0.3);
+  color: #fff;
+  border-color: transparent;
+}
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+
+#title {
+  color: #fff;
+  top: 8px;
+  left: 16px;
+  z-index: 15;
+  position: absolute;
+}
+#subtitle {
+  color: #ccc;
+  top: 30px;
+  left: 16px;
+  z-index: 15;
+  position: absolute;
+}
+#copyright {
+  color: #ccc;
+  bottom: 10px;
+  width: 100%;
+  z-index:  5;
+  position: absolute;
+  font-size: 10px;
+  text-align: center;
+}
+
+.datelabels {
+  color: #fff;
+  bottom: 11px;
+  left: 46px;
+  z-index: 15;
+  position: absolute;
+  width: 200px;
+}
+
+.datemonth {
+  z-index: 15;
+  position: relative;
+  font-size: 16px;
+  float: left;
+  padding-right: 6px;
+  font-size: 18px;
+}
+
+.dateyear {
+  z-index: 15;
+  position: relative;
+  font-size: 16px;
+  float: left;
+  padding-right: 6px;
+  font-size: 18px;
+}
+
+#gui-container {
+  display: block;
+  background: #000;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 260px;
+  height: 0px;
+  overflow: visible;
+  z-index: 60;
+}
+
+#loadcontainer {
+  display: block;
+  width: 100%;
+  z-index: 2;
+  position: absolute;
+  text-align: center;
+  color: #fff;
+  font-family: 'helvetica';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 28px;
+}
+
+.verticalmiddle {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+select {
+  color: #000;
+}
+input {
+  line-height: normal;
+  padding: 6px;
+}
+
+/* Fullscreen Button */
+#fsbutton {
+  color: #fff;
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+  z-index: 10;
+}
+
+#runbutton {
+  color: #fff;
+  position: absolute;
+  left: 16px;
+  bottom: 8px;
+  z-index: 10;
+}
+
+/* Fading Icon */
+.fadeicon {
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  
+  -webkit-transition: color 0.1s ease-in-out;
+  -moz-transition: color 0.1s ease-in-out;
+  -ms-transition: color 0.1s ease-in-out;
+  -o-transition: color 0.1s ease-in-out;
+  transition: color 0.1s ease-in-out;
+}
+.fadeicon:hover,
+.fadeicon:focus {
+  color: rgba(255, 255, 255, 1.0);
+}
+
+@media screen and (max-width: 560px){
+  #title {
+    color: #fff;
+    text-align: center;
+    top: 8px;
+    left: 8px;
+    z-index: 15;
+    font-size: 0.8em;
+    margin: none;
+    padding: none;
+  }
+  #subtitle {
+    color: #ccc;
+    text-align: center;
+    top: 22px;
+    left: 8px;
+    font-size: 0.8em;
+    z-index: 15;
+    margin: none;
+    padding: none;
+  }
+}
