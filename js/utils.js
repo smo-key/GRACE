@@ -1,6 +1,7 @@
 this.year = '2002';
 this.month = '04';
 this.ym = '2002-04';
+this.time = 0; //time in seconds
 
 //*** FULL SCREEN ***//
 function fullscreen() {
@@ -101,8 +102,28 @@ function startSimul() {
   }
 }
 function resetSimul() {
-  earthMesh.rotation.y = 0;
   if (this.run == 1) { startSimul(); }
+  earthMesh.rotation.y = 0;
+  this.time = 0;
+}
+function updateTime()
+{
+  var t = this.time;
+  var d = Math.floor(t / 86400);
+  t -= d * 86400;
+  var h = Math.floor(t / 3600);
+  t -= h * 3600;
+  var m = Math.floor(t / 60);
+  t -= m * 60;
+  var s = Math.floor(t);
+  var so = s >= 10 ? s.toString() : "0" + s.toString();
+  var mo = m >= 10 ? m.toString() : "0" + m.toString();
+  var ho = h >= 10 ? h.toString() : "0" + h.toString();
+  var dout = d >= 10 ? d.toString() : "0" + d.toString();
+  
+  var str = "T+ " + dout + ":" +  ho + ":" + mo + ":" + so;
+  
+  $("#timer").text(str);
 }
 
 //*** READING KEYBOARD ***//

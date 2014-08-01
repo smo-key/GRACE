@@ -1,8 +1,9 @@
 //*** GLOBALS ***//
 this.display = '3D Globe';
 this.binsize = 3.0;
-this.speed = 1.0;
+this.speed = 0.0;
 this.run = 1;
+var deltarealt = 1.778;
 
 //*** DATGUI ***//
 var gui = new dat.GUI({ autoPlace: false });
@@ -13,12 +14,12 @@ var displayupdate = gui.add(this, 'display', [ '3D Globe', '2D Map'  ] ).name("D
 displayupdate.onChange(function(value){
   //change displaymodes
   
-});
+});   
 var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
 });
-var speedupdate = gui.add(this, 'speed', 0.5, 3.5).name("Simulation Speed");
+var speedupdate = gui.add(this, 'speed', 0.0, 5).name("Simulation Speed");
 
 //** LOAD GLOBE **//
 /*if(!Detector.webgl){
@@ -91,9 +92,17 @@ earthMesh.receiveShadow = true;
 earthMesh.castShadow = true;
 containerEarth.add(earthMesh);
 
+//*** TIMER ***//
+onRenderFcts.push(function(delta, now){
+  //one Earth minute per delta
+  this.time += delta * 60 * Math.pow(10,(this.speed - deltarealt)) * run;
+  updateTime();
+});
+
 //Animate Mesh
 onRenderFcts.push(function(delta, now){
-  earthMesh.rotation.y += 1/32 * delta * Math.pow(10,(this.speed - 1)) * run;
+  //one Earth minute per delta
+  earthMesh.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run;
 });
 
 //Clouds
