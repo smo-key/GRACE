@@ -4,7 +4,7 @@ this.dataopacity = 1;
 var createEarth	= function(){
 	var geometry	= new THREE.SphereGeometry(0.50, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
-		map		: THREE.ImageUtils.loadTexture('img/earthmap4k.jpg'),
+		map		: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
 		bumpMap		: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
 		bumpScale	: 0.05,
 	})
