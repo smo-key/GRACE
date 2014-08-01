@@ -3,7 +3,10 @@ this.display = '3D Globe';
 this.binsize = 3.0;
 this.speed = 0.0;
 this.run = 1;
-var deltarealt = 1.778;
+
+var deltarealt = 1.778; //set zero to realtime (1 delta = 1 second)
+var stellarday = 86164.1 / 86400; //seconds in a stellar day / solar day
+var tropicalyear = 365.2422; //days in one revolution around the Earth
 
 //*** DATGUI ***//
 var gui = new dat.GUI({ autoPlace: false });
@@ -102,7 +105,7 @@ onRenderFcts.push(function(delta, now){
 //Animate Mesh
 onRenderFcts.push(function(delta, now){
   //one Earth minute per delta
-  earthMesh.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run;
+  earthMesh.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * stellarday;
 });
 
 //Clouds
