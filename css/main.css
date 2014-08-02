@@ -161,6 +161,8 @@ input {
   position: absolute;
   display: none;
   color: #0044ff;
+  font-size: 12px;
+  width: 60px;
 }
 
 /* Fading Icon */

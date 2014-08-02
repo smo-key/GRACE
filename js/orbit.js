@@ -34,6 +34,9 @@ function orbit_circle(a, i, p, om, T, t)
 
 function sphere_cartes(r, theta, phi)
 {
+  theta *= Math.PI / 180;
+  phi *= Math.PI / 180;
+
   var x = r * Math.sin(theta) * Math.cos(phi);
   var y = r * Math.sin(theta) * Math.sin(phi);
   var z = r * Math.cos(theta);

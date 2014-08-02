@@ -151,7 +151,7 @@ onRenderFcts.push(function(){
   $("#satcircle").css('top', vector.y.toString() + 'px');
   $("#sattext").css('display', 'block');
   $("#sattext").css('left', vector.x.toString() + 'px');
-  $("#sattext").css('top', (vector.y - 24).toString() + 'px');
+  $("#sattext").css('top', (vector.y - 18).toString() + 'px');
 
   circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
 
