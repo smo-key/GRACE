@@ -6,17 +6,11 @@ this.exagg = 1.2;
 this.run = 1;
 
 var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
-var stellarday = 86164.1 / 86400; //seconds in a stellar day / solar day
+var siderealday = 86164.1 / 86400; //seconds in a sidereal day / solar day
 var tropicalyear = 31556926.08; //seconds in one revolution around the Earth
 var earthaxistilt = 23.4; //in degrees, difference from true north and celestial north
 var earthradius = 6378.1; //in kilometers
 var PI_HALF = Math.PI / 2; //tau
-
-//GRACE Orbital Parameters
-var g_a = 6871.0; //Semi-major axis in kilometers, also radius since e is about zero
-var g_e = 0.000; //eccentricity
-var g_i = 89.000; //inclination in degrees, 89deg is prograde
-
 
 //*** DATGUI ***//
 var gui = new dat.GUI({ autoPlace: false });
@@ -106,7 +100,7 @@ containerEarth.add(earthMesh);
 //Animate Mesh
 onRenderFcts.push(function(delta, now){
   //one Earth minute per delta
-  containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * stellarday;
+  containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * siderealday;
 });
 
 //Clouds
@@ -123,8 +117,10 @@ onRenderFcts.push(function(delta, now){
 var radius   = g_a / earthradius;
 var segments = 64;
 var ccolor = 0x0044ff;
-var material = new THREE.LineBasicMaterial( { color: ccolor } ),
+var material = new THREE.LineBasicMaterial( { color: ccolor } );
+var projector = new THREE.Projector();
 
+//Line of orbit
 geometry = new THREE.CircleGeometry( radius, segments );
 geometry.vertices.shift(); // Remove center vertex
 var circle = new THREE.Line(geometry, material);
@@ -133,7 +129,32 @@ circle.castShadow = circle.receiveShadow = false;
 scene.add(circle);
 
 onRenderFcts.push(function(){
- circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
+  //find location of satellite in 3D space
+  var grace = orbit_circle(g_a / earthradius * this.exagg,               89, g_period, g_om, g_t, this.time);
+
+  //coerce to 2D screen coordinates
+  var width = window.innerWidth, height = window.innerHeight;
+  var widthHalf = width / 2, heightHalf = height / 2;
+
+  var vector = new THREE.Vector3(grace.x,
+                                 grace.y, grace.z);
+  var projector = new THREE.Projector();
+  projector.projectVector( vector, camera );
+
+  vector.x = (( vector.x * widthHalf ) + widthHalf);
+  vector.y = (-( vector.y * heightHalf ) + heightHalf);
+  vector.z = 1;
+
+  //update display
+  $("#satcircle").css('display', 'block');
+  $("#satcircle").css('left', vector.x.toString() + 'px');
+  $("#satcircle").css('top', vector.y.toString() + 'px');
+  $("#sattext").css('display', 'block');
+  $("#sattext").css('left', vector.x.toString() + 'px');
+  $("#sattext").css('top', (vector.y - 24).toString() + 'px');
+
+  circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
+
 });
 
 /*geometry = new THREE.CircleGeometry( radius, segments );

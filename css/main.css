@@ -145,6 +145,24 @@ input {
   z-index: 10;
 }
 
+#satcircle {
+  z-index: 8;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  position: absolute;
+  display: none;
+  background-color: #0044ff;
+  font-size: 8px;
+}
+
+#sattext {
+  z-index: 7;
+  position: absolute;
+  display: none;
+  color: #0044ff;
+}
+
 /* Fading Icon */
 .fadeicon {
   color: rgba(255, 255, 255, 0.6);
