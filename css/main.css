@@ -165,6 +165,13 @@ input {
   width: 60px;
 }
 
+.timetype {
+  z-index: 2;
+  position: absolute;
+  color: #ccc;
+  font-size: 8px;
+}
+
 /* Fading Icon */
 .fadeicon {
   color: rgba(255, 255, 255, 0.6);
