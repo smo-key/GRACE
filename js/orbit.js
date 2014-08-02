@@ -9,7 +9,7 @@ var g_period = 1800; //seconds per revolution
 
 //need r, v (perifocal system)
 
-//circular orbit, no eccentricity
+//circular orbit, no eccentricity, SUPER simplified
 //a: Semi major axis (m)
 //i: Inclination angle (deg)
 //p: Period (t)
@@ -23,8 +23,12 @@ function orbit_circle(a, i, p, om, T, t)
   //var x = a * Math.cos(deg);
   //var y = a * Math.sin(deg);
 
-  //calculate to 2D/3D difference
-  var orbit = sphere_cartes(a, i, deg);
+  //place on spherical coordinates
+  var orbit = sphere_cartes(a, deg, 90);
+
+  //tilt spherical coords by inclination
+
+
   return orbit;
 }
 
@@ -37,9 +41,9 @@ function sphere_cartes(r, theta, phi)
   theta *= Math.PI / 180;
   phi *= Math.PI / 180;
 
-  var x = r * Math.sin(theta) * Math.cos(phi);
+  var x = r * Math.cos(theta) * Math.sin(phi);
   var y = r * Math.sin(theta) * Math.sin(phi);
-  var z = r * Math.cos(theta);
+  var z = r * Math.cos(phi);
   return new THREE.Vector3(x, y, z);
 }
 
