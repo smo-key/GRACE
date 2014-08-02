@@ -124,13 +124,13 @@ var projector = new THREE.Projector();
 geometry = new THREE.CircleGeometry( radius, segments );
 geometry.vertices.shift(); // Remove center vertex
 var circle = new THREE.Line(geometry, material);
-//circle.rotation.x = -1 * Math.PI / 180;
+circle.rotation.x = -1 * Math.PI / 180;
 circle.castShadow = circle.receiveShadow = false;
 scene.add(circle);
 
 onRenderFcts.push(function(){
   //find location of satellite in 3D space
-  var grace = orbit_circle(g_a / earthradius * this.exagg, 90, g_period, g_om, g_t, this.time);
+  var grace = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
 
   //coerce to 2D screen coordinates
   var width = window.innerWidth, height = window.innerHeight;

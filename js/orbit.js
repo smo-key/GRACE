@@ -28,6 +28,10 @@ function orbit_circle(a, i, p, om, T, t)
 
   //tilt spherical coords by inclination
 
+  var axis = new THREE.Vector3( 1, 0, 0 );
+  var angle = (i - 90) * Math.PI / 180;
+  var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
+  orbit.applyMatrix4( matrix );
 
   return orbit;
 }
