@@ -35,6 +35,12 @@ function orbit_circle(a, i, p, om, T, t)
   return orbit;
 }
 
+//Rotates a 3D coordinate in the y-axis direction by a certain angle (great for converting a plain location vector to 3D Earth coordinates)
+function rotate_3d(v, theta)
+{
+
+}
+
 //r = radius
 //theta = polar angle, or inclination (in
 //phi = azimuth, from x counterclockwise
@@ -70,6 +76,6 @@ function sphere_uv(p)
   p.normalize();
   var u = 0.5 + (Math.atan2(p.z, p.x) / (2 * Math.PI));
   var v = 0.5 - (Math.asin(p.y) / Math.PI);
-  var uv = new THREE.Vector2(u, v);
+  var uv = new THREE.Vector3(u, v, 0);
   return uv;
 }

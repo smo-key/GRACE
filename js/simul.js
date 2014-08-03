@@ -129,7 +129,6 @@ circle.castShadow = circle.receiveShadow = false;
 scene.add(circle);
 
 //UV Drawing Canvas
-//render canvas
 var meshOverlay = addCanvasOverlay();
 scene.add(meshOverlay);
 
@@ -148,6 +147,7 @@ onRenderFcts.push(function(){
   var width = window.innerWidth, height = window.innerHeight;
   var widthHalf = width / 2, heightHalf = height / 2;
 
+  //vector = 2d projected vector for orbit
   var vector = new THREE.Vector3(grace.x,  grace.y, grace.z);
   var projector = new THREE.Projector();
   projector.projectVector( vector, camera );
@@ -158,20 +158,22 @@ onRenderFcts.push(function(){
 
   //groundtrack point
   var uv = sphere_uv(grace);
+
   var uvx = uv.x * $('#maincanvas').width();
   var uvy = uv.y * $('#maincanvas').height();
-  var uvr = 5;
+  var uvr = 1;
 
   var ctx = $('#maincanvas')[0].getContext("2d");
   ctx.globalAlpha = 1;
   ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
   //ctx.fillRect(0,0,1000,400); //1024, 512
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#000000";
   ctx.globalAlpha = 1;
   ctx.beginPath();
   //(x,y,r,sAngle,eAngle,counterclock)
   ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
   ctx.fill();
+  //ctx.rotate( -1 * Math.PI / 180 );
 
   var canvasTexture = new THREE.Texture($('#maincanvas')[0]);
   canvasTexture.needsUpdate = true;

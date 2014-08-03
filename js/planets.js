@@ -26,6 +26,7 @@ function addCanvasOverlay() {
 
     var mesh = new THREE.Mesh(spGeo,material);
     mesh.dynamic = true;
+    mesh.rotation.x = -2 * Math.PI / 180;
 
     return mesh;
 }
