@@ -14,7 +14,7 @@ var createEarth	= function(){
 
 //var canvasTexture;
 function addCanvasOverlay() {
-    var spGeo = new THREE.SphereGeometry(1.001,32,32);
+    var spGeo = new THREE.SphereGeometry(1.02,32,32);
     var canvasTexture = new THREE.Texture($('#maincanvas')[0]);
     canvasTexture.needsUpdate = true;
 
@@ -95,7 +95,7 @@ var createStarfield	= function(){
 		map	: texture,
 		side	: THREE.BackSide
 	})
-	var geometry	= new THREE.SphereGeometry(750, 32, 32)
+	var geometry	= new THREE.SphereGeometry(225, 32, 32)
 	var mesh	= new THREE.Mesh(geometry, material)
 	return mesh	
 }

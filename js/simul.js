@@ -30,7 +30,7 @@ sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
 });
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
-gui.add(this, 'exagg', 0.93, 2.0).name("Orbit Exaggeration");
+gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
 
 //*** INITIALIZE THREE.JS ***//
 var renderer = new THREE.WebGLRenderer({
@@ -47,7 +47,7 @@ renderer.shadowMapEnabled = true;
 //*** CREATE SCENE AND CAMERA ***//
 var onRenderFcts=[]; //rendering stack
 var scene = new THREE.Scene(); //initilize scene
-var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 800); //add new camera definition (FOV deg, aspect ratio, near, far)
+var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 250); //add new camera definition (FOV deg, aspect ratio, near, far)
 camera.position.z = 4; //set z axis camera position
 
 //*** TIMER ***//
@@ -193,10 +193,10 @@ onRenderFcts.push(function(){
 
   var ctx = $('#maincanvas')[0].getContext("2d");
   ctx.globalAlpha = 1;
-  ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
+  //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
   //ctx.fillRect(0,0,1000,400); //1024, 512
   ctx.fillStyle = "#0044ff";
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha = 0.1;
   ctx.beginPath();
   //(x,y,r,sAngle,eAngle,counterclock)
   ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
@@ -243,9 +243,9 @@ requestAnimationFrame(function animate(nowMsec){
   //keep looping
   requestAnimationFrame(animate);
   
-  //measure time delta (wait 200 msec)
+  //measure time delta (wait 850 msec)
   lastTimeMsec = lastTimeMsec || nowMsec-1000/60;
-  var deltaMsec = Math.min(1000, nowMsec - lastTimeMsec);
+  var deltaMsec = Math.min(850, nowMsec - lastTimeMsec);
   lastTimeMsec = nowMsec;
   
   //call each update function
