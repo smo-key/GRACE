@@ -12,6 +12,21 @@ var createEarth	= function(){
 	return mesh;
 }
 
+var texture;
+function addCanvasOverlay() {
+    var spGeo = new THREE.SphereGeometry(1.05,32,32);
+    texture = new THREE.Texture($('#canvas')[0]);
+
+    var material = new THREE.MeshBasicMaterial({
+        map : texture,
+        transparent : true,
+        opacity: 0.7
+    });
+
+    var mesh = new THREE.Mesh(spGeo,material);
+    return mesh;
+}
+
 var createEarthCloud	= function(){
 	// create destination canvas
 	var canvasResult	= document.createElement('canvas')

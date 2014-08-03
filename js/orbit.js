@@ -19,7 +19,7 @@ var g_period = 1800; //seconds per revolution
 function orbit_circle(a, i, p, om, T, t)
 {
   //calculate on 2D plane
-  var deg = ((t - T) / p + om) * 2 * Math.PI; //time difference / period = location
+  var deg = ((t - T) / p + om) * 360; //time difference / period = location
   //var x = a * Math.cos(deg);
   //var y = a * Math.sin(deg);
 
@@ -27,7 +27,6 @@ function orbit_circle(a, i, p, om, T, t)
   var orbit = sphere_cartes(a, deg, 90);
 
   //tilt spherical coords by inclination
-
   var axis = new THREE.Vector3( 1, 0, 0 );
   var angle = (i - 90) * Math.PI / 180;
   var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
@@ -63,4 +62,14 @@ function orbit_eci(a, e, i, Om, om, M0, t)
   var G = 3.986005*Math.pow(10, 14); //earth universal gravitational constant (m^3/s^2)
   var N = Math.sqrt(G/(a*a*a)); //mean orbit angular speed
 
+}
+
+//Calculates UV coordinates (0-1) from vector point (p)
+function sphere_uv(p)
+{
+  p.normalize();
+  var u = 0.5 + (Math.atan2(p.z, p.x) / (2 * Math.PI));
+  var v = 0.5 - (Math.asin(p.y) / Math.PI);
+  var uv = new THREE.Vector2(u, v);
+  return uv;
 }

@@ -128,6 +128,18 @@ circle.rotation.x = -1 * Math.PI / 180;
 circle.castShadow = circle.receiveShadow = false;
 scene.add(circle);
 
+//UV Drawing Canvas
+//render canvas
+var meshOverlay = addCanvasOverlay();
+containerEarth.add(meshOverlay);
+
+/*geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
+material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+var groundpoint = new THREE.Mesh( geometry, material );
+scene.add( groundpoint );*/
+
+
+//Render Orbit
 onRenderFcts.push(function(){
   //find location of satellite in 3D space
   var grace = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
@@ -136,14 +148,29 @@ onRenderFcts.push(function(){
   var width = window.innerWidth, height = window.innerHeight;
   var widthHalf = width / 2, heightHalf = height / 2;
 
-  var vector = new THREE.Vector3(grace.x,
-                                 grace.y, grace.z);
+  var vector = new THREE.Vector3(grace.x,  grace.y, grace.z);
   var projector = new THREE.Projector();
   projector.projectVector( vector, camera );
 
   vector.x = (( vector.x * widthHalf ) + widthHalf);
   vector.y = (-( vector.y * heightHalf ) + heightHalf);
   vector.z = 1;
+
+  //groundtrack point
+  var uv = sphere_uv(grace);
+  var uvx = uv.x * 1024;
+  var uvy = uv.y * 512;
+  var uvr = 25;
+
+  var ctx = $('#canvas')[0].getContext("2d");
+  ctx.globalAlpha = 0;
+  ctx.fillRect(0,0,1000,400); //1024, 512
+  ctx.fillStyle = "#ffffff";
+  ctx.globalAlpha = 1;
+  ctx.beginPath();
+  //(x,y,r,sAngle,eAngle,counterclock)
+  ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
+  ctx.fill();
 
   //update display
   $("#satcircle").css('display', 'block');
@@ -156,13 +183,6 @@ onRenderFcts.push(function(){
   circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
 
 });
-
-/*geometry = new THREE.CircleGeometry( radius, segments );
-geometry.vertices.shift(); // Remove center vertex
-geometry.rotation.z = 1.0 * Math.PI/180;
-
-scene.add( new THREE.Line( geometry, material ) );*/
-
 
 //*** CAMERA CONTROLS ***//
 //Trackball Controller
