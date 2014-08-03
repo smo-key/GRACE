@@ -1,5 +1,6 @@
 //*** GLOBALS ***//
 this.display = '3D Globe';
+this.darkglobe = false;
 this.binsize = 3.0;
 this.speed = 1.0;
 this.exagg = 1.2;
@@ -17,11 +18,13 @@ var gui = new dat.GUI({ autoPlace: false });
 var customContainer = document.getElementById('gui-container');
 customContainer.appendChild(gui.domElement);
 
-var displayupdate = gui.add(this, 'display', [ '3D Globe', '2D Map'  ] ).name("Display");
+/*var displayupdate = gui.add(this, 'display', [ '3D Globe', '2D Map'  ] ).name("Display");
 displayupdate.onChange(function(value){
   //change displaymodes
   
-});   
+});*/
+var globeupdate = gui.add(this, 'darkglobe' ).name("Night View");
+
 var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
@@ -103,6 +106,32 @@ onRenderFcts.push(function(delta, now){
   containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * siderealday;
 });
 
+globeupdate.onChange(function(value){
+  //change displaymodes
+  if (!value)
+  {
+    var material = new THREE.MeshPhongMaterial({
+      map: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
+      bumpMap: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
+      bumpScale	: 0.05,
+	});
+    earthMesh.material = material;
+    earthMesh.material.needsUpdate = true;
+    earthMesh.receiveShadow = true;
+    earthMesh.castShadow = true;
+  }
+  else
+  {
+    var material = new THREE.MeshBasicMaterial({
+      map: THREE.ImageUtils.loadTexture('img/world.jpg')
+	});
+    earthMesh.material = material;
+    earthMesh.material.needsUpdate = true;
+    earthMesh.receiveShadow = false;
+    earthMesh.castShadow = false;
+  }
+});
+
 //Clouds
 /*var earthCloud = createEarthCloud();
 earthCloud.recieveShadow = true;
@@ -137,7 +166,6 @@ material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 var groundpoint = new THREE.Mesh( geometry, material );
 scene.add( groundpoint );*/
 
-
 //Render Orbit
 onRenderFcts.push(function(){
   //find location of satellite in 3D space
@@ -167,7 +195,7 @@ onRenderFcts.push(function(){
   ctx.globalAlpha = 1;
   ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
   //ctx.fillRect(0,0,1000,400); //1024, 512
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = "#0044ff";
   ctx.globalAlpha = 1;
   ctx.beginPath();
   //(x,y,r,sAngle,eAngle,counterclock)
@@ -217,7 +245,7 @@ requestAnimationFrame(function animate(nowMsec){
   
   //measure time delta (wait 200 msec)
   lastTimeMsec = lastTimeMsec || nowMsec-1000/60;
-  var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+  var deltaMsec = Math.min(1000, nowMsec - lastTimeMsec);
   lastTimeMsec = nowMsec;
   
   //call each update function
