@@ -27,7 +27,7 @@ sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
 });
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
-gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
+gui.add(this, 'exagg', 0.93, 2.0).name("Orbit Exaggeration");
 
 //*** INITIALIZE THREE.JS ***//
 var renderer = new THREE.WebGLRenderer({
@@ -131,7 +131,7 @@ scene.add(circle);
 //UV Drawing Canvas
 //render canvas
 var meshOverlay = addCanvasOverlay();
-containerEarth.add(meshOverlay);
+scene.add(meshOverlay);
 
 /*geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
 material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
@@ -158,13 +158,13 @@ onRenderFcts.push(function(){
 
   //groundtrack point
   var uv = sphere_uv(grace);
-  var uvx = uv.x * 1024;
-  var uvy = uv.y * 512;
-  var uvr = 25;
+  var uvx = uv.x * $('#maincanvas').width();
+  var uvy = uv.y * $('#maincanvas').height();
+  var uvr = 5;
 
   var ctx = $('#maincanvas')[0].getContext("2d");
   ctx.globalAlpha = 1;
-  ctx.clearRect(0, 0, 1000, 400);
+  ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
   //ctx.fillRect(0,0,1000,400); //1024, 512
   ctx.fillStyle = "#ffffff";
   ctx.globalAlpha = 1;
