@@ -12,18 +12,21 @@ var createEarth	= function(){
 	return mesh;
 }
 
-var texture;
+//var canvasTexture;
 function addCanvasOverlay() {
-    var spGeo = new THREE.SphereGeometry(1.05,32,32);
-    texture = new THREE.Texture($('#canvas')[0]);
+    var spGeo = new THREE.SphereGeometry(1.001,32,32);
+    var canvasTexture = new THREE.Texture($('#maincanvas')[0]);
+    canvasTexture.needsUpdate = true;
 
     var material = new THREE.MeshBasicMaterial({
-        map : texture,
+        map : canvasTexture,
         transparent : true,
-        opacity: 0.7
+        opacity: 1
     });
 
     var mesh = new THREE.Mesh(spGeo,material);
+    mesh.dynamic = true;
+
     return mesh;
 }
 

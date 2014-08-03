@@ -162,15 +162,21 @@ onRenderFcts.push(function(){
   var uvy = uv.y * 512;
   var uvr = 25;
 
-  var ctx = $('#canvas')[0].getContext("2d");
-  ctx.globalAlpha = 0;
-  ctx.fillRect(0,0,1000,400); //1024, 512
+  var ctx = $('#maincanvas')[0].getContext("2d");
+  ctx.globalAlpha = 1;
+  ctx.clearRect(0, 0, 1000, 400);
+  //ctx.fillRect(0,0,1000,400); //1024, 512
   ctx.fillStyle = "#ffffff";
   ctx.globalAlpha = 1;
   ctx.beginPath();
   //(x,y,r,sAngle,eAngle,counterclock)
   ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
   ctx.fill();
+
+  var canvasTexture = new THREE.Texture($('#maincanvas')[0]);
+  canvasTexture.needsUpdate = true;
+  meshOverlay.material.map = canvasTexture;
+  meshOverlay.material.needsUpdate = true;
 
   //update display
   $("#satcircle").css('display', 'block');
