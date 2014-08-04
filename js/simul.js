@@ -26,154 +26,135 @@ sizeupdate.onChange(function(value){
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
 gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
 
+var renderer, scene, camera, light, controls;
+var starSphere, containerEarth;
+var earthMesh, radius;
+var segments, ccolor;
+var material;
+var projector;
+var circle, meshOverlay;
+
 //*** INITIALIZE THREE.JS ***//
-var renderer = new THREE.WebGLRenderer({
-  antialias: true
-});
-//Maximize renderer to window
-renderer.setSize(window.innerWidth, window.innerHeight);
-//Activate the three.js DOM render element
-renderer.setClearColor(0x000000, 1.0);
-document.body.appendChild(renderer.domElement);
-//Allow shadow mapping
-renderer.shadowMapEnabled = true;
-
-//*** CREATE SCENE AND CAMERA ***//
-var scene = new THREE.Scene(); //initilize scene
-var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 250); //add new camera definition (FOV deg, aspect ratio, near, far)
-camera.position.z = 4; //set z axis camera position
-
-//*** AMBIENT LIGHT ***//
-var light = new THREE.AmbientLight(0x222222);
-scene.add(light);
-
-//*** DIRECTIONAL LIGHT ***//
-var light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(10,0,10);
-scene.add(light);
-
-light.castShadow = true;
-light.shadowCameraNear = 0.01;
-light.shadowCameraFar = 15;
-light.shadowCameraFov = 45;
-
-light.shadowCameraLeft = -1;
-light.shadowCameraRight = 1;
-light.shadowCameraTop = 1;
-light.shadowCameraBottom = -1;
-
-light.shadowBias = 0.001;
-light.shadowDarkness = 0.2;
-
-light.shadowMapWidth = 1024;
-light.shadowMapHeight = 1024;
-
-//*** ADD STARFIELD ***//
-var starSphere = createStarfield();
-scene.add(starSphere);
-
-//*** EARTH ***//
-//Render Container
-var containerEarth = new THREE.Object3D();
-containerEarth.rotateZ(-earthaxistilt * Math.PI/180);
-containerEarth.position.z = 0;
-scene.add(containerEarth);
-
-//Mesh
-var earthMesh = createEarth();
-earthMesh.receiveShadow = true;
-earthMesh.castShadow = true;
-containerEarth.add(earthMesh);
-
-globeupdate.onChange(function(value){
-  //change displaymodes
-  if (!value)
-  {
-    var material = new THREE.MeshPhongMaterial({
-      map: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
-      bumpMap: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
-      bumpScale	: 0.05,
-	});
-    earthMesh.material = material;
-    earthMesh.material.needsUpdate = true;
-    earthMesh.receiveShadow = true;
-    earthMesh.castShadow = true;
-  }
-  else
-  {
-    var material = new THREE.MeshBasicMaterial({
-      map: THREE.ImageUtils.loadTexture('img/world.jpg')
-	});
-    earthMesh.material = material;
-    earthMesh.material.needsUpdate = true;
-    earthMesh.receiveShadow = false;
-    earthMesh.castShadow = false;
-  }
-});
-
-//Clouds
-/*var earthCloud = createEarthCloud();
-earthCloud.recieveShadow = true;
-earthCloud.castShadow = true;
-containerEarth.add(earthCloud);
-//Cloud Animation
-onRenderFcts.push(function(delta, now){
-  earthCloud.rotation.y += 1/8 * delta * Math.pow(10,(this.speed - 1)) * run;
-});*/
-
-//*** GRACE ORBIT ***//
-var radius   = g_a / earthradius;
-var segments = 64;
-var ccolor = 0x0044ff;
-var material = new THREE.LineBasicMaterial( { color: ccolor } );
-var projector = new THREE.Projector();
-
-//Line of orbit
-geometry = new THREE.CircleGeometry( radius, segments );
-geometry.vertices.shift(); // Remove center vertex
-var circle = new THREE.Line(geometry, material);
-circle.rotation.x = -1 * Math.PI / 180;
-circle.castShadow = circle.receiveShadow = false;
-scene.add(circle);
-
-//UV Drawing Canvas
-var meshOverlay = addCanvasOverlay();
-scene.add(meshOverlay);
-
-/*geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
-material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-var groundpoint = new THREE.Mesh( geometry, material );
-scene.add( groundpoint );*/
-
-//*** CAMERA CONTROLS ***//
-//Trackball Controller
-var controls = new THREE.TrackballControls(camera, renderer.domElement);
-controls.rotateSpeed = 0.4;
-controls.noZoom = false;
-controls.noPan = true;
-controls.staticMoving = false;
-controls.minDistance = 1.75;
-controls.maxDistance = 8.5;
-controls.dynamicDampingFactor = 0.25;
-
-//*** LOOP ***//
-/*var lastTimeMsec = null;
-requestAnimationFrame(function animate(nowMsec){
-  //keep looping
-  requestAnimationFrame(animate);
-
-  //measure time delta (wait 850 msec)
-  lastTimeMsec = lastTimeMsec || nowMsec-1000/60;
-  var deltaMsec = Math.min(850, nowMsec - lastTimeMsec);
-  lastTimeMsec = nowMsec;
-
-  //call each update function
-  onRenderFcts.forEach(function(onRenderFct){
-    onRenderFct(deltaMsec/1000, nowMsec/1000);
+function init() {
+  renderer = new THREE.WebGLRenderer({
+    antialias: true
   });
-});*/
+  //Maximize renderer to window
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  //Activate the three.js DOM render element
+  renderer.setClearColor(0x000000, 1.0);
+  document.body.appendChild(renderer.domElement);
+  //Allow shadow mapping
+  renderer.shadowMapEnabled = true;
 
-var lastTime = new Date().getTime();;
+  //*** CREATE SCENE AND CAMERA ***//
+  scene = new THREE.Scene(); //initilize scene
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 250); //add new camera definition (FOV deg, aspect ratio, near, far)
+  camera.position.z = 4; //set z axis camera position
+
+  //*** AMBIENT LIGHT ***//
+  light = new THREE.AmbientLight(0x222222);
+  scene.add(light);
+
+  //*** DIRECTIONAL LIGHT ***//
+  light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(10,0,10);
+  scene.add(light);
+
+  light.castShadow = true;
+  light.shadowCameraNear = 0.01;
+  light.shadowCameraFar = 15;
+  light.shadowCameraFov = 45;
+
+  light.shadowCameraLeft = -1;
+  light.shadowCameraRight = 1;
+  light.shadowCameraTop = 1;
+  light.shadowCameraBottom = -1;
+
+  light.shadowBias = 0.001;
+  light.shadowDarkness = 0.2;
+
+  light.shadowMapWidth = 1024;
+  light.shadowMapHeight = 1024;
+
+  //*** ADD STARFIELD ***//
+  starSphere = createStarfield();
+  scene.add(starSphere);
+
+  //*** EARTH ***//
+  //Render Container
+  containerEarth = new THREE.Object3D();
+  containerEarth.rotateZ(-earthaxistilt * Math.PI/180);
+  containerEarth.position.z = 0;
+  scene.add(containerEarth);
+
+  //Mesh
+  earthMesh = createEarth();
+  earthMesh.receiveShadow = true;
+  earthMesh.castShadow = true;
+  containerEarth.add(earthMesh);
+
+  globeupdate.onChange(function(value){
+    //change displaymodes
+    if (!value)
+    {
+      material = new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
+        bumpMap: THREE.ImageUtils.loadTexture('img/earthbump1k.jpg'),
+        bumpScale	: 0.05,
+      });
+      earthMesh.material = material;
+      earthMesh.material.needsUpdate = true;
+      earthMesh.receiveShadow = true;
+      earthMesh.castShadow = true;
+    }
+    else
+    {
+      material = new THREE.MeshBasicMaterial({
+        map: THREE.ImageUtils.loadTexture('img/world.jpg')
+      });
+      earthMesh.material = material;
+      earthMesh.material.needsUpdate = true;
+      earthMesh.receiveShadow = false;
+      earthMesh.castShadow = false;
+    }
+  });
+
+  //*** GRACE ORBIT ***//
+  radius   = g_a / earthradius;
+  segments = 64;
+  ccolor = 0x0044ff;
+  material = new THREE.LineBasicMaterial( { color: ccolor } );
+  projector = new THREE.Projector();
+
+  //Line of orbit
+  geometry = new THREE.CircleGeometry( radius, segments );
+  geometry.vertices.shift(); // Remove center vertex
+  circle = new THREE.Line(geometry, material);
+  circle.rotation.x = -1 * Math.PI / 180;
+  circle.castShadow = circle.receiveShadow = false;
+  scene.add(circle);
+
+  //UV Drawing Canvas
+  meshOverlay = addCanvasOverlay();
+  scene.add(meshOverlay);
+
+  /*geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
+  material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+  var groundpoint = new THREE.Mesh( geometry, material );
+  scene.add( groundpoint );*/
+
+  //*** CAMERA CONTROLS ***//
+  //Trackball Controller
+  controls = new THREE.TrackballControls(camera, renderer.domElement);
+  controls.rotateSpeed = 0.4;
+  controls.noZoom = false;
+  controls.noPan = true;
+  controls.staticMoving = false;
+  controls.minDistance = 1.75;
+  controls.maxDistance = 8.5;
+  controls.dynamicDampingFactor = 0.25;
+}
 
 //*** Animation Loop ***//
 // shim layer with setTimeout fallback
@@ -289,5 +270,6 @@ function render(delta, now) {
   requestAnimationFrame(animate);
 }
 
-//init();
+init();
+var lastTime = new Date().getTime();
 animate();
