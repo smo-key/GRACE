@@ -232,21 +232,24 @@ function render(delta, now) {
   //groundtrack point
   var uv = sphere_uv(grace);
 
-  var uvx = uv.x * $('#maincanvas').width() - (containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
-  var uvy = uv.y * $('#maincanvas').height();
-  var uvr = 1;
+  if (this.run == 1)
+  {
+    var uvx = uv.x * $('#maincanvas').width() - (containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
+    var uvy = uv.y * $('#maincanvas').height();
+    var uvr = 1;
 
-  var ctx = $('#maincanvas')[0].getContext("2d");
-  ctx.globalAlpha = 1;
-  //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
-  //ctx.fillRect(0,0,1000,400); //1024, 512
-  ctx.fillStyle = "#0044ff";
-  ctx.globalAlpha = 0.1;
-  ctx.beginPath();
-  //(x,y,r,sAngle,eAngle,counterclock)
-  ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
-  ctx.fill();
-  //ctx.rotate( -1 * Math.PI / 180 );
+    var ctx = $('#maincanvas')[0].getContext("2d");
+    ctx.globalAlpha = 1;
+    //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
+    //ctx.fillRect(0,0,1000,400); //1024, 512
+    ctx.fillStyle = "#0044ff";
+    ctx.globalAlpha = 0.1;
+    ctx.beginPath();
+    //(x,y,r,sAngle,eAngle,counterclock)
+    ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
+    ctx.fill();
+    //ctx.rotate( -1 * Math.PI / 180 );
+  }
 
   var canvasTexture = new THREE.Texture($('#maincanvas')[0]);
   canvasTexture.needsUpdate = true;

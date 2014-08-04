@@ -104,6 +104,9 @@ function startSimul() {
 function resetSimul() {
   if (this.run == 1) { startSimul(); }
   containerEarth.rotation.y = 0;
+  var ctx = $('#maincanvas')[0].getContext("2d");
+    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
   this.time = 0;
 }
 function updateTime()
