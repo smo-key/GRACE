@@ -232,7 +232,7 @@ function render(delta, now) {
   //groundtrack point
   var uv = sphere_uv(grace);
 
-  var uvx = uv.x * $('#maincanvas').width();
+  var uvx = uv.x * $('#maincanvas').width() - (containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
   var uvy = uv.y * $('#maincanvas').height();
   var uvr = 1;
 
@@ -252,6 +252,7 @@ function render(delta, now) {
   canvasTexture.needsUpdate = true;
   meshOverlay.material.map = canvasTexture;
   meshOverlay.material.needsUpdate = true;
+  meshOverlay.rotation.y = containerEarth.rotation.y;
 
   //update display
   $("#satcircle").css('display', 'block');
