@@ -55,8 +55,12 @@ namespace GRACEChart
             foreach (string file in list)
             {
                 FileInfo fi = new FileInfo(file);
-                if ((!ym.Contains(fi.Name.Substring(0, 4))) && (Convert.ToInt32(fi.Name.Substring(0, 4)) >= 2008))
+                if ((!ym.Contains(fi.Name.Substring(0, 4))) && (Convert.ToInt32(fi.Name.Substring(0, 4)) >= 2008) && (Convert.ToInt32(fi.Name.Substring(0, 4)) <= 2009))
                 {
+                    if (Convert.ToInt32(fi.Name.Substring(0, 4)) == 2009)
+                    {
+                        if (Convert.ToInt32(fi.Name.Substring(5, 2)) >= 2) { break; }
+                    }
                     ym.Add(fi.Name.Substring(0, 4));
                 }
             }
@@ -67,11 +71,6 @@ namespace GRACEChart
                 FileInfo info = new FileInfo(i);
                 if (ym.Contains(info.Name.Substring(0, 4))) { GRACEData.Add(i); }
             }
-            size = Convert.ToDouble(Binsize.Value);
-            lat1 = y + (size/2);
-            lat2 = y - (size / 2);
-            lon1 = x - (size / 2);
-            lon2 = x + (size / 2);
 
             if (Convert.ToString(Location.SelectedItem).Equals("ACC"))
             {
@@ -218,6 +217,11 @@ namespace GRACEChart
                 y = -2.0;
             }
 
+            size = Convert.ToDouble(Binsize.Value);
+            lat1 = y + (size / 2);
+            lat2 = y - (size / 2);
+            lon1 = x - (size / 2);
+            lon2 = x + (size / 2);
             GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", item + "*");
             RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", item + "*");
             max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
@@ -234,6 +238,7 @@ namespace GRACEChart
             RL05.Enabled = false;
             GRACE.Enabled = false;
             DrawButton.Enabled = false;
+            Binsize.Enabled = false;
             Progress.Maximum = max + max2;
 
             Thread thread = new Thread(ReadAllData);
@@ -274,14 +279,9 @@ namespace GRACEChart
                 DrawButton.Enabled = true;
                 SetStatus("Completed Successfully!");
                 CloseForm.Enabled = true;
-                GLDAS.Enabled = true;
-                RL05.Enabled = true;
-                GRACE.Enabled = true;
                 SaveImage.Enabled = false;
-                GLDAS.Checked = true;
-                RL05.Checked = true;
-                GRACE.Checked = true;
                 Location.Enabled = true;
+                Binsize.Enabled = true;
 
             }));
         }
@@ -357,83 +357,21 @@ namespace GRACEChart
                     string s = reader.ReadLine();
                     string[] parameters = s.Split(' ');
                     int count = parameters.Length;
-
                     DateTime time = GRACEdata.Utils.GetTime(Convert.ToDouble(parameters[0]));
                     DateTime start = new DateTime(2008, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                    TimeSpan diff = start - time;
+                    TimeSpan diff = time - start;
                     int t = (int)(Math.Floor(diff.TotalHours));
-
+                    double lat = Convert.ToDouble(parameters[1]);
+                    double lon = Convert.ToDouble(parameters[2]);
                     float height;
-                    if()
-                    if (GLDAS.Checked && !RL05.Checked)
-                    {
-                        foreach (string file2 in GLDASData)
-                        {
-                            StreamReader reader2 = new StreamReader(file);
-                            while (!reader.EndOfStream)
-                            {
-                                string s2 = reader.ReadLine();
-                                string[] parameters2 = s.Split(' ');
-                                int count2 = parameters.Length;
-                                height = float.Parse(parameters[9]);
-                                PointF p = new PointF(t, height);
-                                graceGLDAS.Add(adjustedPoint(p));
-                            }
-                        }
-                    }
-                    else if (RL05.Checked && !GLDAS.Checked)
-                    {
-                        foreach (string file3 in RL05Data)
-                        {
-                            StreamReader reader3 = new StreamReader(file);
-                            while (!reader.EndOfStream)
-                            {
-                                string s3 = reader.ReadLine();
-                                string[] parameters3 = s.Split(' ');
-                                int count3 = parameters.Length;
-                                height = float.Parse(parameters[9]);
-                                PointF p = new PointF(t, height);
-                                graceRL05.Add(adjustedPoint(p));
-                            }
-                        }
-                    }
-                    else if (GLDAS.Checked && RL05.Checked)
-                    {
-                        foreach (string file2 in GLDASData)
-                        {
-                            StreamReader reader2 = new StreamReader(file);
-                            while (!reader.EndOfStream)
-                            {
-                                string s2 = reader.ReadLine();
-                                string[] parameters2 = s.Split(' ');
-                                int count2 = parameters.Length;
-                                height = float.Parse(parameters[9]);
-                                PointF p = new PointF(t, height);
-                                graceGLDAS.Add(adjustedPoint(p));
-                            }
-                        }
-                        foreach (string file3 in RL05Data)
-                        {
-                            StreamReader reader3 = new StreamReader(file);
-                            while (!reader.EndOfStream)
-                            {
-                                string s3 = reader.ReadLine();
-                                string[] parameters3 = s.Split(' ');
-                                int count3 = parameters.Length;
-                                height = float.Parse(parameters[9]);
-                                PointF p = new PointF(t, height);
-                                graceRL05.Add(adjustedPoint(p));
-                            }
-                        }
 
-                    }
-                    else
+                    if(lat <= lat1 && lat >= lat2 && lon >= lon1 && lon <= lon2 && t <= 8784)
                     {
-                        height = 0.0f;
-                        PointF p = new PointF(t, height);
-                        grace.Add(adjustedPoint(p));
+                        
+                            height = 0.0f;
+                            PointF p = new PointF(t, height);
+                            grace.Add(adjustedPoint(p));
                     }
-
                 }
                 filen++;
                 SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
@@ -464,7 +402,6 @@ namespace GRACEChart
                 SetStatus("Creating GLDAS Graph");
                 SetProgress(filen);
             }
-            BringToFront();
         }
 
         //*RL05 GRAPH*//
@@ -501,160 +438,60 @@ namespace GRACEChart
             Pen myPen = new Pen(Color.Crimson);
             SetStatus("Creating GRACE Graph");
             SetProgress(filen);
-            if (!GLDAS.Checked)
+            
+            /*foreach (PointF p in grace)
             {
-                if (!RL05.Checked)
-                {
-                    foreach (PointF p in grace)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                    }
-                    for (int k = 0; k < grace.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, grace[k], grace[k + 1]);
-                    }
-                }
-                else
-                {
-                    for (int k = 0; k < graceRL05.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
-                    }
-                    foreach (PointF p in graceRL05)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                    }
-                }
-               
-            }
-            else
+            g.DrawLine(myPen, p.X, p.Y - 500, p.X, p.Y + 500);
+            }*/
+            if(GLDAS.Checked && RL05.Checked)
             {
-                if (!RL05.Checked)
+                foreach(PointF p in graceGLDAS)
                 {
-                    for (int k = 0; k < graceGLDAS.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
-                    }
-                    foreach (PointF p in graceGLDAS)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                    }
+                    g.FillEllipse(myBrush, p.X, p.Y, 2, 2);
                 }
-                else
+                foreach (PointF p2 in graceRL05)
                 {
-                    for (int k = 0; k < graceRL05.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
-                    }
-                    foreach (PointF p in graceRL05)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                    }
+                    g.FillEllipse(myBrush, p2.X, p2.Y, 2, 2);
+                }
 
-                    for (int k = 0; k < graceGLDAS.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
-                    }
-                    foreach (PointF p in graceGLDAS)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                    }
+            }
+            if (GLDAS.Checked && !RL05.Checked)
+            {
+                foreach (PointF p3 in graceGLDAS)
+                {
+                    g.FillEllipse(myBrush, p3.X, p3.Y, 2, 2);
                 }
             }
-
+            if (!GLDAS.Checked && RL05.Checked)
+            {
+                foreach (PointF p4 in graceRL05)
+                {
+                    g.FillEllipse(myBrush, p4.X, p4.Y, 2, 2);
+                }
+            }
+            if (!GLDAS.Checked && !RL05.Checked)
+            {
+                foreach (PointF p5 in grace)
+                {
+                    g.FillEllipse(myBrush, p5.X, p5.Y, 4, 4);
+                }
+            }
         }
         public void dontShowGRACE(Graphics g)
         {
             Color c = Color.FromArgb(0, 1, 1, 1);
             SolidBrush myBrush = new SolidBrush(c);
             Pen myPen = new Pen(c);
-            if (!GLDAS.Checked)
+            foreach (PointF p in grace)
             {
-                if (!RL05.Checked)
-                {
-                    foreach (PointF p in grace)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                    for (int k = 0; k < grace.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, grace[k], grace[k + 1]);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                }
-                else
-                {
-                    for (int k = 0; k < graceRL05.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                    foreach (PointF p in graceRL05)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                }
-
+                g.DrawLine(myPen, p.X, p.Y - 500, p.X, p.Y + 500);
             }
-            else
-            {
-                if (!RL05.Checked)
-                {
-                    for (int k = 0; k < graceGLDAS.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                    foreach (PointF p in graceGLDAS)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                }
-                else
-                {
-                    for (int k = 0; k < graceRL05.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceRL05[k], graceRL05[k + 1]);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                    foreach (PointF p in graceRL05)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-
-                    for (int k = 0; k < graceGLDAS.Count - 1; k++)
-                    {
-                        g.DrawLine(myPen, graceGLDAS[k], graceGLDAS[k + 1]);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                    foreach (PointF p in graceGLDAS)
-                    {
-                        g.FillRectangle(myBrush, p.X - 1, p.Y - 1, p.X + 2, p.Y + 2);
-                        SetStatus("Creating GRACE Graph");
-                        SetProgress(filen);
-                    }
-                }
-            }
-
         }
 
         public PointF adjustedPoint(PointF a)
         {
-            float x = (float)a.X * (float)Chart.Width / 8764.0f;
-            float y = ((((float)a.Y * (float)Chart.Height / 6.0f))+(float)Chart.Height/2.0f); 
+            float x = (float)a.X * (float)Chart.Width / 8784.0f;
+            float y = ((((float)a.Y * (float)Chart.Height / 8.0f))+(float)Chart.Height/2.035f); 
             return new PointF(x, y);
         }
 
