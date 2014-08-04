@@ -395,7 +395,6 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 
 		document.removeEventListener( 'mousemove', mousemove );
 		document.removeEventListener( 'mouseup', mouseup );
-		_this.dispatchEvent( endEvent );
 
 	}
 
@@ -419,8 +418,6 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 		}
 
 		_zoomStart.y += delta * 0.01;
-		_this.dispatchEvent( startEvent );
-		_this.dispatchEvent( endEvent );
 
 	}
 
@@ -451,8 +448,6 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 				_state = STATE.NONE;
 
 		}
-		_this.dispatchEvent( startEvent );
-
 
 	}
 
@@ -507,7 +502,6 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 		}
 
 		_state = STATE.NONE;
-		_this.dispatchEvent( endEvent );
 
 	}
 
