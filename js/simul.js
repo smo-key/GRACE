@@ -1,6 +1,5 @@
 //*** GLOBALS ***//
 this.darkglobe = false;
-this.binsize = 3.0;
 this.speed = 1.0;
 this.exagg = 1.2;
 this.run = 1;
@@ -21,7 +20,8 @@ var globeupdate = gui.add(this, 'darkglobe' ).name("Night View");
 
 var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
-  binsize = Math.floor(binsize * 2) / 2;
+  //binsize = Math.floor(binsize * 2) / 2;
+  binsize = 3.0;
 });
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
 gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
@@ -33,6 +33,11 @@ var segments, ccolor;
 var material;
 var projector;
 var circle, meshOverlay;
+
+var overRenderer;
+var points;
+
+this.geo30 = new THREE.Geometry();
 
 //*** INITIALIZE THREE.JS ***//
 function init() {
@@ -139,6 +144,10 @@ function init() {
   meshOverlay = addCanvasOverlay();
   scene.add(meshOverlay);
 
+  //*** DAT.GLOBE POINTS ***//
+  points = createPoints();
+  scene.add(points);
+
   /*geometry = new THREE.SphereGeometry( 0.1, 16, 16 );
   material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
   var groundpoint = new THREE.Mesh( geometry, material );
@@ -182,7 +191,6 @@ window.requestAnimFrame = (function(callback){
                 };
             }
 
-
             if (!window.cancelAnimationFrame)
                 window.cancelAnimationFrame = function(id) {
                     clearTimeout(id);
@@ -190,6 +198,7 @@ window.requestAnimFrame = (function(callback){
           });
 });
 
+//Animation loop
 function animate() {
   requestAnimFrame(animate);
 
@@ -202,6 +211,52 @@ function animate() {
   render(deltaMsec / 1000, nowMsec / 1000);
 }
 
+var colorFn = colorFn || function(x) {
+  var c = new THREE.Color();
+  if (x==0.0) {
+      c.setHSV( ( 0.6 - ( x * 0.5 ) ), 0, 0 );
+  } else {
+      c.setHSV( ( 0.6 - ( x * 0.5 ) ), 1.0, 1.0 );
+  }
+  return c;
+};
+
+/*var addData = function(data, opts) {
+  var lat, lng, size, color, i;
+
+
+  for (i = 0; i < data.length; i += 3) {
+    lat = data[i];
+    lng = data[i + 1];
+    color = colorFn(data[i+2]);
+    size = 0; // data[i + 2]; // CHANGED
+    addPoint(lat, lng, size, color, subgeo);
+  }
+  this._baseGeometry = subgeo;
+
+};*/
+
+function addPoint(lat, lng, size, color, subgeo) {
+  var phi = (90 - lat) * Math.PI / 180;
+  var theta = (180 - lng) * Math.PI / 180;
+
+  point.position.x = 200 * Math.sin(phi) * Math.cos(theta);
+  point.position.y = 200 * Math.cos(phi);
+  point.position.z = 200 * Math.sin(phi) * Math.sin(theta);
+
+  point.lookAt(mesh.position);
+
+  point.scale.z = -size;
+  point.updateMatrix();
+  var i;
+  for (i = 0; i < point.geometry.faces.length; i++) {
+    point.geometry.faces[i].color = color;
+  }
+
+  GeometryUtils.merge(subgeo, point);
+}
+
+//*** RENDER LOOP ***//
 function render(delta, now) {
   //UPDATE CLOCK
   this.time += delta * 60 * Math.pow(10,(this.speed - deltarealt)) * run;
@@ -274,8 +329,9 @@ function render(delta, now) {
   requestAnimationFrame(animate);
 }
 
+//*** RUN EVERYTHING ***//
 if (!Detector.webgl) {
-    Detector.addGetWebGLMessage();
+  Detector.addGetWebGLMessage();
 }
 else
 {

@@ -1,7 +1,7 @@
 this.cloudopacity = 0.0;
 this.dataopacity = 1;
 
-function createEarth(){
+function createEarth() {
 	var geometry	= new THREE.SphereGeometry(1, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map		: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
@@ -10,6 +10,16 @@ function createEarth(){
 	})
 	var mesh	= new THREE.Mesh(geometry, material)
 	return mesh;
+}
+
+function createPoints() {
+    points = new THREE.Mesh(this._baseGeometry, new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            vertexColors: THREE.FaceColors,
+            morphTargets: false
+    }));
+    points.dynamic = true;
+    return points;
 }
 
 //var canvasTexture;
