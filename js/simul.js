@@ -146,7 +146,7 @@ function init() {
 
   //*** CAMERA CONTROLS ***//
   //Trackball Controller
-  controls = new THREE.TrackballControls(camera, renderer.domElement);
+  controls = new THREE.TinyTrackballControls(camera, renderer.domElement);
   controls.rotateSpeed = 0.4;
   controls.noZoom = false;
   controls.noPan = true;
@@ -270,6 +270,12 @@ function render(delta, now) {
   requestAnimationFrame(animate);
 }
 
-init();
-var lastTime = new Date().getTime();
-animate();
+if (!Detector.webgl) {
+    Detector.addGetWebGLMessage();
+}
+else
+{
+  init();
+  var lastTime = new Date().getTime();
+  animate();
+}
