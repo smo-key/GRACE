@@ -27,7 +27,15 @@ namespace GRACEChart
         int max;
         int max2;
         int filen;
+        double x;
+        double y;
+        double size;
+        double lat1;
+        double lat2;
+        double lon1;
+        double lon2;
         bool isRead = false;
+        String item;
 
         public MainChart()
         {
@@ -58,8 +66,158 @@ namespace GRACEChart
             {
                 FileInfo info = new FileInfo(i);
                 if (ym.Contains(info.Name.Substring(0, 4))) { GRACEData.Add(i); }
-            }       
-            String item = Convert.ToString(Location.SelectedItem);
+            }
+            size = Convert.ToDouble(Binsize.Value);
+            lat1 = y + (size/2);
+            lat2 = y - (size / 2);
+            lon1 = x - (size / 2);
+            lon2 = x + (size / 2);
+
+            if (Convert.ToString(Location.SelectedItem).Equals("ACC"))
+            {
+                item = "ACC01";
+                x = 30.0;
+                y = -60.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Amazon"))
+            {
+                item = "Amazon01";
+                x = 305.0;
+                y = -2.5;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Antarctic"))
+            {
+                item = "Antarct01";
+                x = 305.0;
+                y = -79.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Baltic Sea"))
+            {
+                item = "BalticSea";
+                x = 19.0;
+                y = 57.5;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Baltic Sea 02"))
+            {
+                item = "BalticSea02";
+                x = 18.0;
+                y = 56.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Bangladesh"))
+            {
+                item = "Bangladesh";
+                x = 90.0;
+                y = 24.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Black Sea"))
+            {
+                item = "BlackSea";
+                x = 31.0;
+                y = 43.5;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Black Sea 02"))
+            {
+                item = "BlackSea02";
+                x = 30.0;
+                y = 43.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Columbia"))
+            {
+                item = "Columbia";
+                x = 241.0;
+                y = 46.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Congo"))
+            {
+                item = "Congo";
+                x = 23.0;
+                y = -12.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("East Siberia"))
+            {
+                item = "EastSib01";
+                x = 170.0;
+                y = 72.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Guinea"))
+            {
+                item = "Guinea";
+                x = 351.0;
+                y = 8.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Gulf Carpentaria"))
+            {
+                item = "GulfCarpen";
+                x = 139.0;
+                y = -15.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Hudson Bay"))
+            {
+                item = "HudsonBay";
+                x = 272.5;
+                y = 60.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Hudson Bay 02"))
+            {
+                item = "HudsonBay02";
+                x = 272.5;
+                y = 58.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Mediterranean"))
+            {
+                item = "Mediterr01";
+                x = 19.0;
+                y = 36.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Mekong"))
+            {
+                item = "Mekong";
+                x = 105.0;
+                y = 12.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("NCP"))
+            {
+                item = "NCP";
+                x = 117.0;
+                y = 34.5;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Ob"))
+            {
+                item = "Ob";
+                x = 69.0;
+                y = 61.5;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Orinoco"))
+            {
+                item = "Orinoco";
+                x = 292.0;
+                y = 5.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Pearl River"))
+            {
+                item = "PearlRiver";
+                x = 113.0;
+                y = 23.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Sao Paulo"))
+            {
+                item = "SaoPaulo";
+                x = 312.0;
+                y = -22.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("StNewFL"))
+            {
+                item = "StNewFL01";
+                x = 301.0;
+                y = 45.0;
+            }
+            if (Convert.ToString(Location.SelectedItem).Equals("Victoria"))
+            {
+                item = "Victoria";
+                x = 32.0;
+                y = -2.0;
+            }
+
             GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", item + "*");
             RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", item + "*");
             max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
@@ -205,8 +363,8 @@ namespace GRACEChart
                     TimeSpan diff = start - time;
                     int t = (int)(Math.Floor(diff.TotalHours));
 
-                    float height = 0.0f;
-
+                    float height;
+                    if()
                     if (GLDAS.Checked && !RL05.Checked)
                     {
                         foreach (string file2 in GLDASData)

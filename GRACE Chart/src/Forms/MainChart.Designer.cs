@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen5 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen6 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen7 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen8 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen13 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen14 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen15 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen16 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -50,14 +50,19 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.BinText = new System.Windows.Forms.Label();
+            this.Binsize = new System.Windows.Forms.NumericUpDown();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
             this.BottomPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Binsize)).BeginInit();
             this.SuspendLayout();
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.Binsize);
+            this.Border.Controls.Add(this.BinText);
             this.Border.Controls.Add(this.label3);
             this.Border.Controls.Add(this.label2);
             this.Border.Controls.Add(this.label1);
@@ -94,6 +99,8 @@
             this.Border.Controls.SetChildIndex(this.label1, 0);
             this.Border.Controls.SetChildIndex(this.label2, 0);
             this.Border.Controls.SetChildIndex(this.label3, 0);
+            this.Border.Controls.SetChildIndex(this.BinText, 0);
+            this.Border.Controls.SetChildIndex(this.Binsize, 0);
             // 
             // TopPanel
             // 
@@ -208,15 +215,18 @@
             "Amazon",
             "Antarctic",
             "Baltic Sea",
+            "Baltic Sea 02",
             "Bangladesh",
-            "Balck Sea",
+            "Black Sea",
+            "Black Sea 02",
             "Columbia",
             "Congo",
             "East siberia",
             "Guinea",
             "Gulf Carpentaria",
             "Hudson Bay",
-            "Mediterranean Sea",
+            "Hudson Bay 02",
+            "Mediterranean",
             "Mekong",
             "NCP",
             "Ob",
@@ -292,27 +302,27 @@
             this.Chart.Location = new System.Drawing.Point(90, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen5.Color = System.Drawing.Color.Black;
-            chartPen5.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen5.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen5;
+            chartPen13.Color = System.Drawing.Color.Black;
+            chartPen13.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen13.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen13;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen6.Color = System.Drawing.Color.Black;
-            chartPen6.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen6.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen6;
-            chartPen7.Color = System.Drawing.Color.Silver;
-            chartPen7.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen7.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen7;
+            chartPen14.Color = System.Drawing.Color.Black;
+            chartPen14.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen14.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen14;
+            chartPen15.Color = System.Drawing.Color.Silver;
+            chartPen15.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen15.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen15;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen8.Color = System.Drawing.Color.Silver;
-            chartPen8.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen8.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen8;
+            chartPen16.Color = System.Drawing.Color.Silver;
+            chartPen16.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen16.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen16;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);
@@ -390,6 +400,40 @@
             this.label3.TabIndex = 67;
             this.label3.Text = "0";
             // 
+            // BinText
+            // 
+            this.BinText.AutoSize = true;
+            this.BinText.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BinText.Location = new System.Drawing.Point(703, 263);
+            this.BinText.Name = "BinText";
+            this.BinText.Size = new System.Drawing.Size(89, 13);
+            this.BinText.TabIndex = 68;
+            this.BinText.Text = "Binsize (Degrees)";
+            // 
+            // Binsize
+            // 
+            this.Binsize.DecimalPlaces = 2;
+            this.Binsize.Location = new System.Drawing.Point(706, 280);
+            this.Binsize.Maximum = new decimal(new int[] {
+            899,
+            0,
+            0,
+            65536});
+            this.Binsize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Binsize.Name = "Binsize";
+            this.Binsize.Size = new System.Drawing.Size(89, 20);
+            this.Binsize.TabIndex = 69;
+            this.Binsize.TabStop = false;
+            this.Binsize.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
             // MainChart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -405,6 +449,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).EndInit();
             this.BottomPanel.ResumeLayout(false);
             this.BottomPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Binsize)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -429,5 +474,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label BinText;
+        private System.Windows.Forms.NumericUpDown Binsize;
     }
 }
