@@ -1,5 +1,4 @@
 //*** GLOBALS ***//
-this.display = '3D Globe';
 this.darkglobe = false;
 this.binsize = 3.0;
 this.speed = 1.0;
@@ -18,11 +17,6 @@ var gui = new dat.GUI({ autoPlace: false });
 var customContainer = document.getElementById('gui-container');
 customContainer.appendChild(gui.domElement);
 
-/*var displayupdate = gui.add(this, 'display', [ '3D Globe', '2D Map'  ] ).name("Display");
-displayupdate.onChange(function(value){
-  //change displaymodes
-  
-});*/
 var globeupdate = gui.add(this, 'darkglobe' ).name("Night View");
 
 var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
@@ -45,19 +39,9 @@ document.body.appendChild(renderer.domElement);
 renderer.shadowMapEnabled = true;
 
 //*** CREATE SCENE AND CAMERA ***//
-var onRenderFcts=[]; //rendering stack
 var scene = new THREE.Scene(); //initilize scene
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 250); //add new camera definition (FOV deg, aspect ratio, near, far)
 camera.position.z = 4; //set z axis camera position
-
-//*** TIMER ***//
-onRenderFcts.push(function(delta, now){
-  //one Earth minute per delta
-  this.time += delta * 60 * Math.pow(10,(this.speed - deltarealt)) * run;
-  var rotsun = this.time / tropicalyear * 2 * Math.PI; //revolution of Earth
-  light.position.set(10*Math.cos(-rotsun),0,10*Math.sin(-rotsun)); //rotsun = counterclockwise revolution
-  updateTime();
-});
 
 //*** AMBIENT LIGHT ***//
 var light = new THREE.AmbientLight(0x222222);
@@ -100,11 +84,6 @@ var earthMesh = createEarth();
 earthMesh.receiveShadow = true;
 earthMesh.castShadow = true;
 containerEarth.add(earthMesh);
-//Animate Mesh
-onRenderFcts.push(function(delta, now){
-  //one Earth minute per delta
-  containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * siderealday;
-});
 
 globeupdate.onChange(function(value){
   //change displaymodes
@@ -166,8 +145,93 @@ material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 var groundpoint = new THREE.Mesh( geometry, material );
 scene.add( groundpoint );*/
 
-//Render Orbit
-onRenderFcts.push(function(){
+//*** CAMERA CONTROLS ***//
+//Trackball Controller
+var controls = new THREE.TrackballControls(camera, renderer.domElement);
+controls.rotateSpeed = 0.4;
+controls.noZoom = false;
+controls.noPan = true;
+controls.staticMoving = false;
+controls.minDistance = 1.75;
+controls.maxDistance = 8.5;
+controls.dynamicDampingFactor = 0.25;
+
+//*** LOOP ***//
+/*var lastTimeMsec = null;
+requestAnimationFrame(function animate(nowMsec){
+  //keep looping
+  requestAnimationFrame(animate);
+
+  //measure time delta (wait 850 msec)
+  lastTimeMsec = lastTimeMsec || nowMsec-1000/60;
+  var deltaMsec = Math.min(850, nowMsec - lastTimeMsec);
+  lastTimeMsec = nowMsec;
+
+  //call each update function
+  onRenderFcts.forEach(function(onRenderFct){
+    onRenderFct(deltaMsec/1000, nowMsec/1000);
+  });
+});*/
+
+var lastTime = new Date().getTime();;
+
+//*** Animation Loop ***//
+// shim layer with setTimeout fallback
+window.requestAnimFrame = (function(callback){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          (function(/* function */ callback, /* DOMElement */ element){
+            var vendors = ['webkit', 'moz'];
+            for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+                window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+                window.cancelAnimationFrame =
+                  window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+            }
+
+            if (!window.requestAnimationFrame)
+            {
+              window.requestAnimationFrame = function(callback, element) {
+                    var currTime = new Date().getTime();
+                    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                    var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                      timeToCall);
+                    lastTime = currTime + timeToCall;
+                    return id;
+                };
+            }
+
+
+            if (!window.cancelAnimationFrame)
+                window.cancelAnimationFrame = function(id) {
+                    clearTimeout(id);
+                };
+          });
+});
+
+function animate() {
+  requestAnimFrame(animate);
+
+  var nowMsec = new Date().getTime();
+
+  //lastTime = lastTime || nowMsec-1000/60;
+  var deltaMsec = nowMsec - lastTime;
+  lastTime = nowMsec;
+
+  render(deltaMsec / 1000, nowMsec / 1000);
+}
+
+function render(delta, now) {
+  //UPDATE CLOCK
+  this.time += delta * 60 * Math.pow(10,(this.speed - deltarealt)) * run;
+  var rotsun = this.time / tropicalyear * 2 * Math.PI; //revolution of Earth
+  light.position.set(10*Math.cos(-rotsun),0,10*Math.sin(-rotsun)); //rotsun = counterclockwise revolution
+  updateTime();
+
+  //ROTATE EARTH
+  containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * siderealday;
+
+  //RENDER ORBIT
   //find location of satellite in 3D space
   var grace = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
 
@@ -218,38 +282,12 @@ onRenderFcts.push(function(){
 
   circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
 
-});
-
-//*** CAMERA CONTROLS ***//
-//Trackball Controller
-var controls = new THREE.TrackballControls(camera, renderer.domElement);
-controls.rotateSpeed = 0.4;
-controls.noZoom = false;
-controls.noPan = true;
-controls.staticMoving = false;
-controls.minDistance = 1.75;
-controls.maxDistance = 8.5;
-controls.dynamicDampingFactor = 0.25;
-
-//*** RENDER SCENE ***//
-onRenderFcts.push(function(){
+  //UPDATE CONTROLS
   controls.update();
   renderer.render(scene, camera);
-});
-
-//*** LOOP ***//
-var lastTimeMsec = null;
-requestAnimationFrame(function animate(nowMsec){
-  //keep looping
+  
   requestAnimationFrame(animate);
-  
-  //measure time delta (wait 850 msec)
-  lastTimeMsec = lastTimeMsec || nowMsec-1000/60;
-  var deltaMsec = Math.min(850, nowMsec - lastTimeMsec);
-  lastTimeMsec = nowMsec;
-  
-  //call each update function
-  onRenderFcts.forEach(function(onRenderFct){
-    onRenderFct(deltaMsec/1000, nowMsec/1000);
-  });
-});
+}
+
+//init();
+animate();

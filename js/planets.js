@@ -1,7 +1,7 @@
 this.cloudopacity = 0.0;
 this.dataopacity = 1;
 
-var createEarth	= function(){
+function createEarth(){
 	var geometry	= new THREE.SphereGeometry(1, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map		: THREE.ImageUtils.loadTexture('img/earthmap1k.jpg'),
@@ -31,7 +31,7 @@ function addCanvasOverlay() {
     return mesh;
 }
 
-var createEarthCloud	= function(){
+function createEarthCloud(){
 	// create destination canvas
 	var canvasResult	= document.createElement('canvas')
 	canvasResult.width	= 1024
@@ -89,7 +89,7 @@ var createEarthCloud	= function(){
 	return mesh;
 }
 
-var createStarfield	= function(){
+function createStarfield(){
 	var texture	= THREE.ImageUtils.loadTexture('img/starfield.png')
 	var material	= new THREE.MeshBasicMaterial({
 		map	: texture,
@@ -98,62 +98,4 @@ var createStarfield	= function(){
 	var geometry	= new THREE.SphereGeometry(225, 32, 32)
 	var mesh	= new THREE.Mesh(geometry, material)
 	return mesh	
-}
-
-var createAtmosphereMaterial	= function(){
-	var vertexShader	= [
-		'varying vec3	vVertexWorldPosition;',
-		'varying vec3	vVertexNormal;',
-
-		'void main(){',
-		'	vVertexNormal	= normalize(normalMatrix * normal);',
-
-		'	vVertexWorldPosition	= (modelMatrix * vec4(position, 1.0)).xyz;',
-
-		'	// set gl_Position',
-		'	gl_Position	= projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
-		'}',
-
-		].join('\n')
-	var fragmentShader	= [
-		'uniform vec3	glowColor;',
-		'uniform float	coeficient;',
-		'uniform float	power;',
-
-		'varying vec3	vVertexNormal;',
-		'varying vec3	vVertexWorldPosition;',
-
-		'void main(){',
-		'	vec3 worldCameraToVertex= vVertexWorldPosition - cameraPosition;',
-		'	vec3 viewCameraToVertex	= (viewMatrix * vec4(worldCameraToVertex, 0.0)).xyz;',
-		'	viewCameraToVertex	= normalize(viewCameraToVertex);',
-		'	float intensity		= pow(coeficient + dot(vVertexNormal, viewCameraToVertex), power);',
-		'	gl_FragColor		= vec4(glowColor, intensity);',
-		'}',
-	].join('\n')
-
-	// create custom material from the shader code above
-	//   that is within specially labeled script tags
-	var material	= new THREE.ShaderMaterial({
-		uniforms: { 
-			coeficient	: {
-				type	: "f", 
-				value	: 1.0
-			},
-			power		: {
-				type	: "f",
-				value	: 2
-			},
-			glowColor	: {
-				type	: "c",
-				value	: new THREE.Color('pink')
-			},
-		},
-		vertexShader	: vertexShader,
-		fragmentShader	: fragmentShader,
-		//blending	: THREE.AdditiveBlending,
-		transparent	: true,
-		depthWrite	: false,
-	});
-	return material
 }
