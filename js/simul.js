@@ -300,21 +300,22 @@ function render(delta, now) {
     {
       var loc = GetTopLeft(id);
       var size = GetSize(loc);
-      var uvx = loc.x / 360 * $('#maincanvas').width() - Math.ceil(containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
+      var uvx = uvadj.x / 360 * $('#maincanvas').width() - Math.ceil(containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
       if (uvx < 0) { uvx+= $('#maincanvas').width(); }
-      var uvy = (loc.y + 90) / 180 * $('#maincanvas').height();
+      var uvy = (uvadj.y + 90) / 180 * $('#maincanvas').height();
+      var uvr = 2 * this.binsize;
 
       var ctx = $('#maincanvas')[0].getContext("2d");
       //ctx.globalAlpha = 1;
       //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
       //ctx.fillRect(0,0,1000,400); //1024, 512
       ctx.fillStyle = "#0044ff";
-      ctx.globalAlpha = 0.25;
-      //ctx.beginPath();
-      ctx.fillRect(uvx, uvy, size.x / 360 * $('#maincanvas').width(), size.y / 180 * $('#maincanvas').height());
+      ctx.globalAlpha = 1; //0.025;
+      ctx.beginPath();
+      //ctx.fillRect(uvx, uvy, size.x / 360 * $('#maincanvas').width(), size.y / 180 * $('#maincanvas').height());
       //(x,y,r,sAngle,eAngle,counterclock)
-      //ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
-      //ctx.fill();
+      ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
+      ctx.fill();
       //ctx.rotate( -1 * Math.PI / 180
       lastbin = id;
     }
