@@ -18,10 +18,11 @@ customContainer.appendChild(gui.domElement);
 
 var globeupdate = gui.add(this, 'darkglobe' ).name("Night View");
 
-var sizeupdate = gui.add(this, 'binsize', 1.0, 5.0).name("Binsize (degrees)");
+var sizeupdate = gui.add(this, 'binsize', 0.5, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
-  //binsize = Math.floor(binsize * 2) / 2;
-  binsize = 3.0;
+  binsize = Math.floor(binsize * 2) / 2;
+  //binsize = 3.0;
+  clearSimul()
 });
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
 gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
@@ -290,35 +291,36 @@ function render(delta, now) {
 
   if (this.run == 1)
   {
-    var uvx = uv.x * $('#maincanvas').width() - (containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
-    var uvy = uv.y * $('#maincanvas').height();
-    var uvr = 1;
-
-    var p = GetGrid(new THREE.Vector2(uvx, uvy));
-    if (p !== lastbin)
+    var uvadj = new THREE.Vector2(uv.x * 360 - (containerEarth.rotation.y / Math.PI / 180), uv.y * 180 - 90);
+    var id = GetGridID(new THREE.Vector2(uvadj.x, uvadj.y));
+    if ((id.x != lastbin.x) || (id.y != lastbin.y))
     {
+      var loc = GetTopLeft(id);
+      var size = GetSize(loc);
+      var uvx = loc.x / 360 * $('#maincanvas').width() - (containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
+      var uvy = (loc.y + 90) / 180 * $('#maincanvas').height();
+
       var ctx = $('#maincanvas')[0].getContext("2d");
-      ctx.globalAlpha = 1;
+      //ctx.globalAlpha = 1;
       //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
       //ctx.fillRect(0,0,1000,400); //1024, 512
       ctx.fillStyle = "#0044ff";
-      ctx.globalAlpha = 0.1;
-      ctx.beginPath();
+      ctx.globalAlpha = 1;
+      //ctx.beginPath();
+      ctx.fillRect(uvx, uvy, size.x / 360 * $('#maincanvas').width(), size.y / 180 * $('#maincanvas').height());
       //(x,y,r,sAngle,eAngle,counterclock)
-      ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
-      ctx.fill();
-      //ctx.rotate( -1 * Math.PI / 180 );
+      //ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
+      //ctx.fill();
+      //ctx.rotate( -1 * Math.PI / 180
+      lastbin = id;
     }
-
-
-    var canvasTexture = new THREE.Texture($('#maincanvas')[0]);
-    canvasTexture.needsUpdate = true;
-    meshOverlay.material.map = canvasTexture;
-    meshOverlay.material.needsUpdate = true;
-    meshOverlay.rotation.y = containerEarth.rotation.y;
-
-
   }
+
+  var canvasTexture = new THREE.Texture($('#maincanvas')[0]);
+  canvasTexture.needsUpdate = true;
+  meshOverlay.material.map = canvasTexture;
+  meshOverlay.material.needsUpdate = true;
+  meshOverlay.rotation.y = containerEarth.rotation.y;
 
   //update display
   $("#satcircle").css('display', 'block');

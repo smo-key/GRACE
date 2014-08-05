@@ -104,10 +104,14 @@ function startSimul() {
 function resetSimul() {
   if (this.run == 1) { startSimul(); }
   containerEarth.rotation.y = 0;
-  var ctx = $('#maincanvas')[0].getContext("2d");
-    ctx.globalAlpha = 1;
-    ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
+  clearSimul();
   this.time = 0;
+}
+function clearSimul() {
+  var con = $('#maincanvas')[0].getContext("2d");
+  con.globalAlpha = 1;
+  con.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
+  lastbin = new THREE.Vector2(-1, -1);
 }
 function updateTime()
 {
