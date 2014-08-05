@@ -3,6 +3,7 @@ this.darkglobe = false;
 this.speed = 1.0;
 this.exagg = 1.2;
 this.run = 1;
+this.drawalpha = 3;
 
 var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
 var siderealday = 86164.1 / 86400; //seconds in a sidereal day / solar day
@@ -26,6 +27,7 @@ sizeupdate.onChange(function(value){
 });
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
 gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
+gui.add(this, 'drawalpha', 0.0, 7.0).name("Draw Brightness");
 
 var renderer, scene, camera, light, controls;
 var starSphere, containerEarth;
@@ -310,7 +312,8 @@ function render(delta, now) {
       //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
       //ctx.fillRect(0,0,1000,400); //1024, 512
       ctx.fillStyle = "#0044ff";
-      ctx.globalAlpha = 1; //0.025;
+      ctx.globalAlpha = Math.pow(2, this.drawalpha - 7); //0.025;
+      if (this.drawalpha == 0) { ctx.globalAlpha = 0; }
       ctx.beginPath();
       //ctx.fillRect(uvx, uvy, size.x / 360 * $('#maincanvas').width(), size.y / 180 * $('#maincanvas').height());
       //(x,y,r,sAngle,eAngle,counterclock)
