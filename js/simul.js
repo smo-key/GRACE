@@ -209,6 +209,11 @@ function animate() {
   var nowMsec = new Date().getTime();
 
   //lastTime = lastTime || nowMsec-1000/60;
+
+  //var degsec = g_period / 360; //second per degree in simulation
+  //var maxtime = ; //minimum msec between frames
+
+
   var deltaMsec = Math.min(200, nowMsec - lastTime);
   //var deltaMsec = nowMsec - lastTime;
   lastTime = nowMsec;

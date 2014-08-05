@@ -1,5 +1,5 @@
 //*** GLOBALS ***//
-this.binsize = 3.0;
+this.binsize = 1.0;
 
 //*** PROPERTIES ***//
 function binslon() {
