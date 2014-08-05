@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen1 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen2 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen3 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen4 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen5 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen6 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen7 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen8 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -50,19 +50,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.BinText = new System.Windows.Forms.Label();
-            this.Binsize = new System.Windows.Forms.NumericUpDown();
+            this.Zero = new System.Windows.Forms.CheckBox();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
             this.BottomPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Binsize)).BeginInit();
             this.SuspendLayout();
             // 
             // Border
             // 
-            this.Border.Controls.Add(this.Binsize);
-            this.Border.Controls.Add(this.BinText);
+            this.Border.Controls.Add(this.Zero);
             this.Border.Controls.Add(this.label3);
             this.Border.Controls.Add(this.label2);
             this.Border.Controls.Add(this.label1);
@@ -99,8 +96,7 @@
             this.Border.Controls.SetChildIndex(this.label1, 0);
             this.Border.Controls.SetChildIndex(this.label2, 0);
             this.Border.Controls.SetChildIndex(this.label3, 0);
-            this.Border.Controls.SetChildIndex(this.BinText, 0);
-            this.Border.Controls.SetChildIndex(this.Binsize, 0);
+            this.Border.Controls.SetChildIndex(this.Zero, 0);
             // 
             // TopPanel
             // 
@@ -132,7 +128,7 @@
             // SaveImage
             // 
             this.SaveImage.AutoSize = true;
-            this.SaveImage.Location = new System.Drawing.Point(708, 181);
+            this.SaveImage.Location = new System.Drawing.Point(697, 246);
             this.SaveImage.Name = "SaveImage";
             this.SaveImage.Size = new System.Drawing.Size(83, 17);
             this.SaveImage.TabIndex = 50;
@@ -142,8 +138,8 @@
             // GLDAS
             // 
             this.GLDAS.AutoSize = true;
-            this.GLDAS.ForeColor = System.Drawing.Color.Green;
-            this.GLDAS.Location = new System.Drawing.Point(706, 82);
+            this.GLDAS.ForeColor = System.Drawing.Color.DarkGreen;
+            this.GLDAS.Location = new System.Drawing.Point(697, 82);
             this.GLDAS.Name = "GLDAS";
             this.GLDAS.Size = new System.Drawing.Size(92, 17);
             this.GLDAS.TabIndex = 52;
@@ -154,7 +150,7 @@
             // 
             this.RL05.AutoSize = true;
             this.RL05.ForeColor = System.Drawing.Color.DarkBlue;
-            this.RL05.Location = new System.Drawing.Point(706, 105);
+            this.RL05.Location = new System.Drawing.Point(697, 105);
             this.RL05.Name = "RL05";
             this.RL05.Size = new System.Drawing.Size(85, 17);
             this.RL05.TabIndex = 53;
@@ -189,7 +185,7 @@
             // 
             this.GRACE.AutoSize = true;
             this.GRACE.ForeColor = System.Drawing.Color.Crimson;
-            this.GRACE.Location = new System.Drawing.Point(706, 128);
+            this.GRACE.Location = new System.Drawing.Point(697, 128);
             this.GRACE.Name = "GRACE";
             this.GRACE.Size = new System.Drawing.Size(93, 17);
             this.GRACE.TabIndex = 55;
@@ -299,30 +295,30 @@
             this.Chart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Chart.BorderStyle = System.Windows.Forms.Border3DStyle.Flat;
             this.Chart.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World);
-            this.Chart.Location = new System.Drawing.Point(90, 82);
+            this.Chart.Location = new System.Drawing.Point(81, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen1.Color = System.Drawing.Color.Black;
-            chartPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen1.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen1;
+            chartPen5.Color = System.Drawing.Color.Black;
+            chartPen5.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen5.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen5;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen2.Color = System.Drawing.Color.Black;
-            chartPen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen2.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen2;
-            chartPen3.Color = System.Drawing.Color.Silver;
-            chartPen3.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen3.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen3;
+            chartPen6.Color = System.Drawing.Color.Black;
+            chartPen6.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen6.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen6;
+            chartPen7.Color = System.Drawing.Color.Silver;
+            chartPen7.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen7.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen7;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen4.Color = System.Drawing.Color.Silver;
-            chartPen4.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen4.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen4;
+            chartPen8.Color = System.Drawing.Color.Silver;
+            chartPen8.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen8.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen8;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);
@@ -338,7 +334,7 @@
             this.yAxis.AutoSize = true;
             this.yAxis.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.yAxis.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.yAxis.Location = new System.Drawing.Point(19, 263);
+            this.yAxis.Location = new System.Drawing.Point(11, 263);
             this.yAxis.Name = "yAxis";
             this.yAxis.Size = new System.Drawing.Size(46, 17);
             this.yAxis.TabIndex = 62;
@@ -350,7 +346,7 @@
             this.yAxis3.AutoSize = true;
             this.yAxis3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.yAxis3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.yAxis3.Location = new System.Drawing.Point(19, 297);
+            this.yAxis3.Location = new System.Drawing.Point(11, 297);
             this.yAxis3.Name = "yAxis3";
             this.yAxis3.Size = new System.Drawing.Size(36, 17);
             this.yAxis3.TabIndex = 63;
@@ -361,7 +357,7 @@
             this.yAxis2.AutoSize = true;
             this.yAxis2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.yAxis2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.yAxis2.Location = new System.Drawing.Point(19, 280);
+            this.yAxis2.Location = new System.Drawing.Point(11, 280);
             this.yAxis2.Name = "yAxis2";
             this.yAxis2.Size = new System.Drawing.Size(49, 17);
             this.yAxis2.TabIndex = 64;
@@ -372,7 +368,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label1.Location = new System.Drawing.Point(692, 504);
+            this.label1.Location = new System.Drawing.Point(685, 504);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(31, 13);
             this.label1.TabIndex = 65;
@@ -394,45 +390,23 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label3.Location = new System.Drawing.Point(71, 284);
+            this.label3.Location = new System.Drawing.Point(62, 284);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(13, 13);
             this.label3.TabIndex = 67;
             this.label3.Text = "0";
             // 
-            // BinText
+            // Zero
             // 
-            this.BinText.AutoSize = true;
-            this.BinText.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.BinText.Location = new System.Drawing.Point(703, 263);
-            this.BinText.Name = "BinText";
-            this.BinText.Size = new System.Drawing.Size(89, 13);
-            this.BinText.TabIndex = 68;
-            this.BinText.Text = "Binsize (Degrees)";
-            // 
-            // Binsize
-            // 
-            this.Binsize.DecimalPlaces = 2;
-            this.Binsize.Location = new System.Drawing.Point(706, 280);
-            this.Binsize.Maximum = new decimal(new int[] {
-            899,
-            0,
-            0,
-            65536});
-            this.Binsize.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.Binsize.Name = "Binsize";
-            this.Binsize.Size = new System.Drawing.Size(89, 20);
-            this.Binsize.TabIndex = 69;
-            this.Binsize.TabStop = false;
-            this.Binsize.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
+            this.Zero.AutoSize = true;
+            this.Zero.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Zero.ForeColor = System.Drawing.Color.Black;
+            this.Zero.Location = new System.Drawing.Point(697, 182);
+            this.Zero.Name = "Zero";
+            this.Zero.Size = new System.Drawing.Size(101, 17);
+            this.Zero.TabIndex = 70;
+            this.Zero.Text = "Show Zero Line";
+            this.Zero.UseVisualStyleBackColor = true;
             // 
             // MainChart
             // 
@@ -449,7 +423,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).EndInit();
             this.BottomPanel.ResumeLayout(false);
             this.BottomPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Binsize)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -474,7 +447,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label BinText;
-        private System.Windows.Forms.NumericUpDown Binsize;
+        private System.Windows.Forms.CheckBox Zero;
     }
 }

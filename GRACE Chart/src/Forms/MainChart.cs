@@ -36,6 +36,10 @@ namespace GRACEChart
         double lon2;
         bool isRead = false;
         String item;
+        String lastitem = "NaSTy";
+
+        double datamin = double.PositiveInfinity;
+        double datamax = double.NegativeInfinity;
 
         public MainChart()
         {
@@ -72,174 +76,182 @@ namespace GRACEChart
                 if (ym.Contains(info.Name.Substring(0, 4))) { GRACEData.Add(i); }
             }
 
-            if (Convert.ToString(Location.SelectedItem).Equals("ACC"))
+            size = 3.00;
+            lat1 = y + (size / 2);
+            lat2 = y - (size / 2);
+            lon1 = x - (size / 2);
+            lon2 = x + (size / 2);
+            filen = 0;
+        }
+               
+        public void Search()
+        {
+            if ((Location.SelectedItem).Equals("ACC"))
             {
                 item = "ACC01";
                 x = 30.0;
                 y = -60.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Amazon"))
+            else if ((Location.SelectedItem).Equals("Amazon"))
             {
                 item = "Amazon01";
                 x = 305.0;
                 y = -2.5;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Antarctic"))
+            else if ((Location.SelectedItem).Equals("Antarctic"))
             {
                 item = "Antarct01";
                 x = 305.0;
                 y = -79.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Baltic Sea"))
+            else if ((Location.SelectedItem).Equals("Baltic Sea"))
             {
                 item = "BalticSea";
                 x = 19.0;
                 y = 57.5;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Baltic Sea 02"))
+            else if ((Location.SelectedItem).Equals("Baltic Sea 02"))
             {
                 item = "BalticSea02";
                 x = 18.0;
                 y = 56.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Bangladesh"))
+            else if ((Location.SelectedItem).Equals("Bangladesh"))
             {
                 item = "Bangladesh";
                 x = 90.0;
                 y = 24.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Black Sea"))
+            else if ((Location.SelectedItem).Equals("Black Sea"))
             {
                 item = "BlackSea";
                 x = 31.0;
                 y = 43.5;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Black Sea 02"))
+            else if ((Location.SelectedItem).Equals("Black Sea 02"))
             {
                 item = "BlackSea02";
                 x = 30.0;
                 y = 43.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Columbia"))
+            else if ((Location.SelectedItem).Equals("Columbia"))
             {
                 item = "Columbia";
                 x = 241.0;
                 y = 46.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Congo"))
+            else if ((Location.SelectedItem).Equals("Congo"))
             {
                 item = "Congo";
                 x = 23.0;
                 y = -12.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("East Siberia"))
+            else if ((Location.SelectedItem).Equals("East Siberia"))
             {
                 item = "EastSib01";
                 x = 170.0;
                 y = 72.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Guinea"))
+            else if ((Location.SelectedItem).Equals("Guinea"))
             {
                 item = "Guinea";
                 x = 351.0;
                 y = 8.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Gulf Carpentaria"))
+            else if ((Location.SelectedItem).Equals("Gulf Carpentaria"))
             {
                 item = "GulfCarpen";
                 x = 139.0;
                 y = -15.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Hudson Bay"))
+            else if ((Location.SelectedItem).Equals("Hudson Bay"))
             {
                 item = "HudsonBay";
                 x = 272.5;
                 y = 60.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Hudson Bay 02"))
+            else if ((Location.SelectedItem).Equals("Hudson Bay 02"))
             {
                 item = "HudsonBay02";
                 x = 272.5;
                 y = 58.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Mediterranean"))
+            else if ((Location.SelectedItem).Equals("Mediterranean"))
             {
                 item = "Mediterr01";
                 x = 19.0;
                 y = 36.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Mekong"))
+            else if ((Location.SelectedItem).Equals("Mekong"))
             {
                 item = "Mekong";
                 x = 105.0;
                 y = 12.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("NCP"))
+            else if ((Location.SelectedItem).Equals("NCP"))
             {
                 item = "NCP";
                 x = 117.0;
                 y = 34.5;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Ob"))
+            else if ((Location.SelectedItem).Equals("Ob"))
             {
                 item = "Ob";
                 x = 69.0;
                 y = 61.5;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Orinoco"))
+            else if ((Location.SelectedItem).Equals("Orinoco"))
             {
                 item = "Orinoco";
                 x = 292.0;
                 y = 5.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Pearl River"))
+            else if ((Location.SelectedItem).Equals("Pearl River"))
             {
                 item = "PearlRiver";
                 x = 113.0;
                 y = 23.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Sao Paulo"))
+            else if ((Location.SelectedItem).Equals("Sao Paulo"))
             {
                 item = "SaoPaulo";
                 x = 312.0;
                 y = -22.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("StNewFL"))
+            else if ((Location.SelectedItem).Equals("StNewFL"))
             {
                 item = "StNewFL01";
                 x = 301.0;
                 y = 45.0;
             }
-            if (Convert.ToString(Location.SelectedItem).Equals("Victoria"))
+            else
             {
                 item = "Victoria";
                 x = 32.0;
                 y = -2.0;
             }
 
-            size = Convert.ToDouble(Binsize.Value);
-            lat1 = y + (size / 2);
-            lat2 = y - (size / 2);
-            lon1 = x - (size / 2);
-            lon2 = x + (size / 2);
             GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", item + "*");
             RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", item + "*");
             max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
             max2 = gldas.Count + rl05.Count + grace.Count + graceGLDAS.Count + graceRL05.Count;
-            filen = 0;
+            Progress.Maximum = max + max2;
         }
-               
 
         //*START*//
         private void DrawButton_Click(object sender, EventArgs e)
         {
+            Progress.Refresh();
+            g.Clear(Color.Transparent);
+            Chart.Refresh();
             Location.Enabled = false;
             GLDAS.Enabled = false;
             RL05.Enabled = false;
             GRACE.Enabled = false;
+            Zero.Enabled = false;
             DrawButton.Enabled = false;
-            Binsize.Enabled = false;
-            Progress.Maximum = max + max2;
+
+            if (lastitem != item) { Search(); }
 
             Thread thread = new Thread(ReadAllData);
             thread.IsBackground = true;
@@ -248,15 +260,15 @@ namespace GRACEChart
         }
         public void ReadAllData()
         {
-            if (!isRead)
+            if(lastitem != item)
             {
+                datamin = double.MaxValue;
+                datamax = double.MinValue;
                 readGLDAS();
                 readRL05();
                 readGRACE();
-                isRead = true;
+                lastitem = item;
             }
-
-            //drawZeroLine(g);
 
             if (GLDAS.Checked)
             {
@@ -273,6 +285,11 @@ namespace GRACEChart
                 showGRACE(g);
             }
 
+            if (Zero.Checked)
+            {
+                drawZeroLine(g);
+            }
+
              //** EXIT **//
             SetProgress(Progress.Maximum);
             this.Invoke(new MethodInvoker(delegate
@@ -282,7 +299,11 @@ namespace GRACEChart
                 CloseForm.Enabled = true;
                 SaveImage.Enabled = false;
                 Location.Enabled = true;
-                Binsize.Enabled = true;
+                GLDAS.Enabled = true;
+                RL05.Enabled = true;
+                GRACE.Enabled = true;
+                Zero.Enabled = true;
+
 
             }));
         }
@@ -327,16 +348,20 @@ namespace GRACEChart
                     int t = Convert.ToInt32(parameters[3]);
                     float height = float.Parse(parameters[9]);
                     PointF p = new PointF(t, height);
-                    PointF adj = adjustedPoint(p);
-                    gldas.Add(adj);
+                    gldas.Add(p);
+                    if (p.Y > datamax) { datamax = p.Y; }
+                    else if (p.Y < datamin) { datamin = p.Y; }
                 }
                 filen++;
                 SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
                 SetProgress(filen);
             }
+            for (int k = 0; k < rl05.Count; k++)
+            {
+                PointF p = new PointF(adjustedPoint(rl05[k]).X, adjustedPoint(rl05[k]).Y);
+                rl05[k] = p;
+            }
         }
-
-
         //*READ RL-05 DATA*//
         public void readRL05()
         {
@@ -352,12 +377,19 @@ namespace GRACEChart
                     int t = Convert.ToInt32(parameters[3]);
                     float height = float.Parse(parameters[9]);
                     PointF p = new PointF(t, height);
-                    rl05.Add(adjustedPoint(p));
+                    rl05.Add(p);
+                    if (p.Y > datamax) { datamax = p.Y; }
+                    else if (p.Y < datamin) { datamin = p.Y; }
                 }
                 filen++;
                 SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
                 SetProgress(filen);
             }
+            for (int k = 0; k < rl05.Count; k++)
+            {
+                PointF p = new PointF(adjustedPoint(rl05[k]).X, adjustedPoint(rl05[k]).Y);
+                rl05[k] = p;
+            }   
         }
         //*READ GRACE DATA*//
         public void readGRACE()
@@ -390,7 +422,7 @@ namespace GRACEChart
                         {
                             int n1 = (int)Math.Floor((double)t / (double)3);
                             float h = gldas[n1].Y;
-                            PointF p = new PointF(adjustedPoint(t), h);
+                            PointF p = new PointF(adjustedTime(t), h);
                             graceGLDAS.Add(p);
                         }
 
@@ -405,7 +437,7 @@ namespace GRACEChart
                         {
                             int n1 = (int)Math.Floor((double)t / (double)6);
                             float h =rl05[n1].Y;
-                            PointF p = new PointF(adjustedPoint(t), h);
+                            PointF p = new PointF(adjustedTime(t), h);
                             graceRL05.Add(p);
                         }
 
@@ -423,20 +455,8 @@ namespace GRACEChart
         //*GLDAS GRAPH*//
         public void showGLDAS(Graphics g)
         {
-            SolidBrush myBrush = new SolidBrush(Color.Green);
-            Pen myPen = new Pen(Color.Green);
-            for (int k = 0; k < gldas.Count - 1; k++)
-            {
-                g.DrawLine(myPen, gldas[k], gldas[k + 1]);
-                SetStatus("Creating GLDAS Graph");
-                SetProgress(filen);
-            }
-        }
-        public void dontShowGLDAS(Graphics g)
-        {
-            Color a = Color.FromArgb(0, 1, 1, 1);
-            SolidBrush myBrush = new SolidBrush(a);
-            Pen myPen = new Pen(a);
+            SolidBrush myBrush = new SolidBrush(Color.DarkGreen);
+            Pen myPen = new Pen(Color.DarkGreen);
             for (int k = 0; k < gldas.Count - 1; k++)
             {
                 g.DrawLine(myPen, gldas[k], gldas[k + 1]);
@@ -458,19 +478,6 @@ namespace GRACEChart
             }
 
         }
-        public void dontShowRL05(Graphics g)
-        {
-            Color b = Color.FromArgb(0, 1, 1, 1);
-            SolidBrush myBrush = new SolidBrush(b);
-            Pen myPen = new Pen(b);
-            for (int k = 0; k < rl05.Count - 1; k++)
-            {
-                g.DrawLine(myPen, rl05[k], rl05[k + 1]);
-                SetStatus("Creating RL-05 Graph");
-                SetProgress(filen);
-            }
-
-        }
 
         //*GRACE GRAPH(S)*//
         public void showGRACE(Graphics g)
@@ -479,12 +486,6 @@ namespace GRACEChart
             Pen myPen = new Pen(Color.Crimson);
             SetStatus("Creating GRACE Graph");
             SetProgress(filen);
-
-            //*DRAW LINES*//
-            /*foreach (PointF p in grace)
-            {
-            g.DrawLine(myPen, p.X, p.Y - 500, p.X, p.Y + 500);
-            }*/
 
             //*DRAW POINTS*//
             if(GLDAS.Checked && RL05.Checked)
@@ -521,24 +522,17 @@ namespace GRACEChart
                 }
             }
         }
-        public void dontShowGRACE(Graphics g)
-        {
-            Color c = Color.FromArgb(0, 1, 1, 1);
-            SolidBrush myBrush = new SolidBrush(c);
-            Pen myPen = new Pen(c);
-           /* foreach (PointF p in grace)
-            {
-                g.DrawLine(myPen, p.X, p.Y - 500, p.X, p.Y + 500);
-            }*/
-        }
 
         public PointF adjustedPoint(PointF a)
         {
             float x = (float)a.X * (float)Chart.Width / 8784.0f;
-            float y = -((((float)a.Y * (float)Chart.Height / 8.0f))-(float)Chart.Height/2.01f); 
+            float h = (float)(datamax - datamin); //chart height
+            //float y = -((((float)a.Y * (float)h / 10.0f))-(float)h/2.0f);
+
+            float y = -(float)(((a.Y - (h/2)) / h) * Chart.Height + 2); //y / scale height * map height + delta
             return new PointF(x, y);
         }
-        public float adjustedPoint(float t)
+        public float adjustedTime(float t)
         {
             float x = (float)t * (float)Chart.Width / 8784.0f;
             return x;
