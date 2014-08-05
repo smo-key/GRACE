@@ -4,7 +4,11 @@ this.speed = 1.0;
 this.exagg = 1.2;
 this.run = 1;
 this.drawalpha = 3;
-this.timemax = 0;
+this.saveimage = function()
+{
+  var canvas = document.getElementById("maincanvas");
+  saveImage(canvas);
+};
 
 var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
 var siderealday = 86164.1 / 86400; //seconds in a sidereal day / solar day
@@ -29,7 +33,8 @@ sizeupdate.onChange(function(value){
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
 gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
 gui.add(this, 'drawalpha', 0.0, 7.0).name("Draw Brightness");
-gui.add(this, 'timemax').listen();;
+gui.add(this, 'saveimage').name("Save Image");
+
 
 var renderer, scene, camera, light, controls;
 var starSphere, containerEarth;
