@@ -4,6 +4,7 @@ this.speed = 1.0;
 this.exagg = 1.2;
 this.run = 1;
 this.drawalpha = 3;
+this.timemax = 0;
 
 var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
 var siderealday = 86164.1 / 86400; //seconds in a sidereal day / solar day
@@ -28,6 +29,7 @@ sizeupdate.onChange(function(value){
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
 gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
 gui.add(this, 'drawalpha', 0.0, 7.0).name("Draw Brightness");
+gui.add(this, 'timemax').listen();;
 
 var renderer, scene, camera, light, controls;
 var starSphere, containerEarth;
@@ -210,11 +212,21 @@ function animate() {
 
   //lastTime = lastTime || nowMsec-1000/60;
 
-  //var degsec = g_period / 360; //second per degree in simulation
-  //var maxtime = ; //minimum msec between frames
+  var degsec = g_period / 360 ; //s (in simulation) it takes to traverse binsize
+  var msframe = 60 * Math.pow(10,(this.speed - deltarealt)); //ms in sim / ms in realtime
+  var deltat = nowMsec - lastTime;
+  var maxtime = degsec / msframe * 1000; //maximum msec between frames = ms in sim / ms in realtime
+  this.timemax = maxtime;
 
+  var deltaMsec = Math.min(maxtime, deltat);
 
-  var deltaMsec = Math.min(200, nowMsec - lastTime);
+  if (deltat > maxtime)
+  { $('#timer').css('color', '#ffa500');
+    $('.timetype').css('color', '#ffa500'); }
+  else
+  { $('#timer').css('color', '#ccc');
+    $('.timetype').css('color', '#ccc'); }
+
   //var deltaMsec = nowMsec - lastTime;
   lastTime = nowMsec;
 
@@ -266,7 +278,9 @@ function addPoint(lat, lng, size, color, subgeo) {
   GeometryUtils.merge(subgeo, point);
 }
 
+
 //*** RENDER LOOP ***//
+
 function render(delta, now) {
   //UPDATE CLOCK
   this.time += delta * 60 * Math.pow(10,(this.speed - deltarealt)) * run;
