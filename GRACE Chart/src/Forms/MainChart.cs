@@ -389,11 +389,8 @@ namespace GRACEChart
                         else
                         {
                             int n1 = (int)Math.Floor((double)t / (double)3);
-                            int n2 = n1 + 1;
-                            float m = ((gldas[n2].Y - gldas[n1].Y) / (gldas[n2].X - gldas[n1].X));
-                            float h = m * (t - gldas[n1].X) + gldas[n1].Y;
+                            float h = gldas[n1].Y;
                             PointF p = new PointF(adjustedPoint(t), h);
-                            //PointF adj = adjustedPoint(p);
                             graceGLDAS.Add(p);
                         }
 
@@ -407,11 +404,8 @@ namespace GRACEChart
                         else
                         {
                             int n1 = (int)Math.Floor((double)t / (double)6);
-                            int n2 = n1 + 1;
-                            float m = ((rl05[n2].Y - rl05[n1].Y) / (rl05[n2].X - rl05[n1].X));
-                            float h = m * (t - rl05[n1].X) + rl05[n1].Y;
+                            float h =rl05[n1].Y;
                             PointF p = new PointF(adjustedPoint(t), h);
-                            //PointF adj = adjustedPoint(p);
                             graceRL05.Add(p);
                         }
 
@@ -485,20 +479,23 @@ namespace GRACEChart
             Pen myPen = new Pen(Color.Crimson);
             SetStatus("Creating GRACE Graph");
             SetProgress(filen);
-            
+
+            //*DRAW LINES*//
             /*foreach (PointF p in grace)
             {
             g.DrawLine(myPen, p.X, p.Y - 500, p.X, p.Y + 500);
             }*/
+
+            //*DRAW POINTS*//
             if(GLDAS.Checked && RL05.Checked)
             {
                 foreach(PointF p in graceGLDAS)
                 {
-                    g.FillEllipse(myBrush, p.X, p.Y, 4, 4);
+                    g.FillEllipse(myBrush, p.X - 2, p.Y - 2, 4, 4);
                 }
                 foreach (PointF p2 in graceRL05)
                 {
-                    g.FillEllipse(myBrush, p2.X, p2.Y, 4, 4);
+                    g.FillEllipse(myBrush, p2.X - 2, p2.Y - 2, 4, 4);
                 }
 
             }
@@ -506,21 +503,21 @@ namespace GRACEChart
             {
                 foreach (PointF p3 in graceGLDAS)
                 {
-                    g.FillEllipse(myBrush, p3.X, p3.Y, 4, 4);
+                    g.FillEllipse(myBrush, p3.X - 2, p3.Y - 2, 4, 4);
                 }
             }
             if (!GLDAS.Checked && RL05.Checked)
             {
                 foreach (PointF p4 in graceRL05)
                 {
-                    g.FillEllipse(myBrush, p4.X, p4.Y, 4, 4);
+                    g.FillEllipse(myBrush, p4.X - 2, p4.Y - 2, 4, 4);
                 }
             }
             if (!GLDAS.Checked && !RL05.Checked)
             {
                 foreach (PointF p5 in grace)
                 {
-                    g.FillEllipse(myBrush, p5.X, p5.Y, 4, 4);
+                    g.FillEllipse(myBrush, p5.X - 2, p5.Y - 2, 4, 4);
                 }
             }
         }
@@ -538,7 +535,7 @@ namespace GRACEChart
         public PointF adjustedPoint(PointF a)
         {
             float x = (float)a.X * (float)Chart.Width / 8784.0f;
-            float y = -((((float)a.Y * (float)Chart.Height / 8.0f))-(float)Chart.Height/2.035f); 
+            float y = -((((float)a.Y * (float)Chart.Height / 8.0f))-(float)Chart.Height/2.01f); 
             return new PointF(x, y);
         }
         public float adjustedPoint(float t)
