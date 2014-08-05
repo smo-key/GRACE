@@ -300,7 +300,7 @@ function render(delta, now) {
     {
       var loc = GetTopLeft(id);
       var size = GetSize(loc);
-      var uvx = loc.x / 360 * $('#maincanvas').width() - Math.floor(containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
+      var uvx = loc.x / 360 * $('#maincanvas').width() - Math.ceil(containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
       if (uvx < 0) { uvx+= $('#maincanvas').width(); }
       var uvy = (loc.y + 90) / 180 * $('#maincanvas').height();
 
