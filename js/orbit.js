@@ -5,7 +5,7 @@ var g_i = 89.000; //inclination in degrees, 89deg is prograde, from plane of ref
 var g_Om = 0; //longitude of ascending node, from zero degrees to ascending node
 var g_om = 0; //argument of periapsis, from plane of reference to periapsis
 var g_t = 0; //time of periapsis passage
-var g_period = 1800; //seconds per revolution
+var g_period = 1690; //seconds per revolution
 
 //need r, v (perifocal system)
 

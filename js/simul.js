@@ -207,7 +207,8 @@ function animate() {
   var nowMsec = new Date().getTime();
 
   //lastTime = lastTime || nowMsec-1000/60;
-  var deltaMsec = nowMsec - lastTime;
+  var deltaMsec = Math.min(200, nowMsec - lastTime);
+  //var deltaMsec = nowMsec - lastTime;
   lastTime = nowMsec;
 
   render(deltaMsec / 1000, nowMsec / 1000);
@@ -269,6 +270,8 @@ function render(delta, now) {
   //ROTATE EARTH
   containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * siderealday;
 
+  while (containerEarth.rotation.y >= Math.PI * 2) { containerEarth.rotation.y -= Math.PI * 2; }
+
   //RENDER ORBIT
   //find location of satellite in 3D space
   var grace = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
@@ -297,7 +300,8 @@ function render(delta, now) {
     {
       var loc = GetTopLeft(id);
       var size = GetSize(loc);
-      var uvx = loc.x / 360 * $('#maincanvas').width() - (containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
+      var uvx = loc.x / 360 * $('#maincanvas').width() - Math.floor(containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
+      if (uvx < 0) { uvx+= $('#maincanvas').width(); }
       var uvy = (loc.y + 90) / 180 * $('#maincanvas').height();
 
       var ctx = $('#maincanvas')[0].getContext("2d");
@@ -305,7 +309,7 @@ function render(delta, now) {
       //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
       //ctx.fillRect(0,0,1000,400); //1024, 512
       ctx.fillStyle = "#0044ff";
-      ctx.globalAlpha = 1;
+      ctx.globalAlpha = 0.25;
       //ctx.beginPath();
       ctx.fillRect(uvx, uvy, size.x / 360 * $('#maincanvas').width(), size.y / 180 * $('#maincanvas').height());
       //(x,y,r,sAngle,eAngle,counterclock)
