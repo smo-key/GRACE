@@ -34,8 +34,6 @@ namespace GRACEChart
         double lat2;
         double lon1;
         double lon2;
-        bool isRead = false;
-        String item;
         String lastitem = "NaSTy";
 
         double datamin = double.PositiveInfinity;
@@ -86,155 +84,161 @@ namespace GRACEChart
                
         public void Search()
         {
-            if ((Location.SelectedItem).Equals("ACC"))
+            String seltext = "";
+            Location.Invoke(new MethodInvoker(delegate { seltext = Location.SelectedItem.ToString(); }));
+
+            String itemname = "ACC01";
+            if (seltext == "ACC")
             {
-                item = "ACC01";
+                itemname = "ACC01";
                 x = 30.0;
                 y = -60.0;
             }
-            else if ((Location.SelectedItem).Equals("Amazon"))
+            else if (seltext == "Amazon")
             {
-                item = "Amazon01";
+                itemname = "Amazon01";
                 x = 305.0;
                 y = -2.5;
             }
-            else if ((Location.SelectedItem).Equals("Antarctic"))
+            else if (seltext == "Antarctic")
             {
-                item = "Antarct01";
+                itemname = "Antarct01";
                 x = 305.0;
                 y = -79.0;
             }
-            else if ((Location.SelectedItem).Equals("Baltic Sea"))
+            else if (seltext == "Baltic Sea")
             {
-                item = "BalticSea";
+                itemname = "BalticSea";
                 x = 19.0;
                 y = 57.5;
             }
-            else if ((Location.SelectedItem).Equals("Baltic Sea 02"))
+            else if (seltext == "Baltic Sea 02")
             {
-                item = "BalticSea02";
+                itemname = "BalticSea02";
                 x = 18.0;
                 y = 56.0;
             }
-            else if ((Location.SelectedItem).Equals("Bangladesh"))
+            else if (seltext == "Bangladesh")
             {
-                item = "Bangladesh";
+                itemname = "Bangladesh";
                 x = 90.0;
                 y = 24.0;
             }
-            else if ((Location.SelectedItem).Equals("Black Sea"))
+            else if (seltext == "Black Sea")
             {
-                item = "BlackSea";
+                itemname = "BlackSea";
                 x = 31.0;
                 y = 43.5;
             }
-            else if ((Location.SelectedItem).Equals("Black Sea 02"))
+            else if (seltext == "Black Sea 02")
             {
-                item = "BlackSea02";
+                itemname = "BlackSea02";
                 x = 30.0;
                 y = 43.0;
             }
-            else if ((Location.SelectedItem).Equals("Columbia"))
+            else if (seltext == "Columbia")
             {
-                item = "Columbia";
+                itemname = "Columbia";
                 x = 241.0;
                 y = 46.0;
             }
-            else if ((Location.SelectedItem).Equals("Congo"))
+            else if (seltext == "Congo")
             {
-                item = "Congo";
+                itemname = "Congo";
                 x = 23.0;
                 y = -12.0;
             }
-            else if ((Location.SelectedItem).Equals("East Siberia"))
+            else if (seltext == "East Siberia")
             {
-                item = "EastSib01";
+                itemname = "EastSib01";
                 x = 170.0;
                 y = 72.0;
             }
-            else if ((Location.SelectedItem).Equals("Guinea"))
+            else if (seltext == "Guinea")
             {
-                item = "Guinea";
+                itemname = "Guinea";
                 x = 351.0;
                 y = 8.0;
             }
-            else if ((Location.SelectedItem).Equals("Gulf Carpentaria"))
+            else if (seltext == "Gulf Carpentaria")
             {
-                item = "GulfCarpen";
+                itemname = "GulfCarpen";
                 x = 139.0;
                 y = -15.0;
             }
-            else if ((Location.SelectedItem).Equals("Hudson Bay"))
+            else if (seltext == "Hudson Bay")
             {
-                item = "HudsonBay";
+                itemname = "HudsonBay";
                 x = 272.5;
                 y = 60.0;
             }
-            else if ((Location.SelectedItem).Equals("Hudson Bay 02"))
+            else if (seltext == "Hudson Bay 02")
             {
-                item = "HudsonBay02";
+                itemname = "HudsonBay02";
                 x = 272.5;
                 y = 58.0;
             }
-            else if ((Location.SelectedItem).Equals("Mediterranean"))
+            else if (seltext == "Mediterranean")
             {
-                item = "Mediterr01";
+                itemname = "Mediterr01";
                 x = 19.0;
                 y = 36.0;
             }
-            else if ((Location.SelectedItem).Equals("Mekong"))
+            else if (seltext == "Mekong")
             {
-                item = "Mekong";
+                itemname = "Mekong";
                 x = 105.0;
                 y = 12.0;
             }
-            else if ((Location.SelectedItem).Equals("NCP"))
+            else if (seltext == "NCP")
             {
-                item = "NCP";
+                itemname = "NCP";
                 x = 117.0;
                 y = 34.5;
             }
-            else if ((Location.SelectedItem).Equals("Ob"))
+            else if (seltext == "Ob")
             {
-                item = "Ob";
+                itemname = "Ob";
                 x = 69.0;
                 y = 61.5;
             }
-            else if ((Location.SelectedItem).Equals("Orinoco"))
+            else if (seltext == "Orinoco")
             {
-                item = "Orinoco";
+                itemname = "Orinoco";
                 x = 292.0;
                 y = 5.0;
             }
-            else if ((Location.SelectedItem).Equals("Pearl River"))
+            else if (seltext == "Pearl River")
             {
-                item = "PearlRiver";
+                itemname = "PearlRiver";
                 x = 113.0;
                 y = 23.0;
             }
-            else if ((Location.SelectedItem).Equals("Sao Paulo"))
+            else if (seltext == "Sao Paulo")
             {
-                item = "SaoPaulo";
+                itemname = "SaoPaulo";
                 x = 312.0;
                 y = -22.0;
             }
-            else if ((Location.SelectedItem).Equals("StNewFL"))
+            else if (seltext == "StNewFL")
             {
-                item = "StNewFL01";
+                itemname = "StNewFL01";
                 x = 301.0;
                 y = 45.0;
             }
             else
             {
-                item = "Victoria";
+                itemname = "Victoria";
                 x = 32.0;
                 y = -2.0;
             }
 
-            GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", item + "*");
-            RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", item + "*");
+            GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", itemname + "*");
+            RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", itemname + "*");
             max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
             max2 = gldas.Count + rl05.Count + grace.Count + graceGLDAS.Count + graceRL05.Count;
+            Progress.Value = 0;
+            filen = 0;
             Progress.Maximum = max + max2;
         }
 
@@ -251,8 +255,6 @@ namespace GRACEChart
             Zero.Enabled = false;
             DrawButton.Enabled = false;
 
-            if (lastitem != item) { Search(); }
-
             Thread thread = new Thread(ReadAllData);
             thread.IsBackground = true;
             thread.Name = "Read Data Thread";
@@ -260,14 +262,23 @@ namespace GRACEChart
         }
         public void ReadAllData()
         {
-            if(lastitem != item)
+            String seltext = "";
+            Location.Invoke(new MethodInvoker(delegate { seltext = Location.SelectedItem.ToString(); }));
+
+            if(lastitem != seltext)
             {
                 datamin = double.MaxValue;
                 datamax = double.MinValue;
+                gldas.Clear();
+                rl05.Clear();
+                grace.Clear();
+                graceGLDAS.Clear();
+                graceRL05.Clear();
+
+                this.Invoke(new MethodInvoker(delegate { Search(); }));
                 readGLDAS();
                 readRL05();
                 readGRACE();
-                lastitem = item;
             }
 
             if (GLDAS.Checked)
@@ -303,8 +314,7 @@ namespace GRACEChart
                 RL05.Enabled = true;
                 GRACE.Enabled = true;
                 Zero.Enabled = true;
-
-
+                lastitem = Location.SelectedItem.ToString();
             }));
         }
         private void Border_Paint(object sender, PaintEventArgs e)
@@ -329,11 +339,9 @@ namespace GRACEChart
             PointF p1 = adjustedPoint(a);
             PointF p2 = adjustedPoint(b);
             g.DrawLine(myPen, p1, p2);
-        }
-
+        }        
         
-        
-      //*READ GLDAS DATA*// 
+        //*READ GLDAS DATA*// 
         public void readGLDAS()
         {
             foreach (String file in GLDASData)

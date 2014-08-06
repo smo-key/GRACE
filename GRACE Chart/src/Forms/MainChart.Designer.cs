@@ -124,6 +124,7 @@
             this.Minimize.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.HotTrack;
             this.Minimize.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Minimize.Location = new System.Drawing.Point(751, 3);
+            this.Minimize.Visible = false;
             // 
             // SaveImage
             // 

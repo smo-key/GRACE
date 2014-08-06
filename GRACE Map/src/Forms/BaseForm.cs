@@ -53,6 +53,7 @@ namespace GRACEMap
                 sorted.Values.ElementAt(i).Location = p;
             } 
             //Resizer.BringToFront();
+            Title.Location = new Point((this.Width / 2) - (Title.Width / 2), Title.Location.Y);
         }
 
         internal virtual void CloseForm_Click(object sender, EventArgs e)
