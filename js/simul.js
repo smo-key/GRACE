@@ -330,7 +330,7 @@ function animate() {
   var degsec = g_period / 360 ; //s (in simulation) it takes to traverse binsize
   var msframe = 60 * Math.pow(10,(this.speed - deltarealt)); //ms in sim / ms in realtime
   var deltat = nowMsec - lastTime;
-  var maxtime = degsec / msframe * 1000; //maximum msec between frames = ms in sim / ms in realtime
+  var maxtime = degsec / msframe * 1000 * this.binsize; //maximum msec between frames = ms in sim / ms in realtime
   this.timemax = maxtime;
 
   var deltaMsec = Math.min(maxtime, deltat);
