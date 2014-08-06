@@ -10,7 +10,7 @@ this.saveimage = function()
   var canvas = document.getElementById("maincanvas");
   saveImage(canvas);
 };
-this.satcount = 2;
+this.satcount = 1;
 this.satsep = 200; //km
 this.pairsep = 180; //degrees
 this.multiorb = false;
@@ -34,41 +34,43 @@ draws.add(this, 'drawalpha', 0.0, 7.0).name("Draw Brightness");
 draws.add(this, 'saveimage').name("Save Image");
 
 var sats = gui.addFolder("Satellites");
-var countupdate = sats.add(this, 'satcount', 1, 3).name("Pairs");
+var countupdate = sats.add(this, 'satcount', 0.5, 3).name("Pairs");
 countupdate.onChange(function(value){
   satcount = Math.floor(satcount);
+  if (satcount == 0) { satcount = 0.5; }
 
-  if (satcount >= 2) {
+  if (satcount >= 1) {
     $("#satcircleb").css('display', 'block');
     $("#sattextb").css('display', 'block');
   } else {
     $("#satcircleb").css('display', 'none');
     $("#sattextb").css('display', 'none');
   }
-  if (satcount >= 3) {
+  if (satcount >= 2) {
     $("#satcirclec").css('display', 'block');
     $("#sattextc").css('display', 'block');
-  } else {
-    $("#satcirclec").css('display', 'none');
-    $("#sattextc").css('display', 'none');
-  }
-  if (satcount >= 4) {
     $("#satcircled").css('display', 'block');
     $("#sattextd").css('display', 'block');
   } else {
+    $("#satcirclec").css('display', 'none');
+    $("#sattextc").css('display', 'none');
     $("#satcircled").css('display', 'none');
     $("#sattextd").css('display', 'none');
   }
-  if (satcount >= 5) {
+  if (satcount >= 3) {
     $("#satcirclee").css('display', 'block');
     $("#sattexte").css('display', 'block');
+    $("#satcirclef").css('display', 'block');
+    $("#sattextf").css('display', 'block');
   } else {
     $("#satcirclee").css('display', 'none');
     $("#sattexte").css('display', 'none');
+    $("#satcirclef").css('display', 'none');
+    $("#sattextf").css('display', 'none');
   }
 });
 
-sats.add(this, 'satsep', 0, 10000).name("Seperation (km)");
+sats.add(this, 'satsep', 0, 10000).name("Separation (km)");
 sats.add(this, 'pairsep', 0, 180).name("Pair Distance (deg)");
 
 this.orb1Om = 0;
@@ -92,7 +94,7 @@ var points;
 
 var lastbin = [new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
                new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
-               new THREE.Vector2(-1, -1)];
+               new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1)];
 this.geo30 = new THREE.Geometry();
 
 //*** INITIALIZE THREE.JS ***//
@@ -369,20 +371,20 @@ function render(delta, now) {
   var width = window.innerWidth, height = window.innerHeight;
   var widthHalf = width / 2, heightHalf = height / 2;
 
-  var satname = ["a","b","c","d","e","A","B","C","D","E"];
-  var satcolor = ["#0044ff", "#0aff00", "#f00", "#ff00eb", "#00ffeb"]
-  var maxsat = 5;
+  var satname = ["a","b","c","d","e","f"];
+  var satcolor = ["#0044ff", "#0aff00", "#f00", "#ff00eb", "#00ffeb", "#f5ff00"]
 
   if (this.run == 1)
   {
     //groundtrack point
-    for (var i = 0; i < this.satcount; i++) {
+    for (var i = 0; i < this.satcount * 2; i++) {
       var n;
       if (i == 0) { n = gracea; }
       if (i == 1) { n = graceb; }
       if (i == 2) { n = gracec; }
       if (i == 3) { n = graced; }
       if (i == 4) { n = gracee; }
+      if (i == 5) { n = gracef; }
 
       var uv = sphere_uv(n);
       var uvadj = new THREE.Vector2(uv.x * 360 - (containerEarth.rotation.y / Math.PI / 180), uv.y * 180 - 90);
@@ -415,7 +417,7 @@ function render(delta, now) {
   meshOverlay.rotation.y = containerEarth.rotation.y;
 
   //update display
-  for (var i = 0; i < this.satcount; i++) {
+  for (var i = 0; i < this.satcount * 2; i++) {
     var n;
     var s = satname[i];
     if (i == 0) { n = graceca; }
@@ -423,6 +425,7 @@ function render(delta, now) {
     if (i == 2) { n = gracecc; }
     if (i == 3) { n = gracecd; }
     if (i == 4) { n = gracece; }
+    if (i == 5) { n = gracecf; }
 
     var pa = new THREE.Vector3(n.x, n.y, n.z);
     var projector = new THREE.Projector();
