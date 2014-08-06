@@ -51,7 +51,7 @@ countupdate.onChange(function(value){
   }
 
 });
-var sepupdate = sats.add(this, 'satsep', 0, 2500).name("Seperation (km)");
+var sepupdate = sats.add(this, 'satsep', 0, g_circ()).name("Seperation (km)");
 
 var renderer, scene, camera, light, controls;
 var starSphere, containerEarth;
@@ -320,18 +320,18 @@ function render(delta, now) {
   var grace = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
   var gracea = grace.clone();
 
-  var db = this.satsep / g_a;
+  var db = this.satsep / g_circ();
   var graceb = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db, g_t, this.time);
+  var gracecb = grace.clone();
 
   //coerce to 2D screen coordinates
   var width = window.innerWidth, height = window.innerHeight;
   var widthHalf = width / 2, heightHalf = height / 2;
 
-  //groundtrack point
-  var uv = sphere_uv(grace);
-
   if (this.run == 1)
   {
+    //groundtrack point
+    var uv = sphere_uv(grace);
     var uvadj = new THREE.Vector2(uv.x * 360 - (containerEarth.rotation.y / Math.PI / 180), uv.y * 180 - 90);
     var id = GetGridID(new THREE.Vector2(uvadj.x, uvadj.y));
     if ((id.x != lastbin.x) || (id.y != lastbin.y))
@@ -344,18 +344,12 @@ function render(delta, now) {
       var uvr = 2 * this.binsize;
 
       var ctx = $('#maincanvas')[0].getContext("2d");
-      //ctx.globalAlpha = 1;
-      //ctx.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
-      //ctx.fillRect(0,0,1000,400); //1024, 512
       ctx.fillStyle = "#0044ff";
       ctx.globalAlpha = Math.pow(2, this.drawalpha - 7); //0.025;
       if (this.drawalpha == 0) { ctx.globalAlpha = 0; }
       ctx.beginPath();
-      //ctx.fillRect(uvx, uvy, size.x / 360 * $('#maincanvas').width(), size.y / 180 * $('#maincanvas').height());
-      //(x,y,r,sAngle,eAngle,counterclock)
       ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
       ctx.fill();
-      //ctx.rotate( -1 * Math.PI / 180
       lastbin = id;
     }
   }
