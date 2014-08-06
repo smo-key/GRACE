@@ -219,7 +219,7 @@
             this.gridsize.TabIndex = 41;
             this.gridsize.TabStop = false;
             this.gridsize.Value = new decimal(new int[] {
-            2,
+            3,
             0,
             0,
             0});
@@ -373,10 +373,10 @@
             this.Sensitivity.TabIndex = 52;
             this.Sensitivity.TabStop = false;
             this.Sensitivity.Value = new decimal(new int[] {
-            8,
+            65,
             0,
             0,
-            0});
+            65536});
             // 
             // DispBack
             // 

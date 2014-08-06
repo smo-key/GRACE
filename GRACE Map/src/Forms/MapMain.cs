@@ -13,6 +13,7 @@ using System.IO.Pipes;
 using System.IO;
 using GRACEdata;
 using System.Windows.Media.Imaging;
+using AviFile;
 
 namespace GRACEMap
 {
@@ -181,8 +182,10 @@ namespace GRACEMap
             DrawScale(max);
 
             //create GIF
-            System.Windows.Media.Imaging.GifBitmapEncoder gEnc = new GifBitmapEncoder();
-            File.Delete("../../../output.gif");
+            File.Delete("../../../output.avi");
+            AviManager aviManager = new AviManager(@"../../../output.avi", false);;
+            VideoStream aviStream = null;
+            bool first = true;
 
             foreach (string f in ym)
             {
@@ -210,6 +213,9 @@ namespace GRACEMap
                     {
                         int k = j - Structs.CoercedBin.BinLatCenter;
                         Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
+
+                        if (DispBack.Checked) { c.x += 180.0f; if (c.x >= 360.0f) { c.x -= 360.0f; } }
+
                         Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
                         Structs.AreaBox box = new Structs.AreaBox();
                         switch (anchor)
@@ -249,8 +255,8 @@ namespace GRACEMap
                 
                 Rectangle b = this.Bounds;
                 Rectangle bounds = new Rectangle(b.Left, b.Top + 102, 801, 400);
-                Bitmap gif = new Bitmap(bounds.Width, bounds.Height);
-                Graphics g = Graphics.FromImage(gif);
+                Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
+                Graphics g = Graphics.FromImage(bitmap);
                 this.Invoke(new MethodInvoker(delegate
                 {
                     this.TopMost = false;
@@ -260,16 +266,29 @@ namespace GRACEMap
                 g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
                 
                 var src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                        gif.GetHbitmap(),
+                        bitmap.GetHbitmap(),
                         IntPtr.Zero,
                         System.Windows.Int32Rect.Empty,
                         BitmapSizeOptions.FromEmptyOptions());
-                gEnc.Frames.Add(BitmapFrame.Create(src));
-                
+
+                //ENCODE TO AVI
+                if (first)
+                {
+                    SetStatus("Encoding to AVI (use Microsoft Video 1 if prompted)...");
+                    //add a new video stream and one frame to the new file
+                    aviStream = aviManager.AddVideoStream(true, 1.0d, bitmap);
+                    first = false;
+                }
+                else
+                {
+                    aviStream.AddFrame(bitmap);
+                    bitmap.Dispose();
+                }
             }
 
             SetStatus("Saving image...");
-            gEnc.Save(new FileStream("../../../output.gif", FileMode.Create));
+            aviManager.Close();
+            //gEnc.Save(new FileStream("../../../output.gif", FileMode.Create));
 
             //** EXIT **//
             SetProgress(Progress.Maximum);
@@ -398,6 +417,9 @@ namespace GRACEMap
                 {
                     int k = j - Structs.CoercedBin.BinLatCenter;
                     Structs.Point c = Structs.CoercedBin.GetCenter(i, k);
+
+                    if (DispBack.Checked) { c.x += 180.0f; if (c.x >= 360.0f) { c.x -= 360.0f; } }
+
                     Structs.Point size = Structs.CoercedBin.GetSize(c.x, c.y);
                     Structs.AreaBox box = new Structs.AreaBox();
                     switch (anchor)
@@ -438,14 +460,7 @@ namespace GRACEMap
             SetStatus("Saving image...");
             if (SaveImage.Checked) 
             {
-                if (!Transp.Checked)
-                {
-                    SaveFrame("../../../output");
-                }
-                else
-                {
-                    gif.Save("../../../output.png", System.Drawing.Imaging.ImageFormat.Png);
-                }
+                gif.Save("../../../output.png", System.Drawing.Imaging.ImageFormat.Png);
             }
 
             //** EXIT **//
@@ -478,7 +493,7 @@ namespace GRACEMap
             return;
         }
 
-        private void SaveFrame(string name)
+        /*private void SaveFrame(string name)
         {
             SetStatus("Saving image...");
             Rectangle b = this.Bounds;
@@ -502,7 +517,7 @@ namespace GRACEMap
                 this.TopMost = false;
                 dragenabled = true;
             }));
-        }
+        }*/
 
         private void DrawScale(int max)
         {
@@ -510,7 +525,7 @@ namespace GRACEMap
             for (int i = 0; i < max; i++)
             {
                 Color color;
-                if (Transp.Checked) { color = Utils.BlueToRedScale((double)i / (double)max * 100.0d, 100, (double)Sensitivity.Value); }
+                if (Transp.Checked && !(AllM.Checked || AllY.Checked)) { color = Utils.BlueToRedScale((double)i / (double)max * 100.0d, 100, (double)Sensitivity.Value); }
                 else { color = Utils.BlueToRedScale((double)i / (double)max * 100.0d, 100, (double)Sensitivity.Value, 255); }
                 Brush brush = new System.Drawing.SolidBrush( color );
                 scale.FillRectangle(brush, (float)i / (float)max * 200.0f, 0.0f, (float)200.0f / max, 23.0f);

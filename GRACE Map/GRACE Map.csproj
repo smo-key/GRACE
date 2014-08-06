@@ -291,6 +291,10 @@
     <None Include="Resources\action_add_16xLG.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\aviwrapper\AviFile.csproj">
+      <Project>{abb32a29-af50-47fa-b243-5fd75a5aba54}</Project>
+      <Name>AviFile</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GRACEdata\GRACEdata.csproj">
       <Project>{b257ce19-2c05-4ed4-9b5c-4d813db09dd7}</Project>
       <Name>GRACEdata</Name>
@@ -298,6 +302,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\World-Map.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
