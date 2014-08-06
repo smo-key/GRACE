@@ -11,8 +11,8 @@ this.saveimage = function()
   saveImage(canvas);
 };
 this.satcount = 1;
-this.satsep = 200; //km
-this.pairsep = 180; //degrees
+this.satsep = 500; //km
+this.pairsep = 30; //degrees
 this.multiorb = false;
 
 //*** DATGUI ***//
@@ -37,7 +37,7 @@ var sats = gui.addFolder("Satellites");
 var countupdate = sats.add(this, 'satcount', 0.5, 3).name("Pairs");
 countupdate.onChange(function(value){
   satcount = Math.floor(satcount);
-  if (satcount == 0) { satcount = 0.5; }
+  if (satcount == 0) {  satcount = 0.5; }
 
   if (satcount >= 1) {
     $("#satcircleb").css('display', 'block');
@@ -73,15 +73,16 @@ countupdate.onChange(function(value){
 });
 
 sats.add(this, 'satsep', 0, 10000).name("Separation (km)");
-sats.add(this, 'pairsep', 0, 180).name("Pair Distance (deg)");
 
 this.orb1Om = 0;
-this.orb2Om = 180;
-this.orb3Om = 270;
+this.orb2Om = 90;
+this.orb3Om = 60;
+this.ocount = 1;
 
 var orbs = gui.addFolder("Orbits");
 var multchange = orbs.add(this, 'multiorb').name("Multiple Orbits");
 this.o1 = orbs.add(this, 'orb1Om', 0, 360).name("Orbit 1 &Omega;");
+this.opair = orbs.add(this, 'pairsep', 0, 360).name("Pair Distance");
 //this.o2 = orbs.add(this, 'orb2Om', 0, 360).name("Orbit 2 &Omega;");
 //this.o3 = orbs.add(this, 'orb3Om', 0, 360).name("Orbit 3 &Omega;");
 
@@ -90,13 +91,31 @@ multchange.onChange(function(value){
 });
 
 function updateOrbitStat() {
+  this.ocount = 1;
+  if (this.opair !== undefined) { this.opair = orbs.remove(this.opair); }
   if (this.o2 !== undefined) { this.o2 = orbs.remove(this.o2); }
   if (this.o3 !== undefined) { this.o3 = orbs.remove(this.o3); }
+
+  radius   = g_a / earthradius;
+  segments = 64;
+  ccolor = 0x888888;
+  geometry = new THREE.CircleGeometry( radius, segments );
+  geometry.vertices.shift(); // Remove center vertex
+
   if (this.satcount >= 2 && this.multiorb) {
     this.o2 = orbs.add(this, 'orb2Om', 0, 360).name("Orbit 2 &Omega;");
+    this.ocount = 2;
+    ob2.visible = true;
+  } else {
+    ob2.visible = false;
+    if (this.satcount > 0.5) { this.opair = orbs.add(this, 'pairsep', 0, 360).name("Pair Distance"); }
   }
   if (this.satcount >= 3 && this.multiorb) {
     this.o3 = orbs.add(this, 'orb3Om', 0, 360).name("Orbit 3 &Omega;");
+    this.ocount = 3;
+    ob3.visible = true;
+  } else {
+    ob3.visible = false;
   }
 }
 
@@ -107,7 +126,7 @@ var earthMesh, radius;
 var segments, ccolor;
 var material;
 var projector;
-var circle, meshOverlay;
+var ob1, ob2, ob3, meshOverlay;
 
 var overRenderer;
 var points;
@@ -115,7 +134,6 @@ var points;
 var lastbin = [new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
                new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
                new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1)];
-this.geo30 = new THREE.Geometry();
 
 //*** INITIALIZE THREE.JS ***//
 function init() {
@@ -216,11 +234,26 @@ function init() {
   //Line of orbit
   geometry = new THREE.CircleGeometry( radius, segments );
   geometry.vertices.shift(); // Remove center vertex
-  circle = new THREE.Line(geometry, material);
-  circle.castShadow = circle.receiveShadow = false;
-  circle.rotation.x = -1 * Math.PI / 180;
+  ob1 = new THREE.Line(geometry, material);
+  ob1.castShadow = ob1.receiveShadow = false;
+  ob1.rotation.x = -1 * Math.PI / 180;
+  scene.add(ob1);
 
-  scene.add(circle);
+  geometry = new THREE.CircleGeometry( radius, segments );
+  geometry.vertices.shift(); // Remove center vertex
+  ob2 = new THREE.Line(geometry, material);
+  ob2.castShadow = ob2.receiveShadow = false;
+  ob2.rotation.x = -1 * Math.PI / 180;
+  ob2.visible = false;
+  scene.add(ob2);
+
+  geometry = new THREE.CircleGeometry( radius, segments );
+  geometry.vertices.shift(); // Remove center vertex
+  ob3 = new THREE.Line(geometry, material);
+  ob3.castShadow = ob3.receiveShadow = false;
+  ob3.rotation.x = -1 * Math.PI / 180;
+  ob3.visible = false;
+  scene.add(ob3);
 
   //UV Drawing Canvas
   meshOverlay = addCanvasOverlay();
@@ -366,26 +399,44 @@ function render(delta, now) {
 
   //ROTATE EARTH AND ORBITS
   containerEarth.rotation.y += 1/1440 * 2 * Math.PI * delta * Math.pow(10,(this.speed - deltarealt)) * run * siderealday;
-  circle.rotation.y = this.orb1Om * Math.PI / 180;
+  ob1.rotation.y = this.orb1Om * Math.PI / 180;
+  if (this.ocount >= 2) { ob2.rotation.y = this.orb2Om * Math.PI / 180; }
+  if (this.ocount >= 3) { ob3.rotation.y = this.orb3Om * Math.PI / 180; }
 
   while (containerEarth.rotation.y >= Math.PI * 2) { containerEarth.rotation.y -= Math.PI * 2; }
 
   //RENDER ORBIT
   //find location of satellite in 3D space
   var db = this.satsep / g_circ();
+  var psep = this.pairsep / 360;
+  if (this.multiorb) { psep = 0; }
 
   var gracea = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, -this.orb1Om, g_t, this.time);
   var graceca = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, this.orb1Om, g_t, this.time);
   var graceb = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db, -this.orb1Om, g_t, this.time);
   var gracecb = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db, this.orb1Om, g_t, this.time);
-  var gracec = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (2 * db), -this.orb1Om, g_t, this.time);
-  var gracecc = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (2 * db), this.orb1Om, g_t, this.time);
-  var graced = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (3 * db), -this.orb1Om, g_t, this.time);
-  var gracecd = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (3 * db), this.orb1Om, g_t, this.time);
-  var gracee = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (4 * db), -this.orb1Om, g_t, this.time);
-  var gracece = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (4 * db), this.orb1Om, g_t, this.time);
-  var gracef = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (5 * db), -this.orb1Om, g_t, this.time);
-  var gracecf = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (5 * db), this.orb1Om, g_t, this.time);
+  if (this.ocount >= 2)
+  {
+    var gracec = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + psep, -this.orb2Om, g_t, this.time);
+    var gracecc = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + psep, this.orb2Om, g_t, this.time);
+    var graced = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + psep, -this.orb2Om, g_t, this.time);
+    var gracecd = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + psep, this.orb2Om, g_t, this.time);
+    var gracee = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (2*psep), -this.orb3Om, g_t, this.time);
+    var gracece = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (2*psep), this.orb3Om, g_t, this.time);
+    var gracef = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + (2*psep), -this.orb3Om, g_t, this.time);
+    var gracecf = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + (2*psep), this.orb3Om, g_t, this.time);
+  }
+  else
+  {
+    var gracec = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + psep, -this.orb1Om, g_t, this.time);
+    var gracecc = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + psep, this.orb1Om, g_t, this.time);
+    var graced = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + psep, -this.orb1Om, g_t, this.time);
+    var gracecd = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + psep, this.orb1Om, g_t, this.time);
+    var gracee = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (2*psep), -this.orb1Om, g_t, this.time);
+    var gracece = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (2*psep), this.orb1Om, g_t, this.time);
+    var gracef = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + (2*psep), -this.orb1Om, g_t, this.time);
+    var gracecf = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db + (2*psep), this.orb1Om, g_t, this.time);
+  }
 
   //coerce to 2D screen coordinates
   var width = window.innerWidth, height = window.innerHeight;
@@ -461,7 +512,9 @@ function render(delta, now) {
     $("#sattext" + s).css('top', (pa.y - 18).toString() + 'px');
   }
 
-  circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
+  ob1.scale.x = ob1.scale.y = ob1.scale.z = this.exagg;
+  if (this.ocount >= 2) { ob2.scale.x = ob2.scale.y = ob2.scale.z = this.exagg; }
+  if (this.ocount >= 3) { ob3.scale.x = ob3.scale.y = ob3.scale.z = this.exagg; }
 
   //UPDATE CONTROLS
   controls.update();
