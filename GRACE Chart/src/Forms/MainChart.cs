@@ -276,8 +276,9 @@ namespace GRACEChart
                 graceRL05.Clear();
 
                 this.Invoke(new MethodInvoker(delegate { Search(); }));
-                readGLDAS();
                 readRL05();
+                readGLDAS();
+                PostProcess();
                 readGRACE();
             }
 
@@ -339,7 +340,21 @@ namespace GRACEChart
             PointF p1 = adjustedPoint(a);
             PointF p2 = adjustedPoint(b);
             g.DrawLine(myPen, p1, p2);
-        }        
+        }
+
+        public void PostProcess()
+        {
+            for (int k = 0; k < gldas.Count; k++)
+            {
+                PointF p = new PointF(adjustedPoint(gldas[k]).X, adjustedPoint(gldas[k]).Y);
+                gldas[k] = p;
+            }
+            for (int k = 0; k < rl05.Count; k++)
+            {
+                PointF p = new PointF(adjustedPoint(rl05[k]).X, adjustedPoint(rl05[k]).Y);
+                rl05[k] = p;
+            }   
+        }
         
         //*READ GLDAS DATA*// 
         public void readGLDAS()
@@ -363,11 +378,6 @@ namespace GRACEChart
                 filen++;
                 SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
                 SetProgress(filen);
-            }
-            for (int k = 0; k < rl05.Count; k++)
-            {
-                PointF p = new PointF(adjustedPoint(rl05[k]).X, adjustedPoint(rl05[k]).Y);
-                rl05[k] = p;
             }
         }
         //*READ RL-05 DATA*//
@@ -393,11 +403,6 @@ namespace GRACEChart
                 SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
                 SetProgress(filen);
             }
-            for (int k = 0; k < rl05.Count; k++)
-            {
-                PointF p = new PointF(adjustedPoint(rl05[k]).X, adjustedPoint(rl05[k]).Y);
-                rl05[k] = p;
-            }   
         }
         //*READ GRACE DATA*//
         public void readGRACE()
