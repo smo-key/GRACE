@@ -72,9 +72,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChartLib">
-      <HintPath>..\chartlib\obj\x86\Debug\ChartLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -288,6 +285,10 @@
     <None Include="Resources\WorkItem_32xLG.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\chartlib\ChartLib.csproj">
+      <Project>{f2ff6c46-a791-4cae-ab46-bd1a37f3fcd7}</Project>
+      <Name>ChartLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GRACEdata\GRACEdata.csproj">
       <Project>{b257ce19-2c05-4ed4-9b5c-4d813db09dd7}</Project>
       <Name>GRACEdata</Name>

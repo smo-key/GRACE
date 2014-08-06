@@ -63,9 +63,9 @@ namespace GRACEMap
         {
             //** SET SETTINGS **//
             Globals.gridsize = (double)this.gridsize.Value;
-            Structs.PointTime lasttime = new Structs.PointTime();
-            Structs.Anchor anchor = Structs.Anchor.Uniform;
-            if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
+            //Structs.PointTime lasttime = new Structs.PointTime();
+            //Structs.Anchor anchor = Structs.Anchor.Uniform;
+            //if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }
 
             string maxestext = "../../../../output/maxmonth.txt";
             int sublen = 7;

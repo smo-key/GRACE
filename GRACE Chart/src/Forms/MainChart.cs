@@ -35,10 +35,8 @@ namespace GRACEChart
         double lon1;
         double lon2;
         String lastitem = "NaSTy";
-
         double datamin = double.PositiveInfinity;
         double datamax = double.NegativeInfinity;
-
         public MainChart()
         {
             InitializeComponent();
@@ -50,6 +48,9 @@ namespace GRACEChart
             GLDAS.Checked = true;
             RL05.Checked = true;
             GRACE.Checked = true;
+            LocationLabel.Visible = false;
+            MaxText.Visible = false;
+            MinText.Visible = false;
 
             /** GET LIST OF YEAR / MONTH **/
             List<string> ym = new List<string>();
@@ -80,8 +81,7 @@ namespace GRACEChart
             lon1 = x - (size / 2);
             lon2 = x + (size / 2);
             filen = 0;
-        }
-               
+        }   
         public void Search()
         {
             String seltext = "";
@@ -226,7 +226,7 @@ namespace GRACEChart
                 x = 301.0;
                 y = 45.0;
             }
-            else
+            else if (seltext == "Victoria")
             {
                 itemname = "Victoria";
                 x = 32.0;
@@ -246,6 +246,8 @@ namespace GRACEChart
         private void DrawButton_Click(object sender, EventArgs e)
         {
             Progress.Refresh();
+            LocationLabel.Text = Convert.ToString(Location.SelectedItem);
+            LocationLabel.Visible = true;
             g.Clear(Color.Transparent);
             Chart.Refresh();
             Location.Enabled = false;
@@ -254,6 +256,7 @@ namespace GRACEChart
             GRACE.Enabled = false;
             Zero.Enabled = false;
             DrawButton.Enabled = false;
+            SaveImage.Enabled = false;
 
             Thread thread = new Thread(ReadAllData);
             thread.IsBackground = true;
@@ -301,6 +304,17 @@ namespace GRACEChart
             {
                 drawZeroLine(g);
             }
+            if(SaveImage.Checked)
+            {
+                save();
+            }
+            this.Invoke(new MethodInvoker(delegate
+            {
+                MaxText.Text = Convert.ToString(datamax);
+                MinText.Text = Convert.ToString(datamin);
+                MaxText.Visible = true;
+                MinText.Visible = true;
+            }));
 
              //** EXIT **//
             SetProgress(Progress.Maximum);
@@ -318,17 +332,39 @@ namespace GRACEChart
                 lastitem = Location.SelectedItem.ToString();
             }));
         }
-        private void Border_Paint(object sender, PaintEventArgs e)
+    
+        //*SAVE*//
+        public void save()
         {
-
+            SetStatus("Saving Image...");
+            SaveFrame("../../../output-chart");
         }
-        private void label1_Click(object sender, EventArgs e)
-        {
 
-        }
-        private void yAxis_Click(object sender, EventArgs e)
+        //*SAVE FRAME*//
+        private void SaveFrame(string name)
         {
+            SetStatus("Saving Image...");
+            Rectangle b = this.Bounds;
+            Rectangle bounds = new Rectangle(b.Left, b.Top + 102, 801, 400);
 
+            this.Invoke(new MethodInvoker(delegate
+            {
+                this.TopMost = true;
+                dragenabled = false;
+            }));
+
+            File.Delete(name);
+
+            Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+            g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+            bitmap.Save(name + ".png", System.Drawing.Imaging.ImageFormat.Png);
+
+            this.Invoke(new MethodInvoker(delegate
+            {
+                this.TopMost = false;
+                dragenabled = true;
+            }));
         }
 
         //*DRAWS LINE AT Y = 0*//
@@ -341,7 +377,6 @@ namespace GRACEChart
             PointF p2 = adjustedPoint(b);
             g.DrawLine(myPen, p1, p2);
         }
-
         public void PostProcess()
         {
             for (int k = 0; k < gldas.Count; k++)
@@ -355,7 +390,7 @@ namespace GRACEChart
                 rl05[k] = p;
             }   
         }
-        
+
         //*READ GLDAS DATA*// 
         public void readGLDAS()
         {
@@ -380,6 +415,7 @@ namespace GRACEChart
                 SetProgress(filen);
             }
         }
+
         //*READ RL-05 DATA*//
         public void readRL05()
         {
@@ -404,6 +440,7 @@ namespace GRACEChart
                 SetProgress(filen);
             }
         }
+
         //*READ GRACE DATA*//
         public void readGRACE()
         {
@@ -465,6 +502,7 @@ namespace GRACEChart
             }
 
         }
+
         //*GLDAS GRAPH*//
         public void showGLDAS(Graphics g)
         {
@@ -550,12 +588,10 @@ namespace GRACEChart
             float x = (float)t * (float)Chart.Width / 8784.0f;
             return x;
         }
-
         private void Progress_Click(object sender, EventArgs e)
         {
 
         }
-
         private void Status_Click(object sender, EventArgs e)
         {
 
@@ -568,13 +604,23 @@ namespace GRACEChart
         {
             Status.Invoke(new MethodInvoker(delegate { Status.Text = "       " + message; }));
         }
-
         private void Chart_Paint(object sender, PaintEventArgs e)
         {
             g = Chart.CreateGraphics();
         }
-
         private void Chart_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void Border_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void yAxis_Click(object sender, EventArgs e)
         {
 
         }
