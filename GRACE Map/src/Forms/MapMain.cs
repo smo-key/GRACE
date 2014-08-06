@@ -457,10 +457,18 @@ namespace GRACEMap
             }
 
             //save image (only one)
+            //save image (only one)
             SetStatus("Saving image...");
-            if (SaveImage.Checked) 
+            if (SaveImage.Checked)
             {
-                gif.Save("../../../output.png", System.Drawing.Imaging.ImageFormat.Png);
+                if (!Transp.Checked)
+                {
+                    SaveFrame("../../../output");
+                }
+                else
+                {
+                    gif.Save("../../../output.png", System.Drawing.Imaging.ImageFormat.Png);
+                }
             }
 
             //** EXIT **//
@@ -493,7 +501,7 @@ namespace GRACEMap
             return;
         }
 
-        /*private void SaveFrame(string name)
+        private void SaveFrame(string name)
         {
             SetStatus("Saving image...");
             Rectangle b = this.Bounds;
@@ -510,14 +518,14 @@ namespace GRACEMap
             Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
             Graphics g = Graphics.FromImage(bitmap);
             g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-            bitmap.Save(name + ".gif", System.Drawing.Imaging.ImageFormat.Gif);
+            bitmap.Save(name + ".png", System.Drawing.Imaging.ImageFormat.Png);
 
             this.Invoke(new MethodInvoker(delegate
             {
                 this.TopMost = false;
                 dragenabled = true;
             }));
-        }*/
+        }
 
         private void DrawScale(int max)
         {
