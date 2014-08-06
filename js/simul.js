@@ -68,6 +68,8 @@ countupdate.onChange(function(value){
     $("#satcirclef").css('display', 'none');
     $("#sattextf").css('display', 'none');
   }
+
+  updateOrbitStat();
 });
 
 sats.add(this, 'satsep', 0, 10000).name("Separation (km)");
@@ -78,8 +80,26 @@ this.orb2Om = 180;
 this.orb3Om = 270;
 
 var orbs = gui.addFolder("Orbits");
-orbs.add(this, 'multiorb').name("Multiple Orbits");
-orbs.add(this, 'orb1Om', 0, 360).name("Orbit 1 &Omega;");
+var multchange = orbs.add(this, 'multiorb').name("Multiple Orbits");
+this.o1 = orbs.add(this, 'orb1Om', 0, 360).name("Orbit 1 &Omega;");
+//this.o2 = orbs.add(this, 'orb2Om', 0, 360).name("Orbit 2 &Omega;");
+//this.o3 = orbs.add(this, 'orb3Om', 0, 360).name("Orbit 3 &Omega;");
+
+multchange.onChange(function(value){
+  updateOrbitStat();
+});
+
+function updateOrbitStat() {
+  if (this.o2 !== undefined) { this.o2 = orbs.remove(this.o2); }
+  if (this.o3 !== undefined) { this.o3 = orbs.remove(this.o3); }
+  if (this.satcount >= 2 && this.multiorb) {
+    this.o2 = orbs.add(this, 'orb2Om', 0, 360).name("Orbit 2 &Omega;");
+  }
+  if (this.satcount >= 3 && this.multiorb) {
+    this.o3 = orbs.add(this, 'orb3Om', 0, 360).name("Orbit 3 &Omega;");
+  }
+}
+
 
 var renderer, scene, camera, light, controls;
 var starSphere, containerEarth;
