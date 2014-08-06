@@ -13,13 +13,6 @@ this.saveimage = function()
 this.satcount = 2;
 this.satsep = 200;
 
-var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
-var siderealday = 86164.1 / 86400; //seconds in a sidereal day / solar day
-var tropicalyear = 31556926.08; //seconds in one revolution around the Earth
-var earthaxistilt = 23.4; //in degrees, difference from true north and celestial north
-var earthradius = 6378.1; //in kilometers
-var PI_HALF = Math.PI / 2; //tau
-
 //*** DATGUI ***//
 var gui = new dat.GUI({ autoPlace: false });
 var customContainer = document.getElementById('gui-container');

@@ -7,6 +7,14 @@ var g_om = 0; //argument of periapsis, from plane of reference to periapsis
 var g_t = 0; //time of periapsis passage
 var g_period = 1690; //seconds per revolution
 
+var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
+var siderealday = 86164.1 / 86400; //seconds in a sidereal day / solar day
+var solaryear = 365.2422 / 365; //days in a solar year / sidereal year
+var tropicalyear = 31556926.08; //seconds in one revolution around the Earth
+var earthaxistilt = 23.4; //in degrees, difference from true north and celestial north
+var earthradius = 6378.1; //in kilometers
+var PI_HALF = Math.PI / 2; //tau
+
 function g_circ() {
   return 2 * Math.PI * g_a;
 }

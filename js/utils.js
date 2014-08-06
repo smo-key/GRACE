@@ -2,6 +2,7 @@ this.year = '2002';
 this.month = '04';
 this.ym = '2002-04';
 this.time = 0; //time in seconds
+this.sidereal = false;
 
 //*** FULL SCREEN ***//
 function fullscreen() {
@@ -115,11 +116,31 @@ function clearSimul() {
              new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
              new THREE.Vector2(-1, -1)];
 }
+function changeDateFormat()
+{
+  if (this.sidereal) {
+    $('#timesidereal').html('Solar Day (switch)');
+    this.sidereal = false;
+  }
+  else {
+    $('#timesidereal').html('Sidereal Day (switch)');
+    this.sidereal = true;
+  }
+}
 function updateTime()
 {
   var t = this.time;
-  var d = Math.floor(t / 86400);
-  t -= d * 86400;
+  var d, h;
+  if (this.sidereal)
+  {
+    var d = Math.floor(t / (86400 * siderealday));
+    t -= d * (86400 * siderealday);
+  }
+  else
+  {
+    var d = Math.floor(t / 86400);
+    t -= d * 86400;
+  }
   var h = Math.floor(t / 3600);
   t -= h * 3600;
   var m = Math.floor(t / 60);

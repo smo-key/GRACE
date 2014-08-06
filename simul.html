@@ -41,7 +41,8 @@
     <div id="resetbutton" href="" onClick="resetSimul();"><span class="mega-octicon octicon-history fadeicon"></span></div>
     
     <div class="timerlabel" id="timer">T+ 00:00:00:00</div>
-    <div class="timetype" style="bottom: 4px; left: 113px;">UTC</div>
+    <div class="timetype" id="timeutc" style="bottom: 3px; left: 113px;">UTC</div>
+    <div class="timetype fadeicon" id="timesidereal" onClick="changeDateFormat();" style="bottom: 3px; left: 140px;">Solar Day (switch)</div>
     
     <!--  3D Rendering  -->
     <div id="container"></div>
