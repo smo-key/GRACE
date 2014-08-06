@@ -7,6 +7,10 @@ var g_om = 0; //argument of periapsis, from plane of reference to periapsis
 var g_t = 0; //time of periapsis passage
 var g_period = 1690; //seconds per revolution
 
+function g_circ() {
+  return 2 * Math.PI * g_a;
+}
+
 //need r, v (perifocal system)
 
 //circular orbit, no eccentricity, SUPER simplified

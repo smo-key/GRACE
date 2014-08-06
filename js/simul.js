@@ -1,4 +1,5 @@
 //*** GLOBALS ***//
+this.display = '3D Globe';
 this.darkglobe = false;
 this.speed = 1.0;
 this.exagg = 1.2;
@@ -9,6 +10,8 @@ this.saveimage = function()
   var canvas = document.getElementById("maincanvas");
   saveImage(canvas);
 };
+this.satcount = 2;
+this.satsep = 200;
 
 var deltarealt = 2.778; //set zero to realtime (1 delta = 1 second)
 var siderealday = 86164.1 / 86400; //seconds in a sidereal day / solar day
@@ -27,7 +30,6 @@ var globeupdate = gui.add(this, 'darkglobe' ).name("Night View");
 var sizeupdate = gui.add(this, 'binsize', 0.5, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
-  //binsize = 3.0;
   clearSimul()
 });
 gui.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
@@ -35,6 +37,21 @@ gui.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
 gui.add(this, 'drawalpha', 0.0, 7.0).name("Draw Brightness");
 gui.add(this, 'saveimage').name("Save Image");
 
+var sats = gui.addFolder("Satellites");
+var countupdate = sats.add(this, 'satcount', 1, 2).name("Count");
+countupdate.onChange(function(value){
+  satcount = Math.floor(satcount);
+
+  if (satcount >= 2) {
+    $("#satcircleb").css('display', 'block');
+    $("#sattextb").css('display', 'block');
+  } else {
+    $("#satcircleb").css('display', 'none');
+    $("#sattextb").css('display', 'none');
+  }
+
+});
+var sepupdate = sats.add(this, 'satsep', 0, 2500).name("Seperation (km)");
 
 var renderer, scene, camera, light, controls;
 var starSphere, containerEarth;
@@ -139,7 +156,7 @@ function init() {
   //*** GRACE ORBIT ***//
   radius   = g_a / earthradius;
   segments = 64;
-  ccolor = 0x0044ff;
+  ccolor = 0x888888;
   material = new THREE.LineBasicMaterial( { color: ccolor } );
   projector = new THREE.Projector();
 
@@ -301,19 +318,14 @@ function render(delta, now) {
   //RENDER ORBIT
   //find location of satellite in 3D space
   var grace = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
+  var gracea = grace.clone();
+
+  var db = this.satsep / g_a;
+  var graceb = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db, g_t, this.time);
 
   //coerce to 2D screen coordinates
   var width = window.innerWidth, height = window.innerHeight;
   var widthHalf = width / 2, heightHalf = height / 2;
-
-  //vector = 2d projected vector for orbit
-  var vector = new THREE.Vector3(grace.x,  grace.y, grace.z);
-  var projector = new THREE.Projector();
-  projector.projectVector( vector, camera );
-
-  vector.x = (( vector.x * widthHalf ) + widthHalf);
-  vector.y = (-( vector.y * heightHalf ) + heightHalf);
-  vector.z = 1;
 
   //groundtrack point
   var uv = sphere_uv(grace);
@@ -355,12 +367,32 @@ function render(delta, now) {
   meshOverlay.rotation.y = containerEarth.rotation.y;
 
   //update display
-  $("#satcircle").css('display', 'block');
-  $("#satcircle").css('left', (vector.x - 2).toString() + 'px');
-  $("#satcircle").css('top', (vector.y - 2).toString() + 'px');
-  $("#sattext").css('display', 'block');
-  $("#sattext").css('left', (vector.x - 2).toString() + 'px');
-  $("#sattext").css('top', (vector.y - 18).toString() + 'px');
+  var pa = new THREE.Vector3(gracea.x,  gracea.y, gracea.z);
+  var projector = new THREE.Projector();
+  projector.projectVector( pa, camera );
+  pa.x = (( pa.x * widthHalf ) + widthHalf);
+  pa.y = (-( pa.y * heightHalf ) + heightHalf);
+  pa.z = 1;
+  $("#satcirclea").css('display', 'block');
+  $("#satcirclea").css('left', (pa.x - 2).toString() + 'px');
+  $("#satcirclea").css('top', (pa.y - 2).toString() + 'px');
+  $("#sattexta").css('display', 'block');
+  $("#sattexta").css('left', (pa.x - 2).toString() + 'px');
+  $("#sattexta").css('top', (pa.y - 18).toString() + 'px');
+  if (satcount >= 2) {
+    var pb = new THREE.Vector3(graceb.x,  graceb.y, graceb.z);
+    var projector = new THREE.Projector();
+    projector.projectVector( pb, camera );
+    pb.x = (( pb.x * widthHalf ) + widthHalf);
+    pb.y = (-( pb.y * heightHalf ) + heightHalf);
+    pb.z = 1;
+    $("#satcircleb").css('display', 'block');
+    $("#satcircleb").css('left', (pb.x - 2).toString() + 'px');
+    $("#satcircleb").css('top', (pb.y - 2).toString() + 'px');
+    $("#sattextb").css('display', 'block');
+    $("#sattextb").css('left', (pb.x - 2).toString() + 'px');
+    $("#sattextb").css('top', (pb.y - 18).toString() + 'px');
+  }
 
   circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;
 
