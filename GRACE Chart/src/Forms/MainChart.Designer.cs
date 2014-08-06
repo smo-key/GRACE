@@ -55,6 +55,7 @@
             this.MinText = new System.Windows.Forms.Label();
             this.MaxText = new System.Windows.Forms.Label();
             this.Delta = new System.Windows.Forms.Label();
+            this.SimGRACE = new System.Windows.Forms.CheckBox();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -63,6 +64,7 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.SimGRACE);
             this.Border.Controls.Add(this.Delta);
             this.Border.Controls.Add(this.MaxText);
             this.Border.Controls.Add(this.MinText);
@@ -109,6 +111,7 @@
             this.Border.Controls.SetChildIndex(this.MinText, 0);
             this.Border.Controls.SetChildIndex(this.MaxText, 0);
             this.Border.Controls.SetChildIndex(this.Delta, 0);
+            this.Border.Controls.SetChildIndex(this.SimGRACE, 0);
             // 
             // TopPanel
             // 
@@ -143,7 +146,7 @@
             this.SaveImage.AutoSize = true;
             this.SaveImage.Checked = true;
             this.SaveImage.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.SaveImage.Location = new System.Drawing.Point(697, 246);
+            this.SaveImage.Location = new System.Drawing.Point(697, 280);
             this.SaveImage.Name = "SaveImage";
             this.SaveImage.Size = new System.Drawing.Size(83, 17);
             this.SaveImage.TabIndex = 50;
@@ -212,6 +215,7 @@
             this.GRACE.TabIndex = 55;
             this.GRACE.Text = "Show GRACE";
             this.GRACE.UseVisualStyleBackColor = true;
+            this.GRACE.CheckedChanged += new System.EventHandler(this.GRACE_CheckedChanged);
             // 
             // LocationText
             // 
@@ -422,7 +426,7 @@
             this.Zero.AutoSize = true;
             this.Zero.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Zero.ForeColor = System.Drawing.Color.Black;
-            this.Zero.Location = new System.Drawing.Point(697, 182);
+            this.Zero.Location = new System.Drawing.Point(697, 216);
             this.Zero.Name = "Zero";
             this.Zero.Size = new System.Drawing.Size(101, 17);
             this.Zero.TabIndex = 70;
@@ -474,6 +478,18 @@
             this.Delta.TabIndex = 74;
             this.Delta.Text = "Δ";
             // 
+            // SimGRACE
+            // 
+            this.SimGRACE.AutoSize = true;
+            this.SimGRACE.ForeColor = System.Drawing.Color.Crimson;
+            this.SimGRACE.Location = new System.Drawing.Point(697, 151);
+            this.SimGRACE.Name = "SimGRACE";
+            this.SimGRACE.Size = new System.Drawing.Size(102, 30);
+            this.SimGRACE.TabIndex = 75;
+            this.SimGRACE.Text = "Show Simulated\r\nGRACE";
+            this.SimGRACE.UseVisualStyleBackColor = true;
+            this.SimGRACE.CheckedChanged += new System.EventHandler(this.SimGRACE_CheckedChanged);
+            // 
             // MainChart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -518,5 +534,6 @@
         private System.Windows.Forms.Label MaxText;
         private System.Windows.Forms.Label MinText;
         private System.Windows.Forms.Label Delta;
+        private System.Windows.Forms.CheckBox SimGRACE;
     }
 }

@@ -17,12 +17,16 @@ namespace GRACEChart
     {   
         String[] GLDASData = new String[] {};
         String[] RL05Data = new String[] {};
+        String[] SimData = new String[] {};
         List<String> GRACEData = new List<string>();
         List<PointF> gldas = new List<PointF>();
         List<PointF> rl05 = new List<PointF>();
         List<PointF> grace = new List<PointF>();
         List<PointF> graceGLDAS = new List<PointF>();
         List<PointF> graceRL05 = new List<PointF>();
+        List<PointF> sim = new List<PointF>();
+        List<PointF> simGLDAS = new List<PointF>();
+        List<PointF> simRL05 = new List<PointF>();
         Graphics g;
         int max;
         int max2;
@@ -50,9 +54,7 @@ namespace GRACEChart
             MinText.Visible = false;
             ZeroLabel.Visible = false;
 
-
-
-            /** GET LIST OF YEAR / MONTH **/
+            /** GET GRACE DATA**/
             List<string> ym = new List<string>();
             string[] list = Directory.GetFiles("../../../../../gracedata/groundtrack/", "*.latlon", SearchOption.TopDirectoryOnly);
             foreach (string file in list)
@@ -74,7 +76,7 @@ namespace GRACEChart
                 FileInfo info = new FileInfo(i);
                 if (ym.Contains(info.Name.Substring(0, 7))) { GRACEData.Add(i); }
             }
-
+            
             size = 3.00;
             lat1 = y + (size / 2);
             lat2 = y - (size / 2);
@@ -236,8 +238,22 @@ namespace GRACEChart
             }
             GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", itemname + "*");
             RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", itemname + "*");
-            max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
-            max2 = gldas.Count + rl05.Count + grace.Count + graceGLDAS.Count + graceRL05.Count;
+
+
+            //*GET SIM DATA*//
+            SimData = System.IO.Directory.GetFiles("../../../../../gracedata/simulated");
+
+
+            if(GRACE.Checked)
+            {
+                max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
+                max2 = gldas.Count + rl05.Count + grace.Count + graceGLDAS.Count + graceRL05.Count;
+            }
+            if (SimGRACE.Checked)
+            {
+                max = GLDASData.Length + RL05Data.Length + SimData.Length;
+                max2 = gldas.Count + rl05.Count + sim.Count + simGLDAS.Count + simRL05.Count;
+            }
             Progress.Value = 0;
             filen = 0;
             Progress.Maximum = max + max2;
@@ -255,6 +271,7 @@ namespace GRACEChart
             GLDAS.Enabled = false;
             RL05.Enabled = false;
             GRACE.Enabled = false;
+            SimGRACE.Enabled = false;
             Zero.Enabled = false;
             DrawButton.Enabled = false;
             SaveImage.Enabled = false;
@@ -279,12 +296,18 @@ namespace GRACEChart
                 grace.Clear();
                 graceGLDAS.Clear();
                 graceRL05.Clear();
-
                 this.Invoke(new MethodInvoker(delegate { Search(); }));
                 readRL05();
                 readGLDAS();
                 PostProcess();
-                readGRACE();
+                if(GRACE.Checked)
+                {
+                    readGRACE();
+                }
+                if(SimGRACE.Checked)
+                {
+                    readSim();
+                }
             }
 
             if (GLDAS.Checked)
@@ -302,6 +325,10 @@ namespace GRACEChart
                 showGRACE(g);
             }
 
+            if (SimGRACE.Checked)
+            {
+                simGRACE(g);
+            }
             if (Zero.Checked)
             {
                 drawZeroLine(g);
@@ -335,6 +362,7 @@ namespace GRACEChart
                 GLDAS.Enabled = true;
                 RL05.Enabled = true;
                 GRACE.Enabled = true;
+                SimGRACE.Enabled = true;
                 Zero.Enabled = true;
                 if (SaveImage.Checked)
                 {
@@ -585,6 +613,109 @@ namespace GRACEChart
             }
         }
 
+        //*READ SIM*//
+        public void readSim()
+        {
+            foreach (string file in SimData)
+            {
+                StreamReader reader = new StreamReader(file);
+                while (!reader.EndOfStream)
+                {
+                    string s = reader.ReadLine();
+                    string[] parameters = s.Split(' ');
+                    int count = parameters.Length;
+                    double time = ((Convert.ToDouble(parameters[0]))/3600); //Converts Seconds To Hours
+                    int t = (int)(Math.Floor(time));
+                    double lat = Convert.ToDouble(parameters[1]);
+                    double lon = Convert.ToDouble(parameters[2]);
+                    if (lat <= lat1 && lat >= lat2 && lon >= lon1 && lon <= lon2 && t <= 8784)
+                    {
+
+                        if (3 % t == 0)
+                        {
+                            int n = t / 3;
+                            float h = gldas[n].Y;
+                            PointF p = new PointF(t, h);
+                            simGLDAS.Add(adjustedPoint(p));
+                        }
+                        else
+                        {
+                            int n1 = (int)Math.Floor((double)t / (double)3);
+                            float h = gldas[n1].Y;
+                            PointF p = new PointF(adjustedTime(t), h);
+                            simGLDAS.Add(p);
+                        }
+
+                        if (6 % t == 0)
+                        {
+                            int n = t / 6;
+                            float h = rl05[n].Y;
+                            PointF p = new PointF(t, h);
+                            simRL05.Add(adjustedPoint(p));
+                        }
+                        else
+                        {
+                            int n1 = (int)Math.Floor((double)t / (double)6);
+                            float h = rl05[n1].Y;
+                            PointF p = new PointF(adjustedTime(t), h);
+                            simRL05.Add(p);
+                        }
+
+                        float height = 0.0f;
+                        PointF p2 = new PointF(t, height);
+                        sim.Add(adjustedPoint(p2));
+                    }
+                }
+                filen++;
+                SetStatus(string.Format("Reading {0}...", Path.GetFileName(file)));
+                SetProgress(filen);
+            }
+        }
+
+        //*GRACE GRAPH(S)*//
+        public void simGRACE(Graphics g)
+        {
+            SolidBrush myBrush = new SolidBrush(Color.Crimson);
+            Pen myPen = new Pen(Color.Crimson);
+            SetStatus("Creating GRACE Simulation Graph");
+            SetProgress(filen);
+
+            //*DRAW POINTS*//
+            if(GLDAS.Checked && RL05.Checked)
+            {
+                foreach(PointF p in simGLDAS)
+                {
+                    g.FillEllipse(myBrush, p.X - 2, p.Y - 2, 4, 4);
+                }
+                foreach (PointF p2 in simRL05)
+                {
+                    g.FillEllipse(myBrush, p2.X - 2, p2.Y - 2, 4, 4);
+                }
+
+            }
+            if (GLDAS.Checked && !RL05.Checked)
+            {
+                foreach (PointF p3 in simGLDAS)
+                {
+                    g.FillEllipse(myBrush, p3.X - 2, p3.Y - 2, 4, 4);
+                }
+            }
+            if (!GLDAS.Checked && RL05.Checked)
+            {
+                foreach (PointF p4 in simRL05)
+                {
+                    g.FillEllipse(myBrush, p4.X - 2, p4.Y - 2, 4, 4);
+                }
+            }
+            if (!GLDAS.Checked && !RL05.Checked)
+            {
+                foreach (PointF p5 in sim)
+                {
+                    g.FillEllipse(myBrush, p5.X - 2, p5.Y - 2, 4, 4);
+                }
+            }
+        }
+        
         //*MOVE ZERO*//
         public void moveZero()
         {
@@ -639,6 +770,22 @@ namespace GRACEChart
         private void yAxis_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void SimGRACE_CheckedChanged(object sender, EventArgs e)
+        {
+            if(SimGRACE.Checked)
+            {
+                GRACE.Checked = false;
+            }
+        }
+
+        private void GRACE_CheckedChanged(object sender, EventArgs e)
+        {
+            if(GRACE.Checked)
+            {
+                SimGRACE.Checked = false;
+            } 
         }
     }
 }
