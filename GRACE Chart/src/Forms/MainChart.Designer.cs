@@ -54,6 +54,7 @@
             this.LocationLabel = new System.Windows.Forms.Label();
             this.MinText = new System.Windows.Forms.Label();
             this.MaxText = new System.Windows.Forms.Label();
+            this.Delta = new System.Windows.Forms.Label();
             this.Border.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
@@ -62,6 +63,7 @@
             // 
             // Border
             // 
+            this.Border.Controls.Add(this.Delta);
             this.Border.Controls.Add(this.MaxText);
             this.Border.Controls.Add(this.MinText);
             this.Border.Controls.Add(this.LocationLabel);
@@ -106,6 +108,7 @@
             this.Border.Controls.SetChildIndex(this.LocationLabel, 0);
             this.Border.Controls.SetChildIndex(this.MinText, 0);
             this.Border.Controls.SetChildIndex(this.MaxText, 0);
+            this.Border.Controls.SetChildIndex(this.Delta, 0);
             // 
             // TopPanel
             // 
@@ -113,9 +116,9 @@
             // 
             // Title
             // 
-            this.Title.Location = new System.Drawing.Point(258, 6);
-            this.Title.Size = new System.Drawing.Size(287, 17);
-            this.Title.Text = "GRACE Frequency Chart Analytic Tools (GFCATS)";
+            this.Title.Location = new System.Drawing.Point(255, 6);
+            this.Title.Size = new System.Drawing.Size(292, 17);
+            this.Title.Text = "GRACE Frequency Chart Analytic Tools (GF-CATS)";
             // 
             // CloseForm
             // 
@@ -180,7 +183,7 @@
             this.DrawButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.DrawButton.Image = global::GRACEChart.Properties.Resources.StatusAnnotations_Play_32xLG_color;
             this.DrawButton.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.DrawButton.Location = new System.Drawing.Point(11, 35);
+            this.DrawButton.Location = new System.Drawing.Point(11, 30);
             this.DrawButton.Name = "DrawButton";
             this.DrawButton.Size = new System.Drawing.Size(158, 41);
             this.DrawButton.TabIndex = 54;
@@ -206,11 +209,11 @@
             // 
             this.LocationText.AutoSize = true;
             this.LocationText.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.LocationText.Location = new System.Drawing.Point(498, 35);
+            this.LocationText.Location = new System.Drawing.Point(492, 49);
             this.LocationText.Name = "LocationText";
-            this.LocationText.Size = new System.Drawing.Size(48, 13);
+            this.LocationText.Size = new System.Drawing.Size(51, 13);
             this.LocationText.TabIndex = 58;
-            this.LocationText.Text = "Location";
+            this.LocationText.Text = "Location:";
             // 
             // Location
             // 
@@ -241,7 +244,7 @@
             "Sao Paulo",
             "StLNewFL",
             "Victoria"});
-            this.Location.Location = new System.Drawing.Point(501, 55);
+            this.Location.Location = new System.Drawing.Point(546, 46);
             this.Location.Name = "Location";
             this.Location.Size = new System.Drawing.Size(144, 21);
             this.Location.TabIndex = 59;
@@ -435,7 +438,7 @@
             this.MinText.AutoSize = true;
             this.MinText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinText.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.MinText.Location = new System.Drawing.Point(62, 488);
+            this.MinText.Location = new System.Drawing.Point(44, 488);
             this.MinText.Name = "MinText";
             this.MinText.Size = new System.Drawing.Size(13, 13);
             this.MinText.TabIndex = 72;
@@ -446,11 +449,22 @@
             this.MaxText.AutoSize = true;
             this.MaxText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaxText.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.MaxText.Location = new System.Drawing.Point(62, 79);
+            this.MaxText.Location = new System.Drawing.Point(44, 79);
             this.MaxText.Name = "MaxText";
             this.MaxText.Size = new System.Drawing.Size(13, 13);
             this.MaxText.TabIndex = 73;
             this.MaxText.Text = "0";
+            // 
+            // Delta
+            // 
+            this.Delta.AutoSize = true;
+            this.Delta.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.Delta.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Delta.Location = new System.Drawing.Point(25, 246);
+            this.Delta.Name = "Delta";
+            this.Delta.Size = new System.Drawing.Size(17, 17);
+            this.Delta.TabIndex = 74;
+            this.Delta.Text = "Δ";
             // 
             // MainChart
             // 
@@ -459,7 +473,7 @@
             this.ClientSize = new System.Drawing.Size(803, 571);
             this.Name = "MainChart";
             this.Text = "MainChart";
-            this.title = "GRACE Frequency Chart Analytic Tools (GFCATS)";
+            this.title = "GRACE Frequency Chart Analytic Tools (GF-CATS)";
             this.Border.ResumeLayout(false);
             this.Border.PerformLayout();
             this.TopPanel.ResumeLayout(false);
@@ -495,5 +509,6 @@
         private System.Windows.Forms.Label LocationLabel;
         private System.Windows.Forms.Label MaxText;
         private System.Windows.Forms.Label MinText;
+        private System.Windows.Forms.Label Delta;
     }
 }

@@ -110,8 +110,9 @@
             // 
             // Title
             // 
-            this.Title.Size = new System.Drawing.Size(142, 17);
-            this.Title.Text = "GRACE Frequency Map";
+            this.Title.Location = new System.Drawing.Point(330, 6);
+            this.Title.Size = new System.Drawing.Size(292, 17);
+            this.Title.Text = "GRACE Frequency Map Analytic Tools (GF-MATS)";
             // 
             // CloseForm
             // 
@@ -421,7 +422,7 @@
             this.ClientSize = new System.Drawing.Size(803, 571);
             this.Name = "MapMain";
             this.Text = "GRACE Frequency Mapper";
-            this.title = "GRACE Frequency Map";
+            this.title = "GRACE Frequency Map Analytic Tools (GF-MATS)";
             this.Border.ResumeLayout(false);
             this.Border.PerformLayout();
             this.TopPanel.ResumeLayout(false);

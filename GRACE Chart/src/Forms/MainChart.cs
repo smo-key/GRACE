@@ -304,14 +304,11 @@ namespace GRACEChart
             {
                 drawZeroLine(g);
             }
-            if(SaveImage.Checked)
-            {
-                save();
-            }
+
             this.Invoke(new MethodInvoker(delegate
             {
-                MaxText.Text = Convert.ToString(datamax);
-                MinText.Text = Convert.ToString(datamin);
+                MaxText.Text = datamax.ToString("F2");
+                MinText.Text = datamin.ToString("F2");
                 MaxText.Visible = true;
                 MinText.Visible = true;
             }));
@@ -321,14 +318,18 @@ namespace GRACEChart
             this.Invoke(new MethodInvoker(delegate
             {
                 DrawButton.Enabled = true;
-                SetStatus("Completed Successfully!");
                 CloseForm.Enabled = true;
-                SaveImage.Enabled = false;
+                SaveImage.Enabled = true;
                 Location.Enabled = true;
                 GLDAS.Enabled = true;
                 RL05.Enabled = true;
                 GRACE.Enabled = true;
                 Zero.Enabled = true;
+                if (SaveImage.Checked)
+                {
+                    save();
+                }
+                SetStatus("Completed Successfully!");
                 lastitem = Location.SelectedItem.ToString();
             }));
         }
@@ -337,7 +338,7 @@ namespace GRACEChart
         public void save()
         {
             SetStatus("Saving Image...");
-            SaveFrame("../../../output-chart");
+            SaveFrame("../../../../output/chart");
         }
 
         //*SAVE FRAME*//
@@ -345,20 +346,19 @@ namespace GRACEChart
         {
             SetStatus("Saving Image...");
             Rectangle b = this.Bounds;
-            Rectangle bounds = new Rectangle(b.Left, b.Top + 102, 801, 400);
+            Rectangle bounds = new Rectangle(b.Left + 2, b.Top + 76,800, 459);
 
             this.Invoke(new MethodInvoker(delegate
             {
                 this.TopMost = true;
                 dragenabled = false;
             }));
-
-            File.Delete(name);
-
+            File.Delete(name + ".png");
             Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height);
             Graphics g = Graphics.FromImage(bitmap);
             g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
             bitmap.Save(name + ".png", System.Drawing.Imaging.ImageFormat.Png);
+            
 
             this.Invoke(new MethodInvoker(delegate
             {
