@@ -33,9 +33,10 @@ function g_findperiod() {
 //i: Inclination angle (deg)
 //p: Period (t)
 //om: Argument of periapsis (deg)
+//Om: Longitude of ascending node (deg)
 //T: Time of periapsis passage (t)
 //t: Current time
-function orbit_circle(a, i, p, om, T, t)
+function orbit_circle(a, i, p, om, Om, T, t)
 {
   //calculate on 2D plane
   var deg = ((t - T) / p + om) * 360; //time difference / period = location
@@ -49,6 +50,12 @@ function orbit_circle(a, i, p, om, T, t)
   var axis = new THREE.Vector3( 1, 0, 0 );
   var angle = (i - 90) * Math.PI / 180;
   var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
+  orbit.applyMatrix4( matrix );
+
+  //tilt spherical coords by longitude of ascending node
+  axis = new THREE.Vector3( 0, 1, 0 );
+  angle = Om * Math.PI / 180;
+  matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
   orbit.applyMatrix4( matrix );
 
   return orbit;
