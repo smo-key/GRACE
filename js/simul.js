@@ -38,7 +38,7 @@ gui.add(this, 'drawalpha', 0.0, 7.0).name("Draw Brightness");
 gui.add(this, 'saveimage').name("Save Image");
 
 var sats = gui.addFolder("Satellites");
-var countupdate = sats.add(this, 'satcount', 1, 2).name("Count");
+var countupdate = sats.add(this, 'satcount', 1, 5).name("Count");
 countupdate.onChange(function(value){
   satcount = Math.floor(satcount);
 
@@ -49,9 +49,29 @@ countupdate.onChange(function(value){
     $("#satcircleb").css('display', 'none');
     $("#sattextb").css('display', 'none');
   }
-
+  if (satcount >= 3) {
+    $("#satcirclec").css('display', 'block');
+    $("#sattextc").css('display', 'block');
+  } else {
+    $("#satcirclec").css('display', 'none');
+    $("#sattextc").css('display', 'none');
+  }
+  if (satcount >= 4) {
+    $("#satcircled").css('display', 'block');
+    $("#sattextd").css('display', 'block');
+  } else {
+    $("#satcircled").css('display', 'none');
+    $("#sattextd").css('display', 'none');
+  }
+  if (satcount >= 5) {
+    $("#satcirclee").css('display', 'block');
+    $("#sattexte").css('display', 'block');
+  } else {
+    $("#satcirclee").css('display', 'none');
+    $("#sattexte").css('display', 'none');
+  }
 });
-var sepupdate = sats.add(this, 'satsep', 0, g_circ()).name("Seperation (km)");
+var sepupdate = sats.add(this, 'satsep', 0, 10000).name("Seperation (km)");
 
 var renderer, scene, camera, light, controls;
 var starSphere, containerEarth;
@@ -64,11 +84,16 @@ var circle, meshOverlay;
 var overRenderer;
 var points;
 
-var lastbin = new THREE.Vector2(-1, -1);
+var lastbin = [new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
+               new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
+               new THREE.Vector2(-1, -1)];
 this.geo30 = new THREE.Geometry();
 
 //*** INITIALIZE THREE.JS ***//
 function init() {
+  //Prepare Maths
+  g_findperiod();
+
   renderer = new THREE.WebGLRenderer({
     antialias: true
   });
@@ -317,40 +342,59 @@ function render(delta, now) {
 
   //RENDER ORBIT
   //find location of satellite in 3D space
-  var grace = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
-  var gracea = grace.clone();
-
   var db = this.satsep / g_circ();
+
+  var gracea = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om, g_t, this.time);
+  var graceca = gracea.clone();
   var graceb = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + db, g_t, this.time);
-  var gracecb = grace.clone();
+  var gracecb = graceb.clone();
+  var gracec = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (2 * db), g_t, this.time);
+  var gracecc = gracec.clone();
+  var graced = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (3 * db), g_t, this.time);
+  var gracecd = graced.clone();
+  var gracee = orbit_circle(g_a / earthradius * this.exagg, 89, g_period, g_om + (4 * db), g_t, this.time);
+  var gracece = gracee.clone();
 
   //coerce to 2D screen coordinates
   var width = window.innerWidth, height = window.innerHeight;
   var widthHalf = width / 2, heightHalf = height / 2;
 
+  var satname = ["a","b","c","d","e","A","B","C","D","E"];
+  var satcolor = ["#0044ff", "#0aff00", "#f00", "#ff00eb", "#00ffeb"]
+  var maxsat = 5;
+
   if (this.run == 1)
   {
     //groundtrack point
-    var uv = sphere_uv(grace);
-    var uvadj = new THREE.Vector2(uv.x * 360 - (containerEarth.rotation.y / Math.PI / 180), uv.y * 180 - 90);
-    var id = GetGridID(new THREE.Vector2(uvadj.x, uvadj.y));
-    if ((id.x != lastbin.x) || (id.y != lastbin.y))
-    {
-      var loc = GetTopLeft(id);
-      var size = GetSize(loc);
-      var uvx = uvadj.x / 360 * $('#maincanvas').width() - Math.ceil(containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
-      if (uvx < 0) { uvx+= $('#maincanvas').width(); }
-      var uvy = (uvadj.y + 90) / 180 * $('#maincanvas').height();
-      var uvr = 2 * this.binsize;
+    for (var i = 0; i < this.satcount; i++) {
+      var n;
+      if (i == 0) { n = gracea; }
+      if (i == 1) { n = graceb; }
+      if (i == 2) { n = gracec; }
+      if (i == 3) { n = graced; }
+      if (i == 4) { n = gracee; }
 
-      var ctx = $('#maincanvas')[0].getContext("2d");
-      ctx.fillStyle = "#0044ff";
-      ctx.globalAlpha = Math.pow(2, this.drawalpha - 7); //0.025;
-      if (this.drawalpha == 0) { ctx.globalAlpha = 0; }
-      ctx.beginPath();
-      ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
-      ctx.fill();
-      lastbin = id;
+      var uv = sphere_uv(n);
+      var uvadj = new THREE.Vector2(uv.x * 360 - (containerEarth.rotation.y / Math.PI / 180), uv.y * 180 - 90);
+      var id = GetGridID(new THREE.Vector2(uvadj.x, uvadj.y));
+      if ((id.x != lastbin[i].x) || (id.y != lastbin[i].y))
+      {
+        var loc = GetTopLeft(id);
+        var size = GetSize(loc);
+        var uvx = uvadj.x / 360 * $('#maincanvas').width() - Math.ceil(containerEarth.rotation.y / Math.PI / 2 * $('#maincanvas').width());
+        if (uvx < 0) { uvx+= $('#maincanvas').width(); }
+        var uvy = (uvadj.y + 90) / 180 * $('#maincanvas').height();
+        var uvr = 2 * this.binsize;
+
+        var ctx = $('#maincanvas')[0].getContext("2d");
+        ctx.fillStyle = satcolor[i];
+        ctx.globalAlpha = Math.pow(2, this.drawalpha - 7); //0.025;
+        if (this.drawalpha == 0) { ctx.globalAlpha = 0; }
+        ctx.beginPath();
+        ctx.arc(uvx, uvy, uvr, 0, 2 * Math.PI, false);
+        ctx.fill();
+        lastbin[i] = id;
+      }
     }
   }
 
@@ -361,31 +405,27 @@ function render(delta, now) {
   meshOverlay.rotation.y = containerEarth.rotation.y;
 
   //update display
-  var pa = new THREE.Vector3(gracea.x,  gracea.y, gracea.z);
-  var projector = new THREE.Projector();
-  projector.projectVector( pa, camera );
-  pa.x = (( pa.x * widthHalf ) + widthHalf);
-  pa.y = (-( pa.y * heightHalf ) + heightHalf);
-  pa.z = 1;
-  $("#satcirclea").css('display', 'block');
-  $("#satcirclea").css('left', (pa.x - 2).toString() + 'px');
-  $("#satcirclea").css('top', (pa.y - 2).toString() + 'px');
-  $("#sattexta").css('display', 'block');
-  $("#sattexta").css('left', (pa.x - 2).toString() + 'px');
-  $("#sattexta").css('top', (pa.y - 18).toString() + 'px');
-  if (satcount >= 2) {
-    var pb = new THREE.Vector3(graceb.x,  graceb.y, graceb.z);
+  for (var i = 0; i < this.satcount; i++) {
+    var n;
+    var s = satname[i];
+    if (i == 0) { n = graceca; }
+    if (i == 1) { n = gracecb; }
+    if (i == 2) { n = gracecc; }
+    if (i == 3) { n = gracecd; }
+    if (i == 4) { n = gracece; }
+
+    var pa = new THREE.Vector3(n.x, n.y, n.z);
     var projector = new THREE.Projector();
-    projector.projectVector( pb, camera );
-    pb.x = (( pb.x * widthHalf ) + widthHalf);
-    pb.y = (-( pb.y * heightHalf ) + heightHalf);
-    pb.z = 1;
-    $("#satcircleb").css('display', 'block');
-    $("#satcircleb").css('left', (pb.x - 2).toString() + 'px');
-    $("#satcircleb").css('top', (pb.y - 2).toString() + 'px');
-    $("#sattextb").css('display', 'block');
-    $("#sattextb").css('left', (pb.x - 2).toString() + 'px');
-    $("#sattextb").css('top', (pb.y - 18).toString() + 'px');
+    projector.projectVector( pa, camera );
+    pa.x = (( pa.x * widthHalf ) + widthHalf);
+    pa.y = (-( pa.y * heightHalf ) + heightHalf);
+    pa.z = 1;
+    $("#satcircle" + s).css('display', 'block');
+    $("#satcircle" + s).css('left', (pa.x - 2).toString() + 'px');
+    $("#satcircle" + s).css('top', (pa.y - 2).toString() + 'px');
+    $("#sattext" + s).css('display', 'block');
+    $("#sattext" + s).css('left', (pa.x - 2).toString() + 'px');
+    $("#sattext" + s).css('top', (pa.y - 18).toString() + 'px');
   }
 
   circle.scale.x = circle.scale.y = circle.scale.z = this.exagg;

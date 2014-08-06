@@ -111,7 +111,9 @@ function clearSimul() {
   var con = $('#maincanvas')[0].getContext("2d");
   con.globalAlpha = 1;
   con.clearRect(0, 0, $('#maincanvas').width(), $('#maincanvas').height());
-  lastbin = new THREE.Vector2(-1, -1);
+  lastbin = [new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
+             new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
+             new THREE.Vector2(-1, -1)];
 }
 function updateTime()
 {

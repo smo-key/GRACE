@@ -11,6 +11,13 @@ function g_circ() {
   return 2 * Math.PI * g_a;
 }
 
+function g_findperiod() {
+ //T^2 = r^3 * 4pi^2 / (GM)
+  var mew = 398600.4418; //standard gravitational parameter for Earth (mew = GM = km^3*s^-2)
+  var T = 2 * Math.PI * Math.sqrt(g_a*g_a*g_a / mew);
+  g_period = T;
+}
+
 //need r, v (perifocal system)
 
 //circular orbit, no eccentricity, SUPER simplified
