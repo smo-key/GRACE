@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen1 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen2 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen3 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen4 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen13 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen14 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen15 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen16 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -49,7 +49,7 @@
             this.yAxis2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.ZeroLabel = new System.Windows.Forms.Label();
             this.Zero = new System.Windows.Forms.CheckBox();
             this.LocationLabel = new System.Windows.Forms.Label();
             this.MinText = new System.Windows.Forms.Label();
@@ -68,7 +68,7 @@
             this.Border.Controls.Add(this.MinText);
             this.Border.Controls.Add(this.LocationLabel);
             this.Border.Controls.Add(this.Zero);
-            this.Border.Controls.Add(this.label3);
+            this.Border.Controls.Add(this.ZeroLabel);
             this.Border.Controls.Add(this.label2);
             this.Border.Controls.Add(this.label1);
             this.Border.Controls.Add(this.yAxis2);
@@ -103,7 +103,7 @@
             this.Border.Controls.SetChildIndex(this.yAxis2, 0);
             this.Border.Controls.SetChildIndex(this.label1, 0);
             this.Border.Controls.SetChildIndex(this.label2, 0);
-            this.Border.Controls.SetChildIndex(this.label3, 0);
+            this.Border.Controls.SetChildIndex(this.ZeroLabel, 0);
             this.Border.Controls.SetChildIndex(this.Zero, 0);
             this.Border.Controls.SetChildIndex(this.LocationLabel, 0);
             this.Border.Controls.SetChildIndex(this.MinText, 0);
@@ -141,6 +141,8 @@
             // SaveImage
             // 
             this.SaveImage.AutoSize = true;
+            this.SaveImage.Checked = true;
+            this.SaveImage.CheckState = System.Windows.Forms.CheckState.Checked;
             this.SaveImage.Location = new System.Drawing.Point(697, 246);
             this.SaveImage.Name = "SaveImage";
             this.SaveImage.Size = new System.Drawing.Size(83, 17);
@@ -151,6 +153,8 @@
             // GLDAS
             // 
             this.GLDAS.AutoSize = true;
+            this.GLDAS.Checked = true;
+            this.GLDAS.CheckState = System.Windows.Forms.CheckState.Checked;
             this.GLDAS.ForeColor = System.Drawing.Color.DarkGreen;
             this.GLDAS.Location = new System.Drawing.Point(697, 82);
             this.GLDAS.Name = "GLDAS";
@@ -162,6 +166,8 @@
             // RL05
             // 
             this.RL05.AutoSize = true;
+            this.RL05.Checked = true;
+            this.RL05.CheckState = System.Windows.Forms.CheckState.Checked;
             this.RL05.ForeColor = System.Drawing.Color.DarkBlue;
             this.RL05.Location = new System.Drawing.Point(697, 105);
             this.RL05.Name = "RL05";
@@ -197,6 +203,8 @@
             // GRACE
             // 
             this.GRACE.AutoSize = true;
+            this.GRACE.Checked = true;
+            this.GRACE.CheckState = System.Windows.Forms.CheckState.Checked;
             this.GRACE.ForeColor = System.Drawing.Color.Crimson;
             this.GRACE.Location = new System.Drawing.Point(697, 128);
             this.GRACE.Name = "GRACE";
@@ -311,27 +319,27 @@
             this.Chart.Location = new System.Drawing.Point(81, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen1.Color = System.Drawing.Color.Black;
-            chartPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen1.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen1;
+            chartPen13.Color = System.Drawing.Color.Black;
+            chartPen13.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen13.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen13;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen2.Color = System.Drawing.Color.Black;
-            chartPen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen2.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen2;
-            chartPen3.Color = System.Drawing.Color.Silver;
-            chartPen3.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen3.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen3;
+            chartPen14.Color = System.Drawing.Color.Black;
+            chartPen14.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen14.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen14;
+            chartPen15.Color = System.Drawing.Color.Silver;
+            chartPen15.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen15.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen15;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen4.Color = System.Drawing.Color.Silver;
-            chartPen4.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen4.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen4;
+            chartPen16.Color = System.Drawing.Color.Silver;
+            chartPen16.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen16.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen16;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);
@@ -398,16 +406,16 @@
             this.label2.TabIndex = 66;
             this.label2.Text = "0";
             // 
-            // label3
+            // ZeroLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label3.Location = new System.Drawing.Point(62, 284);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(13, 13);
-            this.label3.TabIndex = 67;
-            this.label3.Text = "0";
+            this.ZeroLabel.AutoSize = true;
+            this.ZeroLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ZeroLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ZeroLabel.Location = new System.Drawing.Point(62, 82);
+            this.ZeroLabel.Name = "ZeroLabel";
+            this.ZeroLabel.Size = new System.Drawing.Size(13, 13);
+            this.ZeroLabel.TabIndex = 67;
+            this.ZeroLabel.Text = "0";
             // 
             // Zero
             // 
@@ -449,7 +457,7 @@
             this.MaxText.AutoSize = true;
             this.MaxText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaxText.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.MaxText.Location = new System.Drawing.Point(44, 79);
+            this.MaxText.Location = new System.Drawing.Point(47, 74);
             this.MaxText.Name = "MaxText";
             this.MaxText.Size = new System.Drawing.Size(13, 13);
             this.MaxText.TabIndex = 73;
@@ -503,7 +511,7 @@
         private System.Windows.Forms.Label yAxis2;
         private System.Windows.Forms.Label yAxis3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label ZeroLabel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox Zero;
         private System.Windows.Forms.Label LocationLabel;

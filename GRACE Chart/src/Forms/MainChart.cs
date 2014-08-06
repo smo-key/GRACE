@@ -15,8 +15,8 @@ namespace GRACEChart
 {
     public partial class MainChart : BaseForm
     {   
-        String[] GLDASData;
-        String[] RL05Data;
+        String[] GLDASData = new String[] {};
+        String[] RL05Data = new String[] {};
         List<String> GRACEData = new List<string>();
         List<PointF> gldas = new List<PointF>();
         List<PointF> rl05 = new List<PointF>();
@@ -45,12 +45,12 @@ namespace GRACEChart
             RL05.Enabled = true;
             GRACE.Enabled = true;
             SaveImage.Enabled = true;
-            GLDAS.Checked = true;
-            RL05.Checked = true;
-            GRACE.Checked = true;
             LocationLabel.Visible = false;
             MaxText.Visible = false;
             MinText.Visible = false;
+            ZeroLabel.Visible = false;
+
+
 
             /** GET LIST OF YEAR / MONTH **/
             List<string> ym = new List<string>();
@@ -58,13 +58,13 @@ namespace GRACEChart
             foreach (string file in list)
             {
                 FileInfo fi = new FileInfo(file);
-                if ((!ym.Contains(fi.Name.Substring(0, 4))) && (Convert.ToInt32(fi.Name.Substring(0, 4)) >= 2008) && (Convert.ToInt32(fi.Name.Substring(0, 4)) <= 2009))
+                if ((!ym.Contains(fi.Name.Substring(0, 7))) && (Convert.ToInt32(fi.Name.Substring(0, 4)) >= 2008) && (Convert.ToInt32(fi.Name.Substring(0, 4)) <= 2009))
                 {
                     if (Convert.ToInt32(fi.Name.Substring(0, 4)) == 2009)
                     {
                         if (Convert.ToInt32(fi.Name.Substring(5, 2)) >= 2) { break; }
                     }
-                    ym.Add(fi.Name.Substring(0, 4));
+                    ym.Add(fi.Name.Substring(0, 7));
                 }
             }
             string[] search = System.IO.Directory.GetFiles("../../../../../gracedata/groundtrack/");
@@ -72,7 +72,7 @@ namespace GRACEChart
             foreach (string i in search)
             {
                 FileInfo info = new FileInfo(i);
-                if (ym.Contains(info.Name.Substring(0, 4))) { GRACEData.Add(i); }
+                if (ym.Contains(info.Name.Substring(0, 7))) { GRACEData.Add(i); }
             }
 
             size = 3.00;
@@ -81,7 +81,9 @@ namespace GRACEChart
             lon1 = x - (size / 2);
             lon2 = x + (size / 2);
             filen = 0;
-        }   
+
+        } 
+            
         public void Search()
         {
             String seltext = "";
@@ -232,7 +234,6 @@ namespace GRACEChart
                 x = 32.0;
                 y = -2.0;
             }
-
             GLDASData = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/GLDAS", itemname + "*");
             RL05Data = System.IO.Directory.GetFiles("../../../../../gracedata/modeltimeseries/RL05", itemname + "*");
             max = GLDASData.Length + RL05Data.Length + GRACEData.Count;
@@ -257,7 +258,9 @@ namespace GRACEChart
             Zero.Enabled = false;
             DrawButton.Enabled = false;
             SaveImage.Enabled = false;
-
+            MaxText.Visible = false;
+            MinText.Visible = false;
+            ZeroLabel.Visible = false;
             Thread thread = new Thread(ReadAllData);
             thread.IsBackground = true;
             thread.Name = "Read Data Thread";
@@ -267,7 +270,6 @@ namespace GRACEChart
         {
             String seltext = "";
             Location.Invoke(new MethodInvoker(delegate { seltext = Location.SelectedItem.ToString(); }));
-
             if(lastitem != seltext)
             {
                 datamin = double.MaxValue;
@@ -307,10 +309,19 @@ namespace GRACEChart
 
             this.Invoke(new MethodInvoker(delegate
             {
+                ZeroLabel.Location = new Point(ZeroLabel.Location.X, 82);
+            }));
+
+            this.Invoke(new MethodInvoker(delegate
+            { moveZero(); }));
+
+            this.Invoke(new MethodInvoker(delegate
+            {
                 MaxText.Text = datamax.ToString("F2");
                 MinText.Text = datamin.ToString("F2");
                 MaxText.Visible = true;
                 MinText.Visible = true;
+                ZeroLabel.Visible = true;
             }));
 
              //** EXIT **//
@@ -574,13 +585,18 @@ namespace GRACEChart
             }
         }
 
+        //*MOVE ZERO*//
+        public void moveZero()
+        {
+            PointF p = new PointF(0.0f, 0.0f);
+            int pixelMax = ZeroLabel.Location.Y + Convert.ToInt32(adjustedPoint(p).Y) - 7;
+            ZeroLabel.Location = new Point(ZeroLabel.Location.X, pixelMax);
+        }
         public PointF adjustedPoint(PointF a)
         {
             float x = (float)a.X * (float)Chart.Width / 8784.0f;
             float h = (float)(datamax - datamin); //chart height
-            //float y = -((((float)a.Y * (float)h / 10.0f))-(float)h/2.0f);
-
-            float y = -(float)(((a.Y - (h/2)) / h) * Chart.Height + 2); //y / scale height * map height + delta
+            float y = -(float)(((a.Y - (datamax)) / h) * Chart.Height + 2); //y / scale height * map height + delta
             return new PointF(x, y);
         }
         public float adjustedTime(float t)
