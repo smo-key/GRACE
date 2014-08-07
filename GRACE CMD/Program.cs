@@ -29,6 +29,7 @@ namespace GRACE_CMD
              */
 
             Console.WriteLine("Initializing...");
+            Globals.gridsize = 3.0f;
             Structs.PointTime lasttime = new Structs.PointTime();
             Structs.Anchor anchor = Structs.Anchor.Uniform;
             if (!(360 % Globals.gridsize == 0)) { anchor = Structs.Anchor.Center; }

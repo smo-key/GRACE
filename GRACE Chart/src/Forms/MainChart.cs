@@ -241,7 +241,7 @@ namespace GRACEChart
 
 
             //*GET SIM DATA*//
-            SimData = System.IO.Directory.GetFiles("../../../../../gracedata/simulated");
+            //SimData = System.IO.Directory.GetFiles("../../../../../gracedata/simulated");
 
 
             if(GRACE.Checked)

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen13 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen14 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen15 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen16 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen1 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen2 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen3 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen4 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -323,27 +323,27 @@
             this.Chart.Location = new System.Drawing.Point(81, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen13.Color = System.Drawing.Color.Black;
-            chartPen13.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen13.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen13;
+            chartPen1.Color = System.Drawing.Color.Black;
+            chartPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen1.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen1;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen14.Color = System.Drawing.Color.Black;
-            chartPen14.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen14.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen14;
-            chartPen15.Color = System.Drawing.Color.Silver;
-            chartPen15.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen15.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen15;
+            chartPen2.Color = System.Drawing.Color.Black;
+            chartPen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen2.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen2;
+            chartPen3.Color = System.Drawing.Color.Silver;
+            chartPen3.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen3.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen3;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen16.Color = System.Drawing.Color.Silver;
-            chartPen16.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen16.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen16;
+            chartPen4.Color = System.Drawing.Color.Silver;
+            chartPen4.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen4.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen4;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);
@@ -488,6 +488,7 @@
             this.SimGRACE.TabIndex = 75;
             this.SimGRACE.Text = "Show Simulated\r\nGRACE";
             this.SimGRACE.UseVisualStyleBackColor = true;
+            this.SimGRACE.Visible = false;
             this.SimGRACE.CheckedChanged += new System.EventHandler(this.SimGRACE_CheckedChanged);
             // 
             // MainChart
