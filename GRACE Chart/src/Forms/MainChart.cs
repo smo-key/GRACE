@@ -48,6 +48,7 @@ namespace GRACEChart
             GLDAS.Enabled = true;
             RL05.Enabled = true;
             GRACE.Enabled = true;
+            SimGRACE.Visible = true;
             SaveImage.Enabled = true;
             LocationLabel.Visible = false;
             MaxText.Visible = false;
@@ -278,6 +279,11 @@ namespace GRACEChart
             MaxText.Visible = false;
             MinText.Visible = false;
             ZeroLabel.Visible = false;
+            if(SimGRACE.Checked)
+            {
+                xAxis.Text = "Time (hr)";
+                MaxTime.Text = "720";
+            }
             Thread thread = new Thread(ReadAllData);
             thread.IsBackground = true;
             thread.Name = "Read Data Thread";
@@ -418,16 +424,33 @@ namespace GRACEChart
         }
         public void PostProcess()
         {
-            for (int k = 0; k < gldas.Count; k++)
+            if (SimGRACE.Checked)
             {
-                PointF p = new PointF(adjustedPoint(gldas[k]).X, adjustedPoint(gldas[k]).Y);
-                gldas[k] = p;
+                for (int k = 0; k < gldas.Count; k++)
+                {
+                    PointF p = new PointF(simPoint(gldas[k]).X, simPoint(gldas[k]).Y);
+                    gldas[k] = p;
+                }
+                for (int k = 0; k < rl05.Count; k++)
+                {
+                    PointF p = new PointF(simPoint(rl05[k]).X, simPoint(rl05[k]).Y);
+                    rl05[k] = p;
+                }
             }
-            for (int k = 0; k < rl05.Count; k++)
+            else
             {
-                PointF p = new PointF(adjustedPoint(rl05[k]).X, adjustedPoint(rl05[k]).Y);
-                rl05[k] = p;
-            }   
+                for (int k = 0; k < gldas.Count; k++)
+                {
+                    PointF p = new PointF(adjustedPoint(gldas[k]).X, adjustedPoint(gldas[k]).Y);
+                    gldas[k] = p;
+                }
+                for (int k = 0; k < rl05.Count; k++)
+                {
+                    PointF p = new PointF(adjustedPoint(rl05[k]).X, adjustedPoint(rl05[k]).Y);
+                    rl05[k] = p;
+                }  
+            }
+
         }
 
         //*READ GLDAS DATA*// 
@@ -636,13 +659,13 @@ namespace GRACEChart
                             int n = t / 3;
                             float h = gldas[n].Y;
                             PointF p = new PointF(t, h);
-                            simGLDAS.Add(adjustedPoint(p));
+                            simGLDAS.Add(simPoint(p));
                         }
                         else
                         {
                             int n1 = (int)Math.Floor((double)t / (double)3);
                             float h = gldas[n1].Y;
-                            PointF p = new PointF(adjustedTime(t), h);
+                            PointF p = new PointF(simTime(t), h);
                             simGLDAS.Add(p);
                         }
 
@@ -651,19 +674,19 @@ namespace GRACEChart
                             int n = t / 6;
                             float h = rl05[n].Y;
                             PointF p = new PointF(t, h);
-                            simRL05.Add(adjustedPoint(p));
+                            simRL05.Add(simPoint(p));
                         }
                         else
                         {
                             int n1 = (int)Math.Floor((double)t / (double)6);
                             float h = rl05[n1].Y;
-                            PointF p = new PointF(adjustedTime(t), h);
+                            PointF p = new PointF(simTime(t), h);
                             simRL05.Add(p);
                         }
 
                         float height = 0.0f;
                         PointF p2 = new PointF(t, height);
-                        sim.Add(adjustedPoint(p2));
+                        sim.Add(simPoint(p2));
                     }
                 }
                 filen++;
@@ -730,9 +753,21 @@ namespace GRACEChart
             float y = -(float)(((a.Y - (datamax)) / h) * Chart.Height + 2); //y / scale height * map height + delta
             return new PointF(x, y);
         }
+        public PointF simPoint(PointF a)
+        {
+            float x = (float)a.X * (float)Chart.Width / 720.0f;
+            float h = (float)(datamax - datamin); //chart height
+            float y = -(float)(((a.Y - (datamax)) / h) * Chart.Height + 2); //y / scale height * map height + delta
+            return new PointF(x, y);
+        }
         public float adjustedTime(float t)
         {
             float x = (float)t * (float)Chart.Width / 8784.0f;
+            return x;
+        }
+        public float simTime(float t)
+        {
+            float x = (float)t * (float)Chart.Width / 720.0f;
             return x;
         }
         private void Progress_Click(object sender, EventArgs e)

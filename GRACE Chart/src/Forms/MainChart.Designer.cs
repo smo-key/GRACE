@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen1 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen2 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen3 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen4 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen5 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen6 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen7 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen8 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -47,7 +47,7 @@
             this.yAxis = new System.Windows.Forms.Label();
             this.yAxis3 = new System.Windows.Forms.Label();
             this.yAxis2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.MaxTime = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ZeroLabel = new System.Windows.Forms.Label();
             this.Zero = new System.Windows.Forms.CheckBox();
@@ -72,7 +72,7 @@
             this.Border.Controls.Add(this.Zero);
             this.Border.Controls.Add(this.ZeroLabel);
             this.Border.Controls.Add(this.label2);
-            this.Border.Controls.Add(this.label1);
+            this.Border.Controls.Add(this.MaxTime);
             this.Border.Controls.Add(this.yAxis2);
             this.Border.Controls.Add(this.yAxis3);
             this.Border.Controls.Add(this.yAxis);
@@ -103,7 +103,7 @@
             this.Border.Controls.SetChildIndex(this.yAxis, 0);
             this.Border.Controls.SetChildIndex(this.yAxis3, 0);
             this.Border.Controls.SetChildIndex(this.yAxis2, 0);
-            this.Border.Controls.SetChildIndex(this.label1, 0);
+            this.Border.Controls.SetChildIndex(this.MaxTime, 0);
             this.Border.Controls.SetChildIndex(this.label2, 0);
             this.Border.Controls.SetChildIndex(this.ZeroLabel, 0);
             this.Border.Controls.SetChildIndex(this.Zero, 0);
@@ -323,27 +323,27 @@
             this.Chart.Location = new System.Drawing.Point(81, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen1.Color = System.Drawing.Color.Black;
-            chartPen1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen1.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen1;
+            chartPen5.Color = System.Drawing.Color.Black;
+            chartPen5.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen5.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen5;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen2.Color = System.Drawing.Color.Black;
-            chartPen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen2.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen2;
-            chartPen3.Color = System.Drawing.Color.Silver;
-            chartPen3.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen3.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen3;
+            chartPen6.Color = System.Drawing.Color.Black;
+            chartPen6.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen6.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen6;
+            chartPen7.Color = System.Drawing.Color.Silver;
+            chartPen7.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen7.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen7;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen4.Color = System.Drawing.Color.Silver;
-            chartPen4.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen4.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen4;
+            chartPen8.Color = System.Drawing.Color.Silver;
+            chartPen8.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen8.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen8;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);
@@ -388,16 +388,16 @@
             this.yAxis2.TabIndex = 64;
             this.yAxis2.Text = "Height";
             // 
-            // label1
+            // MaxTime
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label1.Location = new System.Drawing.Point(684, 504);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 13);
-            this.label1.TabIndex = 65;
-            this.label1.Text = "8784";
+            this.MaxTime.AutoSize = true;
+            this.MaxTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MaxTime.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.MaxTime.Location = new System.Drawing.Point(684, 504);
+            this.MaxTime.Name = "MaxTime";
+            this.MaxTime.Size = new System.Drawing.Size(31, 13);
+            this.MaxTime.TabIndex = 65;
+            this.MaxTime.Text = "8784";
             // 
             // label2
             // 
@@ -527,7 +527,7 @@
         private System.Windows.Forms.Label yAxis;
         private System.Windows.Forms.Label yAxis2;
         private System.Windows.Forms.Label yAxis3;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label MaxTime;
         private System.Windows.Forms.Label ZeroLabel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox Zero;
