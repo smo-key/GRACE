@@ -411,7 +411,7 @@ namespace GRACEMap
             int alpha = 200;
             if (!DispBack.Checked) { alpha = 255; }
 
-            for (int i = 0; i < Structs.CoercedBin.BinsLon - 1; i++)
+            for (int i = 0; i < Structs.CoercedBin.BinsLon - Globals.gridsize / 2; i++)
             {
                 for (int j = 0; j < Structs.CoercedBin.BinsLat + 1; j++)
                 {
