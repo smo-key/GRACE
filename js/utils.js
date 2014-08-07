@@ -204,6 +204,26 @@ function download(canvas, filename) {
     }
 }
 
+//*** FILE I/O ***//
+function createFile() {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET","writer.php?t=create",true);
+  xmlhttp.send();
+}
+
+function saveFile() {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET","writer.php?t=save",true);
+  xmlhttp.send();
+}
+
+function writeData(str) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET","writer.php?t=append&s="+str,true);
+  xmlhttp.send();
+}
+
+
 //*** ACTIVATE ANIMATION ***//
 function runGif() {
   

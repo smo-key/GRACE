@@ -144,9 +144,13 @@ var lastbin = [new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1),
                new THREE.Vector2(-1, -1), new THREE.Vector2(-1, -1)];
 
 //*** INITIALIZE THREE.JS ***//
+
 function init() {
   //Prepare Maths
   g_findperiod();
+  createFile();
+  writeData("Hello World!");
+  saveFile();
 
   renderer = new THREE.WebGLRenderer({
     antialias: true
