@@ -205,7 +205,7 @@ function download(canvas, filename) {
 }
 
 //*** FILE I/O ***//
-function createFile() {
+/*function createFile() {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open("GET","writer.php?t=create",true);
   xmlhttp.send();
@@ -221,7 +221,7 @@ function writeData(str) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open("GET","writer.php?t=append&s="+str,true);
   xmlhttp.send();
-}
+}*/
 
 
 //*** ACTIVATE ANIMATION ***//
