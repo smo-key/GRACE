@@ -14,6 +14,7 @@ this.satcount = 1;
 this.satsep = 500; //km
 this.pairsep = 30; //degrees
 this.multiorb = false;
+this.endday = 0;
 
 //*** DATGUI ***//
 var gui = new dat.GUI({ autoPlace: false });
@@ -26,11 +27,12 @@ var globeupdate = draws.add(this, 'darkglobe' ).name("Night View");
 var sizeupdate = draws.add(this, 'binsize', 0.5, 5.0).name("Binsize (degrees)");
 sizeupdate.onChange(function(value){
   binsize = Math.floor(binsize * 2) / 2;
-  clearSimul()
+  clearSimul();
 });
 draws.add(this, 'speed', 1.0, 7.0).name("Simulation Speed");
 draws.add(this, 'exagg', 1.0, 2.0).name("Orbit Exaggeration");
 draws.add(this, 'drawalpha', 0.0, 7.0).name("Draw Brightness");
+var enddaygui = draws.add(this, 'endday').name("Stop on Day");
 draws.add(this, 'saveimage').name("Save Image");
 
 var sats = gui.addFolder("Satellites");
@@ -401,6 +403,14 @@ function render(delta, now) {
   this.time += delta * 60 * Math.pow(10,(this.speed - deltarealt)) * run;
   var rotsun = this.time / tropicalyear * 2 * Math.PI; //revolution of Earth
   light.position.set(10*Math.cos(-rotsun),0,10*Math.sin(-rotsun)); //rotsun = counterclockwise revolution
+
+  var day = this.sidereal ? 24 * siderealday : 24;
+  if ((this.time / 3600 / day >= this.endday) && (this.run == 1) && (this.endday > 0))
+  {
+    startSimul();
+    this.endday = 0;
+    enddaygui.needsUpdate = true;
+  }
   updateTime();
 
   //ROTATE EARTH AND ORBITS
