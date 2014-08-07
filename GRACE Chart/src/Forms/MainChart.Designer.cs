@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ChartLib.ChartPen chartPen5 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen6 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen7 = new ChartLib.ChartPen();
-            ChartLib.ChartPen chartPen8 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen9 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen10 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen11 = new ChartLib.ChartPen();
+            ChartLib.ChartPen chartPen12 = new ChartLib.ChartPen();
             this.SaveImage = new System.Windows.Forms.CheckBox();
             this.GLDAS = new System.Windows.Forms.CheckBox();
             this.RL05 = new System.Windows.Forms.CheckBox();
@@ -247,7 +247,7 @@
             "Gulf Carpentaria",
             "Hudson Bay",
             "Hudson Bay 02",
-            "Mediterranean",
+            "Medeterranean",
             "Mekong",
             "NCP",
             "Ob",
@@ -323,27 +323,27 @@
             this.Chart.Location = new System.Drawing.Point(81, 82);
             this.Chart.Name = "Chart";
             this.Chart.PerfChartStyle.AntiAliasing = true;
-            chartPen5.Color = System.Drawing.Color.Black;
-            chartPen5.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen5.Width = 1F;
-            this.Chart.PerfChartStyle.AvgLinePen = chartPen5;
+            chartPen9.Color = System.Drawing.Color.Black;
+            chartPen9.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen9.Width = 1F;
+            this.Chart.PerfChartStyle.AvgLinePen = chartPen9;
             this.Chart.PerfChartStyle.BackgroundColorBottom = System.Drawing.Color.WhiteSmoke;
             this.Chart.PerfChartStyle.BackgroundColorTop = System.Drawing.Color.WhiteSmoke;
-            chartPen6.Color = System.Drawing.Color.Black;
-            chartPen6.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen6.Width = 1F;
-            this.Chart.PerfChartStyle.ChartLinePen = chartPen6;
-            chartPen7.Color = System.Drawing.Color.Silver;
-            chartPen7.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen7.Width = 1F;
-            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen7;
+            chartPen10.Color = System.Drawing.Color.Black;
+            chartPen10.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen10.Width = 1F;
+            this.Chart.PerfChartStyle.ChartLinePen = chartPen10;
+            chartPen11.Color = System.Drawing.Color.Silver;
+            chartPen11.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen11.Width = 1F;
+            this.Chart.PerfChartStyle.HorizontalGridPen = chartPen11;
             this.Chart.PerfChartStyle.ShowAverageLine = true;
             this.Chart.PerfChartStyle.ShowHorizontalGridLines = true;
             this.Chart.PerfChartStyle.ShowVerticalGridLines = true;
-            chartPen8.Color = System.Drawing.Color.Silver;
-            chartPen8.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-            chartPen8.Width = 1F;
-            this.Chart.PerfChartStyle.VerticalGridPen = chartPen8;
+            chartPen12.Color = System.Drawing.Color.Silver;
+            chartPen12.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            chartPen12.Width = 1F;
+            this.Chart.PerfChartStyle.VerticalGridPen = chartPen12;
             this.Chart.ScaleMode = ChartLib.ScaleMode.Absolute;
             this.Chart.showunit = false;
             this.Chart.Size = new System.Drawing.Size(610, 419);

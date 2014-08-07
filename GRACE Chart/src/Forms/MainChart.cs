@@ -48,7 +48,7 @@ namespace GRACEChart
             GLDAS.Enabled = true;
             RL05.Enabled = true;
             GRACE.Enabled = true;
-            SimGRACE.Visible = true;
+            SimGRACE.Visible = false;//No sim feature
             SaveImage.Enabled = true;
             LocationLabel.Visible = false;
             MaxText.Visible = false;
@@ -183,9 +183,9 @@ namespace GRACEChart
                 x = 272.5;
                 y = 58.0;
             }
-            else if (seltext == "Mediterranean")
+            else if (seltext == "Medeterranean")
             {
-                itemname = "Mediterr01";
+                itemname = "Medeterr01";
                 x = 19.0;
                 y = 36.0;
             }
