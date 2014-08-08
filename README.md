@@ -19,7 +19,13 @@ Analyzes the data from the [Gravity Recovery and Climate Experiment](http://www.
 <br>
 How many satellite pairs are needed to equalize GRACE's frequency distribution?  What is the optimal orbit?  How precise can a GRACE follow-on system be?  These questions are answered by the `GRACE Live Orbit and Groundtrack Simulation (G-LOGS)`, an online application to simulate an orbit in realtime.  Besides being used for answering the questions of GRACE, this app may serve as a template for learning rudimentary Orbital Mechanics (as it did for our research group) and for future, more complex orbital simulations.
 
-Visit the simulation at [http://code.arthurpachachura.com/grace](http://code.arthurpachachura.com/grace).
+Visit the simulation at [http://code.arthurpachachura.com/grace](http://code.arthurpachachura.com/grace) or fork the code on the `pages` branch.
+
+###Additional Solutions
+`GRACEdata`:  GRACE data manipulation library<br>
+`GRACE CMD`:  GRACE command line<br>
+`GRACE JSON`: Converts GRACE groundtrack to JSON frequency map<br>
+`GRACE 3D Test`: C++ implementation of solution 3 (not developed)
 
 ###Installation
 To run solutions 1 and 2, you will need Visual Studio 2013 or newer with C# Desktop app capability.  To modify solution 3, no software is required as it is entirely online.
